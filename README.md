@@ -1,8 +1,8 @@
 import os
 
 def delAllFile(folder):
-    fileList = os.listdir(folder)
 
+    fileList = os.listdir(folder)
     for f in fileList:
         filePath = folder + '/'+f
 
@@ -18,4 +18,5 @@ def delAllFile(folder):
                     os.remove(insideFilePath)
                     
 delAllFile('./Result/DailyRunRealTimeStock/')
+
 delAllFile('./Result/DailyFiles/')
