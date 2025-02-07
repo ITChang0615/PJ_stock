@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Fetch API Example</title>
+	<link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.10/dist/vuetify.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.10/dist/vuetify.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.4/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+	<div id="app">
+		<v-app>
+			<v-container>
+				<h1>Posts Data</h1>
+				<v-data-table :headers="headerss" :items="posts" :items-per-page="5" class="elevation-1"></v-data-table>
+			</v-container>
+		</v-app>
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			vuetify: new Vuetify(),
+			data() {
+				return {
+					cors: 'https://cors-anywhere.herokuapp.com/',
+					apiurl: "",
+					posts: [],
+					rawdata: [],
+
+					headers: [],
+					jsonData: [],
+					filters: {},
+					uniqueValues: {},
+					
+
+					headerss: [
+					{ text: 'Company', align: 'start', sortable: true, value: 'nf' },
+					{ text: '揭示買量', value: 'g' },
+					{ text: '揭示買價', value: 'b' },
+					{ text: '揭示賣價', value: 'a' },
+					{ text: '揭示賣量', value: 'f' },
+					{ text: '累積成交量', value: 'v' },
+					],
+				};
+			},
+			created() {
+				//this.getUrl();
+				//this.getData();
+				this.loadExcelData();
+				
+			},
+			computed: {
+				filteredData() {
+                    return this.jsonData.filter(item => {
+                        return Object.keys(this.filters).every(key => {
+                            const filterValues = this.filters[key];
+
+                            if (!filterValues || filterValues.length === 0) return true;
+                            const value = item[key] ? item[key].toString() : '';
+                            const a = this.isNumberField(key);
+
+                            if (Array.isArray(filterValues) && a) {
+                                //if (Array.isArray(filterValues)) {
+                                const [min, max] = filterValues;
+                                const numericValue = parseFloat(value);
+                                return !isNaN(numericValue) && numericValue >= min && numericValue <= max;
+                            } else {
+                                return filterValues.includes(value);
+                            }
+                        });
+                    });
+                }
+			},
+			methods: {
+				dataProcess(data){
+					//app.filteredData
+					return  data.map(header => ({ stock_number: header.stock_number, Type: header.Type2 }));
+				},
+				main(){
+					var vm=this
+					var data=vm.filteredData
+				
+					var _baseInfo=vm.dataProcess(data);
+					debugger;
+					urllist=vm.get_craw_url(_baseInfo,60)
+			
+					
+				},
+				get_craw_url(data,size){
+					var vm=this
+					let x = [];
+					targets=data.filter(zz=>zz.Type=="上市").map(zz=>zz.stock_number)
+					vm.batch_size(targets,size).forEach(i => {
+						x.push(vm.get_Url(i, 'tse'));
+					})
+					targets=data.filter(zz=>zz.Type!="上市").map(zz=>zz.stock_number)
+
+					vm.batch_size(targets,size).forEach(i => {
+						x.push(vm.get_Url(i, 'otc'));
+					})
+					return x
+				},
+				
+				get_Url(targets,type_tse_otc){
+					endpoint = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp'
+					let today = new Date();
+					let dtime = today.toISOString().slice(0, 10).replace(/-/g, '');
+
+					// 根據 type_tse_otc 的值決定使用哪種格式的字符串
+					let channels;
+					if (type_tse_otc === 'tse') {
+						channels = targets.map(target =>  ` tse_${target}.tw_${dtime} ` ).join('|');
+					} else {
+						channels = targets.map(target =>  ` otc_${target}.tw_${dtime} ` ).join('|');
+					}
+
+					// 拼接 URL
+					let url =  ` ${endpoint}?ex_ch=${channels} ` ;
+					return url;
+
+				},
+				getUrl() {
+					this.apiurl = this.cors + 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_1419.tw_20250207|tse_1423.tw_20250207|tse_1432.tw_20250207|tse_1434.tw_20250207|tse_1435.tw_20250207|tse_1436.tw_20250207|tse_1437.tw_20250207|tse_1438.tw_20250207|tse_1439.tw_20250207|tse_1440.tw_20250207|tse_1441.tw_20250207|tse_1442.tw_20250207|tse_1443.tw_20250207|tse_1444.tw_20250207|tse_1445.tw_20250207|tse_1446.tw_20250207|tse_1447.tw_20250207|tse_1449.tw_20250207|tse_1451.tw_20250207|tse_1452.tw_20250207|tse_1453.tw_20250207|tse_1454.tw_20250207|tse_1455.tw_20250207|tse_1456.tw_20250207|tse_1457.tw_20250207|tse_1459.tw_20250207|tse_1460.tw_20250207|tse_1463.tw_20250207|tse_1464.tw_20250207|tse_1465.tw_20250207|tse_1466.tw_20250207|tse_1467.tw_20250207|tse_1468.tw_20250207|tse_1470.tw_20250207|tse_1471.tw_20250207|tse_1472.tw_20250207|tse_1473.tw_20250207|tse_1474.tw_20250207|tse_1475.tw_20250207|tse_1476.tw_20250207|tse_1477.tw_20250207|tse_1503.tw_20250207|tse_1504.tw_20250207|tse_1506.tw_20250207|tse_1512.tw_20250207|tse_1513.tw_20250207|tse_1514.tw_20250207|tse_1515.tw_20250207|tse_1516.tw_20250207|tse_1517.tw_20250207|tse_1519.tw_20250207|tse_1521.tw_20250207|tse_1522.tw_20250207|tse_1524.tw_20250207|tse_1525.tw_20250207|tse_1526.tw_20250207|tse_1527.tw_20250207|tse_1528.tw_20250207|tse_1529.tw_20250207|tse_1530.tw_20250207';
+				},
+				batch_size(dataList, batchSize) {
+					let result = [];
+					// 計算總共需要多少個批次
+					const numBatches = Math.ceil(dataList.length / batchSize);
+					
+					// 迴圈遍歷每個批次
+					for (let i = 0; i < numBatches; i++) {
+						const startIndex = i * batchSize;
+						const endIndex = Math.min((i + 1) * batchSize, dataList.length);
+						result.push(dataList.slice(startIndex, endIndex));
+					}
+					
+					return result;
+				},
+				getData() {
+					var vm = this;
+					fetch(vm.apiurl)
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Network response was not ok');
+						}
+						return response.json();
+					})
+					.then(data => {
+						vm.posts = data['msgArray']
+						vm.posts.map(x => x.g = x.g.split('_')[0])
+						vm.posts.map(x => x.b = parseFloat(x.b.split('_')[0]))
+						vm.posts.map(x => x.a = parseFloat(x.a.split('_')[0]))
+						vm.posts.map(x => x.f = x.f.split('_')[0])
+						vm.posts.map(x => x.v = x.v.split('_')[0])
+					})
+					.catch(error => {
+						console.error('There has been a problem with your fetch operation:', error);
+					});
+				},
+				isNumberField(field) {
+                    return field !== 'stock_number' && this.jsonData.some(item => {
+                        const value = item[field];
+                        return value != null && !isNaN(parseFloat(value)) && isFinite(value);
+                    });
+                },    
+				getMinValue(field) {
+                    const values = this.jsonData
+                        .map(item => parseFloat(item[field]))
+                        .filter(value => !isNaN(value));
+                    return values.length ? Math.min(...values) : 0;
+                },
+                getMaxValue(field) {
+                    const values = this.jsonData
+                        .map(item => parseFloat(item[field]))
+                        .filter(value => !isNaN(value));
+                    return values.length ? Math.max(...values) : 100;
+                },
+				loadExcelData() {
+                    let urlParams = new URLSearchParams(window.location.search);
+                    file='./Result/check.xlsx'
+                    if (urlParams.has('d')){
+                         if(urlParams.get('d')=='T'){
+                            file='./Result/check1.xlsx'
+                        }
+                        if(urlParams.get('d')=='S'){
+                            file='./Result/check2.xlsx'
+                        }
+                        if(urlParams.get('d')=='M'){
+                            file='./Result/checkmy.xlsx'
+                        }
+                        if(urlParams.get('d')=='O'){
+                            file='./Result/check3.xlsx'
+                        }
+                        if(urlParams.get('d')=='H'){
+                            file='./Result/check4.xlsx'
+                        }
+                        if(urlParams.get('d')=='A'){
+                            file='./Result/checkall.xlsx'
+                        }
+                        if(urlParams.get('d')=='C'){ 
+                            file='./Result/checkall/'+urlParams.get('date')+'.xlsx'
+                            // https://itchang0615.github.io/PJ_stock/index.html?d=C&date=2025-01-21
+                        }
+                    }
+
+                    fetch(file)
+                        .then(response => response.arrayBuffer())
+                        .then(data => {
+                            const workbook = XLSX.read(data, { type: 'array' });
+                            const sheetName = workbook.SheetNames[0];
+                            const worksheet = workbook.Sheets[sheetName];
+                            const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                            if (json.length > 0) {
+                                this.headers = json[0].map(header => ({ text: header, value: header }));
+                                this.jsonData = json.slice(1).map(row => {
+                                    const rowData = {};
+                                    this.headers.forEach((header, i) => {
+                                        rowData[header.value] = row[i];
+                                    });
+                                    return rowData;
+                                });
+
+                                this.headers.forEach(header => {
+                                    if (this.isNumberField(header.value)) {
+                                        this.$set(this.filters, header.value, [
+                                            this.getMinValue(header.value),
+                                            this.getMaxValue(header.value),
+                                        ]);
+                                    } else {
+                                        this.$set(this.filters, header.value, []);
+                                    }
+                                    this.$set(this.uniqueValues, header.value, []);
+                                });
+
+                                this.jsonData.forEach(row => {
+                                    this.headers.forEach(header => {
+                                        const value = row[header.value];
+                                        if (value != null) {
+                                            const strValue = value.toString();
+                                            if (!this.uniqueValues[header.value].includes(strValue)) {
+                                                this.uniqueValues[header.value].push(strValue);
+                                            } else {
+
+
+                                            }
+                                        }
+                                    });
+                                });
+
+
+                                Object.keys(this.uniqueValues).forEach(key => {
+                                    this.uniqueValues[key] = this.uniqueValues[key].map(val => ({ text: val, value: val }));
+                                    this.uniqueValues[key].sort((a, b) => a.text.localeCompare(b.text));
+                                });
+								this.main();
+                            }
+                        })
+                        .catch(error => console.error('Error loading Excel file:', error));
+                }
+
+			},
+		});
+	</script>
+</body>
+
+</html>
