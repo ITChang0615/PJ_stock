@@ -237,7 +237,7 @@
                                 this.headers = dates.map(header => ({ text: header, value: header }));
                                 // 显示的日期列表
                                 const datesToShow = [...new Set(this.jsonData.map(x => x.日期))].sort();
-
+                                debugger;
                                 // 转换数据
                                 const transformedData = this.jsonData.map((item, index) => {
                                     const transformedItem = item
