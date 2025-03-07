@@ -59,7 +59,7 @@
                     <template v-slot:item.rt_price="{ item }">
                         <span style="color: rgb(124, 169, 173);"
                             v-show="realtimedata.filter(x=>x.c==item.stock_number)[0]?.a">
-                            {{(realtimedata.filter(x=>x.c==item.stock_number)[0]?.b/parseFloat(realtimedata.filter(x=>x.c==item.stock_number)[0]?.y)-1).toFixed(3)*100}}
+                            {{ ((realtimedata.filter(x=>x.c==item.stock_number)[0]?.b/parseFloat(realtimedata.filter(x=>x.c==item.stock_number)[0]?.y)-1)*100).toFixed(2)}}
                         </span>
                     </template>
                     <template v-slot:item.rt_量="{ item }">
@@ -186,7 +186,8 @@
                 sync_data() {
                     this.jsonData.forEach(item => {
                         var price = this.realtimedata.filter(x => x.c == item.stock_number)[0]?.a
-                        item.rt_price = (((price / item.now_price) - 1) * 100).toFixed(1)
+                        // item.rt_price = (((price / item.now_price) - 1) * 100).toFixed(1)
+                        item.rt_price =  ((this.realtimedata.filter(x=>x.c==item.stock_number)[0]?.b/parseFloat(this.realtimedata.filter(x=>x.c==item.stock_number)[0]?.y)-1)*100).toFixed(2)
                         var vol = this.realtimedata.filter(x => x.c == item.stock_number)[0]?.v
                         item.rt_量 = (vol / parseFloat(item.成交股數)).toFixed(1)
                     })
