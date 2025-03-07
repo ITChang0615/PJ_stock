@@ -102,6 +102,7 @@
                     sync: false,
                     url: '',
                     jsonData: [],
+					dummydata: [],
                     headers: [],
                     filters: {},
                     arrcount: 0,
@@ -228,7 +229,7 @@
 
                                 var dates = [...new Set(this.jsonData.map(x => x.日期))].sort()
                                 //var arr = ['Type', 'Type1', 'Type2', 'LevelArea', 'stock_number', '貝他值', '日期', 'highlight_date', 'MA5_%', '均價_%', 'MACD_%', '短交易量o', '遠交易量o', 'Trend_change', '_quote', 'diff_quote', 'now_price', 'rt_price', '成交股數', 'rt_量', 'count']
-                                var arr = ['Type', 'Type1', 'Type2', '貝他值', 'stock_number','rt_price',  '日期', 'diff_quote', 'highlight_date',  'count']
+                                var arr = ['Type', 'Type1', 'Type2', '貝他值','箱型力量','箱型力量_5均', 'stock_number','rt_price',  '日期', 'diff_quote', 'highlight_date',  'count']
                                 this.arrcount = arr.length
                                 arr.reverse().forEach(element => {
                                     dates.unshift(element)
@@ -237,27 +238,40 @@
                                 this.headers = dates.map(header => ({ text: header, value: header }));
                                 // 显示的日期列表
                                 const datesToShow = [...new Set(this.jsonData.map(x => x.日期))].sort();
-                                debugger;
+                                
                                 // 转换数据
                                 const transformedData = this.jsonData.map((item, index) => {
                                     const transformedItem = item
-
+									
                                     this.jsonData.filter(q => q.stock_number == item.stock_number).forEach(ff => {
                                         datesToShow.forEach(date => {
                                             transformedItem[date] = ff.日期 === date | transformedItem[date] === '1' ? '1' : ''; // 检查日期是否匹配
-
                                         });
                                     });
-
                                     return transformedItem;
                                 });
 
-                                this.jsonData = Array.from(
+								var dummydata=Array.from(
                                     new Map(transformedData.map(item => [item.stock_number, item])).values()
                                 );
-                                this.jsonData.forEach(item => {
-                                    item.count = Object.keys(item).filter(key => item[key] === "1").length
+	
+								dummydata.map((item, index) => {
+									const dummydataItem = item
+									const maxdata=this.jsonData.filter(q => q.stock_number == item.stock_number)
+									const maxdate=maxdata.map(x=>x.日期).reduce((a, b) => a > b ? a : b);
+									const maxdateitem=this.jsonData.filter(q => q.stock_number == item.stock_number&&q.日期 == maxdate )[0]
+									
+									dummydataItem.箱型力量=maxdateitem.箱型力量
+									dummydataItem.箱型力量_5均=maxdateitem.箱型力量_5均
+								
+								    dummydataItem.count=maxdata.length;
+									
+								      return dummydataItem;
                                 });
+
+
+								this.jsonData =dummydata
+								
                             }
 
                             if (this.realtimedata.length > 0) {
