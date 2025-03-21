@@ -18,7 +18,6 @@
 
 <body>
     <div id="app">
-
         <v-app>
             <v-container style="max-width: 95%;">
                 <v-row no-gutters>
@@ -46,28 +45,44 @@
                     </v-col>
                 </v-row>
 
-
-                <v-data-table disable-pagination fixed-header height="95vh" hide-default-footer :headers="headers"
-                    :items="filteredData" :items-per-page="-1" item-key="id" :sort-by.sync="sortBy"
-                    :sort-desc.sync="sortDesc" style="white-space: nowrap;">
-                    <!-- 自訂第一個欄位為超連結 -->
+                <v-data-table disable-pagination fixed-header height="95vh" hide-default-footer :headers="headers" :items="filteredData" :items-per-page="-1" item-key="id"
+                    :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" style="white-space: nowrap;">
                     <template v-slot:item.stock_number="{ item }">
                         <v-btn text @click="openDialog(item)">
                             {{ item.stock_number }} {{ item.Type0 }}
                         </v-btn>
                     </template>
-                    <template v-slot:[`item.${header.value}`]="{ item }" v-for="header in headers.slice(arrcount)"
-                        :key="header.value">
-                        <v-icon v-if="item[header.value]  " color="#a9a260">mdi-weather-sunny </v-icon>
-                        <BR />
-                        <template v-for="(data, index) in item.datalist.filter(x => x.日期 === header.value)"
-                            :key="index">
+                
+
+                    <template v-slot:[`item.${header.value}`]="{ item }" v-for="header in headers.slice(arrcount)" :key="header.value"  >
+                        <template v-for="(data, index) in item.datalist.filter(x => x.日期 === header.value)" :key="index"  >
+                        <div style="position: sticky;">
+                            <v-tooltip slot="append" bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-icon  v-on="on"  v-if="data.flag=='Y'" color="#a9a260">mdi-weather-sunny </v-icon>
+                                  </template>
+                                <span>【表現佳】成交量>500 ，短期量增</span>
+                              </v-tooltip>       
+                              <v-tooltip slot="append" bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-icon   v-on="on"   v-if="data.MA_break" color="red">mdi-star-outline </v-icon>
+                                  </template>
+                                <span>【MA_break】</span>
+                              </v-tooltip>
+                            
+                            <BR />
+                            <!--
                             <div :style="{ backgroundColor:  
-                                        parseInt(data._quote) > 8 ? '#ff4d4d40' :  // 淡紅色
-                                        parseInt(data._quote) > 4 ? '#ffa50040' : // 淡橘色
-                                        parseInt(data._quote) > 2 ? '#4caf5040' : // 淡綠色
-                                        '' 
+                                        parseInt(data._quote) >  8 ? '#ff4d4d60' :  // 淡紅色
+                                        parseInt(data._quote) >  4 ? '#ff4d4d40' : 
+                                        parseInt(data._quote) >  0 ? '#ff4d4d20' : 
+                                        parseInt(data._quote) > -2 ? '#4caf5020' : 
+                                        parseInt(data._quote) > -4 ? '#4caf5040' : 
+                                        parseInt(data._quote) > -6 ? '#4caf5060' : 
+                                        '#4caf5080' 
                                   }">
+                            -->
+                            <div>     
                                 <span :style="{ 
                                                 color: parseInt(data.量能.split('.')[0]) > 90 ? 'red' : 
                                                 parseInt(data.量能.split('.')[0]) > 20 ? 'orange' : 
@@ -79,15 +94,31 @@
                                 <BR />
                                 <span :style="{ 
                                                 color: parseInt(data._quote) > 5 ? 'red' : 
-                                                       parseInt(data._quote) > 2 ? 'orange' : 
-                                                       parseInt(data._quote) > 0 ? 'blue' : 
+                                                       parseInt(data._quote) > 0 ? 'orange' : 
                                                        'green' 
                                             }" style="font-size: xx-small;">
                                     {{data._quote}}
                                 </span>
                             </div>
+                            <div :style="{ backgroundColor:  
+                                    parseInt(data.Volume_Oscillator) > 50  ? '#ff4d4d60' :  
+                                    parseInt(data.Volume_Oscillator) > 40  ? '#ff4d4d50' : 
+                                    parseInt(data.Volume_Oscillator) > 30  ? '#ff4d4d40' : 
+                                    parseInt(data.Volume_Oscillator) > 20  ? '#ff4d4d30' : 
+                                    parseInt(data.Volume_Oscillator) > 10  ? '#ff4d4d20' :
+                                    parseInt(data.Volume_Oscillator) > 0   ? '#ff4d4d10' :
+                                    parseInt(data.Volume_Oscillator) > -10 ? '#4caf5020' :
+                                    parseInt(data.Volume_Oscillator) > -20 ? '#4caf5040' :
+                                    parseInt(data.Volume_Oscillator) > -60 ? '#4caf5060' :
+                                    '#4caf5080' ,
+                                    height: 
+                                    String(Math.abs(parseInt(data.Volume_Oscillator)))+'px'
+                            }">
+                                {{data.Volume_Oscillator}} 
+                                
+                            </div>
+                        </div>
                         </template>
-
                     </template>
                     <template v-slot:item.rt_price="{ item }">
                         <span style="color: rgb(124, 169, 173);"
@@ -153,7 +184,6 @@
                     this.sync = urlParams.get('sync') == 'Y';
                 }
                 this.init();
-
             },
             computed: {
                 filteredData() {
@@ -182,7 +212,6 @@
                     if (this.sync) {
                         await this.sync_realtime();
                     }
-
                     this.loadExcelData();
                 },
                 async sync_realtime() {
@@ -216,11 +245,10 @@
                 },
                 sync_data() {
                     this.jsonData.forEach(item => {
-                        var price = this.realtimedata.filter(x => x.c == item.stock_number)[0]?.a
-                        // item.rt_price = (((price / item.now_price) - 1) * 100).toFixed(1)
-                        item.rt_price = ((this.realtimedata.filter(x => x.c == item.stock_number)[0]?.b / parseFloat(this.realtimedata.filter(x => x.c == item.stock_number)[0]?.y) - 1) * 100).toFixed(2)
-                        var vol = this.realtimedata.filter(x => x.c == item.stock_number)[0]?.v
-                        item.rt_量 = (vol / parseFloat(item.成交股數)).toFixed(1)
+                        var price = this.realtimedata.filter(x => x.c == item.stock_number)[0]?.a;
+                        item.rt_price = ((this.realtimedata.filter(x => x.c == item.stock_number)[0]?.b / parseFloat(this.realtimedata.filter(x => x.c == item.stock_number)[0]?.y) - 1) * 100).toFixed(2);
+                        var vol = this.realtimedata.filter(x => x.c == item.stock_number)[0]?.v;
+                        item.rt_量 = (vol / parseFloat(item.成交股數)).toFixed(1);
                     })
                 },
                 funcSortBy(i) {
@@ -265,25 +293,26 @@
                                 });
 
                                 var dates = [...new Set(this.jsonData.map(x => x.日期))].sort()
-                                //var arr = ['Type', 'Type1', 'Type2', 'LevelArea', 'stock_number', '貝他值', '日期', 'highlight_date', 'MA5_%', '均價_%', 'MACD_%', '短交易量o', '遠交易量o', 'Trend_change', '_quote', 'diff_quote', 'now_price', 'rt_price', '成交股數', 'rt_量', 'count']
-                                var arr = ['殖利率', '貝他值', '成交量', 'Type1', 'Type2', 'stock_number', '箱型力量_5均', '漲跌', 'rt_price', 'max量能', 'count量能', '遠交易量', '起始日期', 'diff_quote', 'highlight_date', 'count']
+                                
+                                var arr = ['殖利率', '貝他值', '成交量', 'Type1', 'Type2', 'stock_number', '箱型力量_5均', '漲跌', 'rt_price', 'max量能', 'count量能', '遠交易量', '起始日期', 'diff_quote', 'highlight_date', 'count','Type','價差', 'rt_price','量差']
                                 if (!this.sync) {
-                                    arr = ['殖利率', '貝他值', '成交量', 'Type1', 'Type2', 'stock_number', '箱型力量_5均', '漲跌_7', '漲跌_6', '漲跌_5', '漲跌_4', '漲跌_3', '漲跌_2', '漲跌_1', '漲跌', 'max量能', 'count量能', '遠交易量', '起始日期', 'diff_quote', 'highlight_date', 'count']
-
                                     const baseFields = ['殖利率', '貝他值', '成交量', 'Type1', 'Type2', 'stock_number'];
                                     const trendFields = ['箱型力量_5均', '漲跌', ...Array.from({ length: 7 }, (_, i) => `漲跌_${7 - i}`)];
                                     const volumeFields = [...Array.from({ length: 7 }, (_, i) => `量_${7 - i}`),'量','max量能', 'count量能', '遠交易量'];
                                     const dateFields = ['起始日期', 'highlight_date'];
-                                    const miscFields = ['diff_quote', 'count'];
+                                    const miscFields = ['diff_quote', 'count','Type','價差','量差'];
 
-                                     arr = [...baseFields, ...trendFields, ...volumeFields, ...dateFields, ...miscFields];
+                                    arr = [...baseFields, ...trendFields, ...volumeFields, ...dateFields, ...miscFields];
                                 }
                                 this.arrcount = arr.length
+
                                 arr.reverse().forEach(element => {
                                     dates.unshift(element)
                                 });
 
                                 this.headers = dates.map(header => ({ text: header, value: header }));
+                               
+                                /*
                                 // 显示的日期列表
                                 const datesToShow = [...new Set(this.jsonData.map(x => x.日期))].sort();
 
@@ -298,6 +327,8 @@
                                     });
                                     return transformedItem;
                                 });
+                                */
+                                const transformedData = this.jsonData
 
                                 var dummydata = Array.from(
                                     new Map(transformedData.map(item => [item.stock_number, item])).values()
@@ -307,35 +338,38 @@
                                     const dummydataItem = item
 
                                     if (!!!item.datalist) {
-                                        const maxdata = this.jsonData.filter(q => q.stock_number == item.stock_number)
-                                        dummydataItem.datalist = maxdata
-                                        const maxdate = maxdata.map(x => x.日期).reduce((a, b) => a > b ? a : b);
+                                        const datalist = this.jsonData.filter(q => q.stock_number == item.stock_number)
+                                        dummydataItem.datalist = datalist
+                                        const maxdate = datalist.map(x => x.日期).reduce((a, b) => a > b ? a : b);
+                                        const mindate = datalist.map(x => x.日期).reduce((a, b) => a < b ? a : b);
                                         const maxdateitem = this.jsonData.filter(q => q.stock_number == item.stock_number && q.日期 == maxdate)[0]
-
-                                        dummydataItem.max量能 = maxdata.map(x => parseInt(x.量能.split('.')[0])).reduce((a, b) => a > b ? a : b);
-                                        dummydataItem.count量能 = maxdata.map(x => parseInt(x.量能.split('.')[0])).filter(x => x > 20).length;
 
                                         dummydataItem.箱型力量 = maxdateitem.箱型力量
                                         dummydataItem.箱型力量_5均 = maxdateitem.箱型力量_5均
                                         dummydataItem.highlight_date = maxdateitem.highlight_date
                                         dummydataItem.遠交易量 = maxdateitem.遠交易量
 
+                                        dummydataItem.max量能 = datalist.map(x => parseInt(x.量能.split('.')[0])).reduce((a, b) => a > b ? a : b);
+                                        dummydataItem.count量能 = datalist.map(x => parseInt(x.量能.split('.')[0])).filter(x => x > 20).length;
+                                        dummydataItem.價差 =parseFloat((this.jsonData.filter(q => q.stock_number == item.stock_number && q.日期 == maxdate)[0].now_price-this.jsonData.filter(q => q.stock_number == item.stock_number && q.日期 == mindate)[0].now_price)/this.jsonData.filter(q => q.stock_number == item.stock_number && q.日期 == mindate)[0].now_price*100).toFixed(2);
+                                        
+                                        let arrlist= datalist.map(x=> parseInt(x.Volume_Oscillator) ).slice().reverse()
+                                        let differences =arrlist.slice(0, -1).map((item, index) =>  arrlist[index + 1]-item )
+
+                                        dummydataItem.量差= differences.reduce((acc, current) => acc + current, 0);
 
                                         dummydataItem.起始日期 = dummydataItem.datalist.filter(y => y.flag == 'Y').map(x => x.日期).reduce((a, b) => a < b ? a : b, Infinity);
-
                                         dummydataItem.count = dummydataItem.datalist.filter(y => y.flag == 'Y')?.length;
                                         if (!this.sync) {
                                             const headerSlice = this.headers.slice(-8);
                                             for (let i = 7; i >= 1; i--) {
-                                                dummydataItem[`漲跌_${i}`] = maxdata.find(x => x.日期 === headerSlice[7 - i]?.text)?._quote;
-                                                dummydataItem[`量_${i}`] = maxdata.find(x => x.日期 === headerSlice[7 - i]?.text)?.量能;
+                                                dummydataItem[`漲跌_${i}`] = datalist.find(x => x.日期 === headerSlice[7 - i]?.text)?._quote;
+                                                dummydataItem[`量_${i}`] = datalist.find(x => x.日期 === headerSlice[7 - i]?.text)?.Volume_Oscillator;
                                             }
                                         }
-
-                                        dummydataItem.漲跌 = maxdata.find(x => x.日期 === this.headers.slice(-1)[0]?.text)?._quote;
-                                        dummydataItem.量 = maxdata.find(x => x.日期 === this.headers.slice(-1)[0]?.text)?.量能;
-
-
+                                        dummydataItem.漲跌 = datalist.find(x => x.日期 === this.headers.slice(-1)[0]?.text)?._quote;
+                                        //dummydataItem.量 = datalist.find(x => x.日期 === this.headers.slice(-1)[0]?.text)?.量能;
+                                        dummydataItem.量 = datalist.find(x => x.日期 === this.headers.slice(-1)[0]?.text)?.Volume_Oscillator;
                                     }
                                     return dummydataItem;
                                 });
@@ -351,5 +385,4 @@
         });
     </script>
 </body>
-
 </html>
