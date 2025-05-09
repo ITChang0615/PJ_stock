@@ -454,6 +454,7 @@
                                             
                                             item.Flag =(item._quote>0  &&  item.量能差 >  5  && item.量能均 >10 ) |item.Volume_Oscillator>-10 ?'Y' :'N'
                                             //item.Flag +=item.Volume_Oscillator>-10 ? 'Y' :'N'
+                                            item.Flag=parseInt(item.量能差/item.量能均)
                                         });
 
                                         //## 二次處理Header資料 (放這裡是因為要經過明細計算才會得到處理)                                        
@@ -466,8 +467,6 @@
                                         dummydataItem.量能均 = datalist_last_date?.量能均;
                                         dummydataItem.Flag = datalist_last_date?.Flag;
                                         dummydataItem.Volume_Diff = datalist_last_date?.Volume_Diff;
-                                        
-                                        
 
                                         //確認 "價" "量" 起來差距日
                                         const date1 = new Date(dummydataItem.highlight_date); // 開始日期 highlight_date(價)
@@ -481,8 +480,7 @@
                                         let arrlist_cc = cc.map(x => parseInt(x._quote)).slice().reverse()
                                         let differences_cc = arrlist_cc.slice(0, -1).map((item, index) => arrlist_cc[index + 1] - item)
                                         item.確認漲跌 = arrlist_cc.reduce((acc, current) => acc + current, 0);
-                                  
-                                        
+                                                                          
                                     }
                                     return dummydataItem;
                                 });
