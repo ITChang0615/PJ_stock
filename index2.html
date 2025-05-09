@@ -453,11 +453,19 @@
                                             item.Volume_Diff = arrlist_dll2.slice(-2).reduce((acc, current) => -acc + current, 0)
 
                                             // 新產判斷邏輯
-                                            
+                                            //********
                                             item.Flag =(item._quote>0  &&  item.量能差 >  5  && item.量能均 >10 ) |item.Volume_Oscillator>-10 ?'Y' :'N'
                                             //item.Flag +=item.Volume_Oscillator>-10 ? 'Y' :'N'
                                             item.Flag=parseInt(item.量能差/item.量能均)
+                                            //**** 想計算 整體向上 但現價碰到5日均
                                             item.Flag1=item['MA5_%']<0  && item['均價_%']>0  ?'Y' :'N'
+                                            //**** 想計算
+                                            item.Flag1= item.量能差 > 10 && item.量能均>5 ? '【Lv.4】-突然放量' :
+                                                        item.量能差 < 10 && item.量能均>5 ? '【Lv.2】-有量，當日縮' :
+                                                        item.量能差 > 10 && item.量能均<5 ? '【Lv.3】-漸漸量長' :
+                                                        '【Lv.1】-' 
+                                                        ;
+
                                         });
 
                                         //## 二次處理Header資料 (放這裡是因為要經過明細計算才會得到處理)                                        
