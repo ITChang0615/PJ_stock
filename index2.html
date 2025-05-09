@@ -458,7 +458,7 @@
                                             //item.Flag +=item.Volume_Oscillator>-10 ? 'Y' :'N'
                                             item.Flag=parseInt(item.量能差/item.量能均)
                                             //**** 想計算 整體向上 但現價碰到5日均
-                                            item.Flag1=item['MA5_%']<0  && item['均價_%']>0  ?'Y' :'N'
+                                            item.Flag=item['MA5_%']<0  && item['均價_%']>0  ?'Y' :'N'
                                             //**** 想計算
                                             item.Flag1= item.量能差 > 10 && item.量能均>5 ? '【Lv.4】-突然放量' :
                                                         item.量能差 < 10 && item.量能均>5 ? '【Lv.2】-有量，當日縮' :
