@@ -93,7 +93,7 @@
                                         color: data.Flag=='Y'? 'red' :
                                         'gray' 
                                         }">
-                                        {{data.Flag}}-------------
+                                        {{data.Flag}}-------{{data.Flag1}}
                                     </span>
                                 </div>
                                 <div class="style1" style="  height:35px;display: none;">
@@ -362,13 +362,13 @@
                                 const baseFields = ['desc', '營業毛利率', '營業利益率', '淨值倍率', '殖利率', '貝他值', '成交量', 'Type1',];// 'stock_number'
                                 //const baseFields = []
                                 //(價)
-                                const trendFields = ['均價_%', 'highlight_date', '價_起始日期',];
+                                const trendFields = ['MA5_%','均價_%', 'highlight_date', '價_起始日期',];
                                 const dateFields = ['量價差天',];
                                 const miscFields = ['diff_quote', '當日漲跌', '總價差', '漲跌BYN天', '增縮BYN天', 'type']; //, 'count','總量增縮', 
                                 //(量)
                                 const volumeFields = ['量能均', '量能差', '量能', 'Volume_Oscillator','Volume_Diff']; //  ,'遠交易量' , '成交股數' ,'量','max量能', 'count量能',  
                                 const configFlag=['確認漲跌']
-                                var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields,'Flag',];
+                                var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields,'Flag','Flag1',];
 
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
                                 var set_date= this.set_date //-3//4 //-1 :max date     targer date =計算後的目標日 顯示在左上方
@@ -415,6 +415,8 @@
                                         dummydataItem.Volume_Oscillator = maxdateitem.Volume_Oscillator
                                         dummydataItem.量能 = maxdateitem.量能
                                         dummydataItem['均價_%'] = maxdateitem['均價_%']
+                                        dummydataItem['MA5_%'] = maxdateitem['MA5_%']
+
                                         
                                         // 總價差 (依據highlight_date 來計算，如果沒有使用mindate)
                                         //const targerdate = datalist.find(x => x.日期 === datalist[0].highlight_date)?.日期 ?? mindate;
@@ -455,6 +457,7 @@
                                             item.Flag =(item._quote>0  &&  item.量能差 >  5  && item.量能均 >10 ) |item.Volume_Oscillator>-10 ?'Y' :'N'
                                             //item.Flag +=item.Volume_Oscillator>-10 ? 'Y' :'N'
                                             item.Flag=parseInt(item.量能差/item.量能均)
+                                            item.Flag1=item['MA5_%']<0  && item['均價_%']>0  ?'Y' :'N'
                                         });
 
                                         //## 二次處理Header資料 (放這裡是因為要經過明細計算才會得到處理)                                        
@@ -466,6 +469,7 @@
                                         dummydataItem.量能差 = datalist_last_date?.量能差;
                                         dummydataItem.量能均 = datalist_last_date?.量能均;
                                         dummydataItem.Flag = datalist_last_date?.Flag;
+                                        dummydataItem.Flag1 = datalist_last_date?.Flag1;
                                         dummydataItem.Volume_Diff = datalist_last_date?.Volume_Diff;
 
                                         //確認 "價" "量" 起來差距日
