@@ -36,11 +36,10 @@
                         -->
                     </v-col>
                     <v-col col="1">
-                     
                         <v-btn color="primary"
                             @click='jsonData=jsonData_.filter(x =>  x.Flag >2 && x.neg_Flag<2 && x["總價差"]>0)'>
-                            x.Volume_Oscillator > -20 && x.量能差 > 0 && x.漲跌BYN天 > -7 && x.量能均>5 </v-btn>
-                            
+                                Filter Check
+                            </v-btn>
                     </v-col>
                 </v-row>
                 <v-data-table disable-pagination fixed-header height="90vh" hide-default-footer :headers="headers"
