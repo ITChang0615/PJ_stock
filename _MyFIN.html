@@ -165,8 +165,8 @@
                         { text: '', value: 'calculate_4', align: 'left' },
                         { text: 'profit_stock', value: 'profit_stock', align: 'left', sortable: true },
                         { text: 'profit', value: 'profit', align: 'left', sortable: true },
-                        { text: 'frequency', frequency: '202501', align: 'left', sortable: true },
-                        { text: 'mounth', value: 'mounth', align: 'left', sortable: true },
+                        { text: 'frequency', value: 'frequency', align: 'left', sortable: true },
+                        { text: 'month', value: 'month', align: 'left', sortable: true },
                     ]
                 };
             },
@@ -248,22 +248,7 @@
                     ]
                 },
                 set_stockdata() {
-                    this.stockdata = [
-                        { "name": null, "number": "0050", "hold": 0, "now": 180.1, "buyin": 179.86, "profit_stock": null, "profit": 2.07, "frequency ": 2 },
-                        { "name": null, "number": "0056", "hold": 15000, "now": 34.11, "buyin": 35.17, "profit_stock": null, "profit": 1.07, "frequency ": 4 },
-                        { "name": null, "number": "00878", "hold": 20000, "now": 20.18, "buyin": 21.64, "profit_stock": null, "profit": 0.47, "frequency ": 4 },
-                        { "name": null, "number": "00929", "hold": 1000, "now": 17.42, "buyin": 18.85, "profit_stock": null, "profit": 0.07, "frequency ": 12 },
-                        { "name": "台泥", "number": 1101, "hold": 14000, "now": 29.1, "buyin": 33.64, "profit_stock": null, "profit": 1, "frequency ": 1 },
-                        { "name": " 宏佳騰", "number": 1599, "hold": 1000, "now": 29.15, "buyin": 35.35, "profit_stock": null, "profit": 0.5, "frequency ": 1 },
-                        { "name": "橋椿", "number": 2062, "hold": 9000, "now": 25.45, "buyin": 30.75, "profit_stock": null, "profit": 1.8, "frequency ": 1 },
-                        { "name": "光寶科", "number": 2301, "hold": 29, "now": 102.5, "buyin": 109.11, "profit_stock": null, "profit": 2.5, "frequency ": 2 },
-                        { "name": " 錸德", "number": 2349, "hold": 32000, "now": 10, "buyin": 12.95, "profit_stock": null, "profit": null, "frequency ": " " },
-                        { "name": " 技嘉", "number": 2376, "hold": 0, "now": 274, "buyin": 270.76, "profit_stock": null, "profit": 10, "frequency ": 1 },
-                        { "name": " 興富發", "number": 2542, "hold": 10000, "now": 40.25, "buyin": 43.59, "profit_stock": 0.5, "profit": 2, "frequency ": 1 },
-                        { "name": "李洲", "number": 3066, "hold": 11000, "now": 16.2, "buyin": 24.15, "profit_stock": null, "profit": null, "frequency ": " " },
-                        { "name": " 譜瑞-KY", "number": 4966, "hold": 204, "now": 576, "buyin": 704, "profit_stock": null, "profit": 8.93, "frequency ": 2 },
-                        { "name": "采鈺", "number": 6789, "hold": 160, "now": 215.5, "buyin": 348.46, "profit_stock": null, "profit": 3, "frequency ": 1 },
-                    ]
+                    this.stockdata = [{"name":null,"number":50,"hold":0,"now":180.1,"buyin":179.86,"profit_stock":null,"profit":2.07,"frequency ":2,"month":"1, 7"},{"name":null,"number":56,"hold":15000,"now":34.11,"buyin":35.17,"profit_stock":null,"profit":1.07,"frequency ":4,"month":"1,4,7,10"},{"name":null,"number":878,"hold":20000,"now":20.18,"buyin":21.64,"profit_stock":null,"profit":0.47,"frequency ":4,"month":"2,5,8,11"},{"name":null,"number":929,"hold":1000,"now":17.42,"buyin":18.85,"profit_stock":null,"profit":0.07,"frequency ":12,"month":"1,2,3,4,5,6,7,8,9,10,11,12"},{"name":"台泥","number":1101,"hold":14000,"now":29.1,"buyin":33.64,"profit_stock":null,"profit":1,"frequency ":1,"month":8},{"name":" 宏佳騰","number":1599,"hold":1000,"now":29.15,"buyin":35.35,"profit_stock":null,"profit":0.5,"frequency ":1,"month":9},{"name":"橋椿","number":2062,"hold":9000,"now":25.45,"buyin":30.75,"profit_stock":null,"profit":1.8,"frequency ":1,"month":7},{"name":"光寶科","number":2301,"hold":29,"now":102.5,"buyin":109.11,"profit_stock":null,"profit":2.5,"frequency ":2,"month":"3,8"},{"name":" 錸德","number":2349,"hold":32000,"now":10,"buyin":12.95,"profit_stock":null,"profit":null,"frequency ":"","month":""},{"name":" 技嘉","number":2376,"hold":0,"now":274,"buyin":270.76,"profit_stock":null,"profit":10,"frequency ":1,"month":8},{"name":" 興富發","number":2542,"hold":10000,"now":40.25,"buyin":43.59,"profit_stock":0.5,"profit":2,"frequency ":1,"month":9},{"name":"李洲","number":3066,"hold":11000,"now":16.2,"buyin":24.15,"profit_stock":null,"profit":null,"frequency ":"","month":""},{"name":" 譜瑞-KY","number":4966,"hold":204,"now":576,"buyin":704,"profit_stock":null,"profit":8.93,"frequency ":2,"month":"3,8"},{"name":"采鈺","number":6789,"hold":160,"now":215.5,"buyin":348.46,"profit_stock":null,"profit":3,"frequency ":1,"month":7}]
 
                 }
             },
