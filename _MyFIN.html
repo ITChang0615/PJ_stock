@@ -631,3 +631,636 @@
 </body>
 
 </html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【FIM】</title>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.10/dist/vuetify.min.css" rel="stylesheet">
+    <link href="./Content/base.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.10/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.4/dist/xlsx.full.min.js"></script>
+    <script src="./Content/common.js"></script>
+    <script src="./Content/getRealTime.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-container style="max-width: 95%;">
+                <v-row no-gutters>
+                    <v-col col="1">
+                        <v-btn color="primary" @click="window.location.href=location.href+'?&sync=Y'">SYNC</v-btn>
+                    </v-col>
+                </v-row>
+                <v-tabs vertical>
+                    <v-tab>
+                        <v-icon left> mdi-account </v-icon>
+                        Option 1
+                    </v-tab>
+                    <v-tab>
+                        <v-icon left> mdi-lock</v-icon>
+                        Option 2
+                    </v-tab>
+                    <v-tab>
+                        <v-icon left> mdi-access-point </v-icon>
+                        Option 3
+                    </v-tab>
+                    <v-tab>
+                        <v-icon left> mdi-access-point </v-icon>
+                        Option 4
+                    </v-tab>
+                    <!-- 第一個 tab-->
+                    <v-tab-item>
+                        <v-card flat>
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="3">
+                                        <v-data-table hide-default-footer :headers="mydata_headers" :items="mydata"
+                                            style="white-space: nowrap;" :items-per-page="50">
+                                            <template v-slot:item.calculate="{ item }">
+                                                <span v-show="item.Desc=='銀行'">
+                                                    {{ mydata.filter(x=>x.Desc=='現金')[0].today
+                                                    +mydata.filter(x=>x.Desc=='信用卡')[0].today
+                                                    +mydata.filter(x=>x.Desc=='預備金')[0].today
+                                                    +mydata.filter(x=>x.Desc=='銀行')[0].today
+                                                    -300000
+                                                    }}
+                                                </span>
+                                                <span v-show="item.Desc=='預備金'">
+                                                    300000
+                                                </span>
+                                                  <span v-show="item.Desc=='日幣'">
+                                                    {{mydata.filter(x=>x.Desc=='日幣')[0].today}}
+                                                </span>
+                                                <span v-show="item.Desc=='投入'">
+                                                    {{ parseInt(item.today)
+                                                    +mydata.filter(x=>x.Desc=='invest_input')[0].N_1
+                                                    +mydata.filter(x=>x.Desc=='invest_input')[0].N_2
+                                                    -(mydata.filter(x=>x.Desc=='invest_output')[0].N_1-mydata.filter(x=>x.Desc=='income_loss')[0].N_1)
+                                                    -(mydata.filter(x=>x.Desc=='invest_output')[0].N_2-mydata.filter(x=>x.Desc=='income_loss')[0].N_2)
+                                                    
+                                                    }}
+                                                </span>
+                                                <span v-show="item.Desc=='可下單現金'">
+                                                    {{ parseInt(item.today)+
+                                                    -mydata.filter(x=>x.Desc=='invest_input')[0].N_1
+                                                    -mydata.filter(x=>x.Desc=='invest_input')[0].N_2
+                                                    +mydata.filter(x=>x.Desc=='invest_output')[0].N_1
+                                                    +mydata.filter(x=>x.Desc=='invest_output')[0].N_2
+                                                    
+                                                    
+                                                    }}
+                                                </span>
+                                                <span v-show="item.Desc=='Total'">
+                                                    {{ mydata.filter(x=>x.Desc=='現金')[0].today
+                                                    +mydata.filter(x=>x.Desc=='信用卡')[0].today
+                                                    +mydata.filter(x=>x.Desc=='銀行')[0].today
+                                                    +mydata.filter(x=>x.Desc=='預備金')[0].today
+                                                    +mydata.filter(x=>x.Desc=='日幣')[0].today
+                                                    +mydata.filter(x=>x.Desc=='投入')[0].today
+                                                    +mydata.filter(x=>x.Desc=='可下單現金')[0].today
+                                                    }}
+                                                </span>
+                                            </template>
+                                            <template v-slot:body.append>
+                                                <tr class="sticky-table-footer">
+                                                    <td />
+                                                    <td>{{stockdata_sum}}</td>
+                                                    <td>{{
+                                                        mydata.filter(x=>x.Desc=='現金')[0].today
+                                                        +mydata.filter(x=>x.Desc=='信用卡')[0].today
+                                                        +mydata.filter(x=>x.Desc=='銀行')[0].today
+                                                        +mydata.filter(x=>x.Desc=='預備金')[0].today
+                                                        +mydata.filter(x=>x.Desc=='日幣')[0].today
+                                                        +mydata.filter(x=>x.Desc=='投入')[0].today
+                                                        +mydata.filter(x=>x.Desc=='可下單現金')[0].today
+                                                        +stockdata_sum
+                                                        }}</td>
+                                                </tr>
+                                                <tr class="sticky-table-footer">
+                                                    <td>預期</td>
+                                                    <td>股利:{{getRemainMonthsOfYear_profit}}</td>
+                                                    <td>儲蓄:{{getRemainMonthsOfYear_cash}}</td>
+                                                    <td colspan="2">結餘{{
+                                                        mydata.filter(x=>x.Desc=='現金')[0].today
+                                                        +mydata.filter(x=>x.Desc=='信用卡')[0].today
+                                                        +mydata.filter(x=>x.Desc=='銀行')[0].today
+                                                        +mydata.filter(x=>x.Desc=='預備金')[0].today
+                                                        +mydata.filter(x=>x.Desc=='日幣')[0].today
+                                                        +mydata.filter(x=>x.Desc=='投入')[0].today
+                                                        +mydata.filter(x=>x.Desc=='可下單現金')[0].today
+                                                        +getRemainMonthsOfYear_profit
+                                                        +getRemainMonthsOfYear_cash
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                       <tr class="sticky-table-footer">
+                                                        <td>預期</td>
+                                                        <td>優離(6):{{72300*6}}</td>
+                                                        <td/>
+                                                        <td>結餘:{{
+                                                        mydata.filter(x=>x.Desc=='現金')[0].today
+                                                        +mydata.filter(x=>x.Desc=='信用卡')[0].today
+                                                        +mydata.filter(x=>x.Desc=='銀行')[0].today
+                                                        +mydata.filter(x=>x.Desc=='預備金')[0].today
+                                                        +mydata.filter(x=>x.Desc=='日幣')[0].today
+                                                        +mydata.filter(x=>x.Desc=='投入')[0].today
+                                                        +mydata.filter(x=>x.Desc=='可下單現金')[0].today
+                                                        +getRemainMonthsOfYear_profit
+                                                        +getRemainMonthsOfYear_cash
+                                                        +72300*6
+                                                        }}</td>
+                                                       </tr>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                    <v-col cols="9">
+                                        <v-data-table hide-default-footer :headers="stock_headers" :items="stockdata.filter(x=>x.Desc!='total')"
+                                            style="white-space: nowrap;" :items-per-page="50">
+                                            <template v-slot:item.number="{ item }">
+                                                <v-btn text @click="openDialog(item)">
+                                                    {{ item.name }} {{ item.number }}
+                                                </v-btn>
+                                            </template>
+                                            <template v-slot:item.calculate_1="{ item }">
+                                                {{ ((item.now-item.buyin)/item.buyin*100).toFixed(1)}}
+                                            </template>
+                                            <template v-slot:item.calculate_2="{ item }">
+                                                {{ parseInt(item.now*item.hold)}}
+                                            </template>
+                                            <template v-slot:item.calculate_3="{ item }">
+                                                {{ parseInt(item.buyin*item.hold)}}
+                                            </template>
+                                            <template v-slot:item.calculate_4="{ item }">
+                                                {{parseInt((item.now*item.hold)-(item.buyin*item.hold))}}
+                                            </template>
+                                            <template v-slot:item.calculate_5="{ item }">
+                                                {{(parseFloat(item.profit)*parseInt(item.frequency)/
+                                                parseFloat(item.now)*100).toFixed(1)}}
+                                            </template>
+                                            <template v-slot:item.calculate_6="{ item }">
+                                                {{item.hold/10 * item.now *item.profit_stock}}
+                                            </template>
+                                            <template v-slot:item.calculate_7="{ item }">
+                                                {{(item.hold* item.frequency *item.profit).toFixed(0)}}
+                                            </template>
+                                            <template v-slot:item.calculate_8="{ item }">
+                                                {{(item.hold*item.profit).toFixed(0)}}
+                                            </template>
+                                            <template v-slot:body.append>
+                                                <tr class="sticky-table-footer">
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td />
+                                                    <td>{{parseFloat(100*stockdata_sum/stockdata_input).toFixed(2)}}%</td>
+                                                    <td>{{stockdata_input}}</td>
+                                                    <td>{{stockdata_sum}}</td>
+                                                    
+                                                    
+                                                </tr>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-tab-item>
+                    <!-- 第二個 tab-->
+                    <v-tab-item>
+                        <v-card flat>
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-data-table hide-default-footer :headers="headers" :items="report"
+                                            style="white-space: nowrap;" :items-per-page="50">
+                                            <template v-slot:item.calculate="{ item }">
+                                                <span v-show="item.Desc=='月餘'">
+                                                    {{sumTargetData(item)}}
+                                                </span>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-tab-item>
+                    <!-- 第三個 tab-->
+                    <v-tab-item>
+                        <v-card flat>
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-data-table hide-default-footer :headers="stock_headers_profit"
+                                            :items="stockdata" style="white-space: nowrap;" :items-per-page="50">
+                                            <template v-slot:item.calculate_8="{ item }">
+                                                {{(item.hold*item.profit).toFixed(0)}}
+                                            </template>
+                                            <template v-slot:[`item.${header.value}`]="{ item }"
+                                                v-for="header in getYM().map(x => ({ text: x, value: x }))"
+                                                :key="header.value">
+                                                {{item[header.value]}}
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-tab-item>
+                    <!-- 第四個 tab-->
+                    <v-tab-item>
+                        <v-card flat>
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-data-table hide-default-footer :headers="headers" :items="maindata_input"
+                                            style="white-space: nowrap;" :items-per-page="50">
+                                            <template v-slot:item.calculate="{ item }">
+                                                {{sumTargetData(item)}}
+                                            </template>
+                                            <template v-slot:item.bymonth="{ item }">
+                                                {{parseInt(sumTargetData(item)/12)}}
+
+                                            </template>
+                                        </v-data-table>
+                                        <br />
+                                        <v-data-table hide-default-footer :headers="headers" :items="maindata_output"
+                                            style="white-space: nowrap;" :items-per-page="50">
+                                            <template v-slot:item.calculate="{ item }">
+                                                {{sumTargetData(item)}}
+                                            </template>
+                                            <template v-slot:item.bymonth="{ item }">
+                                                {{parseInt(sumTargetData(item)/12)}}
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-tab-item>
+                </v-tabs>
+            </v-container>
+            <v-dialog v-model="dialog" max-width="40vw">
+                <v-card>
+                    <v-card-title class="headline">{{ selectedItem?.number }}</v-card-title>
+                    <v-card-text style="padding: 10px; height:30vh;">
+                        <v-row>
+                            <v-col>Hold : {{ selectedItem?.hold }}</v-col>
+                            <v-col>Now : {{ selectedItem?.now }}</v-col>
+                            <v-col>買均: {{ selectedItem?.buyin }}</v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>add : {{selectedItem_add }}</v-col>
+                            <v-col>Now : {{ selectedItem?.now }}</v-col>
+                            <v-col>AVG : {{
+                                (parseInt((selectedItem?.hold * selectedItem?.buyin)+
+                                (selectedItem_add*selectedItem?.now))
+                                /(parseInt(selectedItem_add)+parseInt(selectedItem?.hold))
+                                ).toFixed(2)
+                                }}
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col></v-col>
+                            <v-col></v-col>
+                            <v-col>Total {{ parseInt((selectedItem?.hold * selectedItem?.buyin)+
+                                (selectedItem_add*selectedItem?.now)) }}</v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-text-field v-model="selectedItem_add" clearable label="購買股數"
+                                    variant="outlined"></v-text-field>
+                            </v-col>
+                            <v-col> ADD Cost :{{(selectedItem_add*selectedItem?.now)}}</v-col>
+                            <v-col>最低賣價(有賺股利)
+                                {{parseFloat(
+                                (parseInt((selectedItem?.hold * selectedItem?.buyin)+
+                                (selectedItem_add*selectedItem?.now)) +
+                                (selectedItem?.hold*selectedItem?.frequency)+(selectedItem?.hold/10 *
+                                selectedItem?.now *selectedItem?.profit_stock))
+                                /(parseInt(selectedItem_add)+parseInt(selectedItem?.hold))
+                                ).toFixed(2)
+                                }}
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-text-field v-model="selectedItem_price" clearable label="賣價"
+                                    variant="outlined"></v-text-field>
+                            </v-col>
+                            <v-col>
+                                預期賺
+                                <br />
+                                {{parseInt((
+                                ( selectedItem_price-
+                                (parseInt((selectedItem?.hold * selectedItem?.buyin)+
+                                (selectedItem_add*selectedItem?.now))
+                                /(parseInt(selectedItem_add)+parseInt(selectedItem?.hold))
+                                ).toFixed(2)
+                                )/(parseInt((selectedItem?.hold * selectedItem?.buyin)+
+                                (selectedItem_add*selectedItem?.now))
+                                /(parseInt(selectedItem_add)+parseInt(selectedItem?.hold))
+                                ).toFixed(2)
+                                )*selectedItem?.hold * selectedItem?.buyin)
+                                }}
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+        </v-app>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data() {
+                return {
+                    sync: false,
+                    realtimedata: [],
+                    dialog: false,
+                    selectedItem: null,
+                    selectedItem_add: null,
+                    selectedItem_price: null,
+                    mydata: [],
+                    mydata_headers: [
+                        { text: 'Desc', value: 'Desc', align: 'left' },
+                        { text: '', value: 'today', align: 'left' },
+                        { text: 'N_1', value: 'N_1', align: 'left' },
+                        { text: 'N_2', value: 'N_2', align: 'left' },
+                        { text: 'calculate', value: 'calculate', align: 'left' },
+                    ],
+                    maindata_intput: [],
+                    maindata_output: [],
+                    report: [],
+                    headers: [
+                        { text: 'Desc', value: 'Desc', align: 'left', sortable: true },
+                        { text: '202501', value: '202501', align: 'left', sortable: true },
+                        { text: '202502', value: '202502', align: 'left', sortable: true },
+                        { text: '202503', value: '202503', align: 'left', sortable: true },
+                        { text: '202504', value: '202504', align: 'left', sortable: true },
+                        { text: '202505', value: '202505', align: 'left', sortable: true },
+                        { text: '202506', value: '202506', align: 'left', sortable: true },
+                        { text: '202507', value: '202507', align: 'left', sortable: true },
+                        { text: '202508', value: '202508', align: 'left', sortable: true },
+                        { text: '202509', value: '202509', align: 'left', sortable: true },
+                        { text: '202510', value: '202510', align: 'left', sortable: true },
+                        { text: '202511', value: '202511', align: 'left', sortable: true },
+                        { text: '202512', value: '202512', align: 'left', sortable: true },
+                        { text: 'calculate', value: 'calculate', align: 'left' },
+                        { text: 'byMonth', value: 'bymonth', align: 'left' },
+                    ],
+                    stockdata: [],
+                    stock_headers: [
+                        //{ text: 'name', value: 'name', align: 'left', sortable: true },
+                        { text: 'number', value: 'number', align: 'left', sortable: true },
+                        { text: 'hold', value: 'hold', align: 'left', sortable: true },
+                        { text: 'now', value: 'now', align: 'left', sortable: true },
+                        { text: 'buyin', value: 'buyin', align: 'left', sortable: true },
+                        { text: '%', value: 'calculate_1', align: 'left' },
+                        //{ text: '', value: 'calculate_2', align: 'left' },
+                        { text: '', value: 'calculate_3', align: 'left' },
+                        { text: '', value: 'calculate_4', align: 'left' },
+                        { text: '配股', value: 'profit_stock', align: 'left', sortable: true },
+                        { text: '配息', value: 'profit', align: 'left', sortable: true },
+                        { text: 'freq', value: 'frequency', align: 'left', sortable: true },
+
+                        { text: '配息%', value: 'calculate_5', align: 'left' },
+                        { text: '', value: 'calculate_6', align: 'left' },
+                        { text: '總發放', value: 'calculate_7', align: 'left' },
+                        { text: '單次發放', value: 'calculate_8', align: 'left' },
+
+                    ],
+                    stock_headers_profit: [
+                        { text: 'name', value: 'name', align: 'left', sortable: true },
+                        { text: 'number', value: 'number', align: 'left', sortable: true },
+                        { text: 'month', value: 'month', align: 'left', sortable: true },
+                        { text: '單次發放', value: 'calculate_8', align: 'left' },
+                    ]
+                };
+            },
+            created() {
+                this.url = window.location.href.split('/').slice(0, 4).join('/') + '/Html/';
+                let urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('sync')) {
+                    this.sync = urlParams.get('sync') == 'Y';
+                }
+                this.set_maindata();
+                this.set_mydata();
+                this.set_stockdata();
+                this.init();
+            },
+            computed: {
+                stockdata_input() {
+                    return this.stockdata.map(item => parseInt(item.buyin * item.hold) || 0).reduce((acc, current) => acc + current, 0)
+                },
+                stockdata_sum() {
+                    return this.stockdata.map(item => parseInt((item.now * item.hold) - (item.buyin * item.hold)) || 0).reduce((acc, current) => acc + current, 0)
+                },
+                getRemainMonthsOfYear_profit() {
+                    //本月起取到本年度最後一個月的所有月份 計算股利
+                    var data = 0;
+                    this.getRemainMonthsOfYear().forEach(x => {
+                        data += this.stockdata.filter(x => x.Desc == 'total')[0][x]
+                    })
+
+                    return data;
+                },
+                getRemainMonthsOfYear_cash() {
+                    //本月起取到本年度最後一個月的所有月份 可存下的錢
+                    var data = 0;
+                    this.getRemainMonthsOfYear().forEach(x => {
+                        data += parseInt(this.report.filter(x => x.Desc == '儲蓄')[0][x] || 0)
+                    })
+                    var lastYMCash = this.report.filter(x => x.Desc == '現金')[0][this.getRemainMonthsOfYear().slice(-1)[0]]
+                    return lastYMCash - data;
+                }
+            },
+            methods: {
+                sumTargetData(item) {
+                    return Object.values(item).map(x => parseInt(x) || 0).reduce((acc, current) => acc + current, 0)
+                },
+                openDialog(item) {
+                    this.selectedItem = item;
+                    this.selectedItem_add = 0;
+
+                    this.dialog = true;
+                },
+                async init() {
+                    if (this.sync) {
+                        await this.sync_realtime();
+                    }
+                },
+                async sync_realtime() {
+                    var vm = this
+                    try {
+                        console.log('Starting the process...');
+                        const result = await main(this.stockdata)
+                            .then(result => {
+                                console.log('Promise result:', result);   // 處理結果
+                                vm.realtimedata = result
+
+                                if (this.realtimedata.length > 0) {
+                                    this.sync_data();
+                                }
+                            })
+                    } catch (error) {
+                        console.error('Error in init:', error);  // 捕獲初始化過程中的錯誤
+                    }
+                    console.log('done');  // 確保這個訊息在主流程完成後顯示
+                },
+                sync_data() {
+                    this.stockdata.forEach(item => {
+                        var a = item.name
+                        item.now = parseFloat(this.realtimedata.filter(x => x.c == item.stock_number)[0]?.z).toFixed(2);
+                    })
+                },
+                getRemainMonthsOfYear() {
+                    //本月起取到本年度最後一個月的所有月份
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    let startMonth = now.getMonth() + 1; // 1~12 月  
+                    if (now.getDate() > 4) {
+                        startMonth = now.getMonth() + 2; //多取一個月(發薪)
+                    }
+                    const months = [];
+                    for (let m = startMonth; m <= 12; m++) {
+                        months.push(`${year}${String(m).padStart(2, '0')}`);
+                    }
+                    return months;
+                },
+                getYM() {
+                    const year = 2025;
+                    const months = Array.from({ length: 12 }, (v, i) =>
+                        `${year}${String(i + 1).padStart(2, '0')}`
+                    );
+                    return months
+                },
+                minus(desc, x,) {
+                    var suminput = { "Desc": desc };
+                    var getMonth = this.getYM()//Object.keys(x[0]).filter(x => x != 'Desc')
+                    getMonth.forEach(item => {
+                        var input = x.map(x => parseInt(x[item]) || 0)[0]
+                        var output = x.map(x => parseInt(x[item]) || 0)[1]
+                        suminput[item] = input - output;
+                    })
+                    x.push(suminput)
+                    return x
+                },
+                sumdata(desc, x) {
+                    var suminput = { "Desc": desc };
+                    var getMonth = this.getYM()
+                    getMonth.forEach(item => {
+                        suminput[item] = x.map(x => parseInt(x[item]) || 0).reduce((acc, current) => acc + current, 0);
+                    })
+                    x.push(suminput)
+                    return x
+                },
+                set_maindata() {
+                    // 【INPUT】
+                    this.maindata_input = [
+                        { "Desc": "預設", "202501": "85000", "202502": null, "202503": null, "202504": null, "202505": null, "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": null },
+                        { "Desc": "薪", "202501": "67300", "202502": "67300", "202503": "67300", "202504": "67300", "202505": "69300", "202506": "64480", "202507": "69300", "202508": "69300", "202509": "69300", "202510": "69300", "202511": "69300", "202512": "69300" },
+                        { "Desc": "獎金", "202501": "70300", "202502": null, "202503": null, "202504": null, "202505": "36150", "202506": null, "202507": null, "202508": null, "202509": null, "202510": "36150", "202511": null, "202512": "" },
+                        { "Desc": "獎金2", "202501": "40000", "202502": null, "202503": null, "202504": null, "202505": null, "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": "" },
+                    ]
+                    this.maindata_input = this.sumdata("sum收入", this.maindata_input);
+                    this.report.push(this.maindata_input.filter(x => x.Desc == "sum收入")[0])
+                    // 【OUTPUT】
+                    this.maindata_output = [
+                        { "Desc": "生活-LPP", "202501": "8000", "202502": "5000", "202503": "7000", "202504": "7000", "202505": "8500", "202506": "8000", "202507": "8000", "202508": "7000", "202509": "7000", "202510": "7000", "202511": "7000", "202512": "7000" },
+                        { "Desc": "生活", "202501": "5000", "202502": "4000", "202503": "3000", "202504": "3500", "202505": "2894",      "202506": "4521", "202507": "3000", "202508": "3000", "202509": "3000", "202510": "3000", "202511": "3000", "202512": "3000" },
+                        { "Desc": "固-3C影音", "202501": "2000", "202502": "2000", "202503": "3000", "202504": "1700", "202505": "3594", "202506": "1606", "202507": "3604", "202508": "3000", "202509": "3000", "202510": "3000", "202511": "3000", "202512": "3000" },
+                        { "Desc": "固-阿罵", "202501": "62000", "202502": "9000", "202503": "1800", "202504": "1000", "202505": null,     "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": "0" },
+                        { "Desc": "固-車", "202501": "3500", "202502": "2000", "202503": "3500", "202504": "1680", "202505": "3500",      "202506": "2263", "202507": "2000", "202508": "2000", "202509": "2000", "202510": "2000", "202511": "2000", "202512": "2000" },
+                        { "Desc": "固-車稅/保養", "202501": null, "202502": null, "202503": null, "202504": "4320", "202505": null,         "202506": "17358", "202507": null, "202508": "18000", "202509": null, "202510": null, "202511": null, "202512": "10000" },
+                        { "Desc": "固-稅", "202501": null, "202502": null, "202503": null, "202504": null, "202505": "7168",                "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": "" },
+                        { "Desc": "運動", "202501": "2400", "202502": "7400", "202503": null, "202504": null, "202505": null,               "202506": null, "202507": "4000", "202508": null, "202509": null, "202510": null, "202511": null, "202512": "" },
+                        { "Desc": "購物/娛樂", "202501": "10000", "202502": "7000", "202503": "5000", "202504": "13000", "202505": "10000", "202506": "7476", "202507": "5000", "202508": "6000", "202509": "40000", "202510": "5000", "202511": "5000", "202512": "5000" },
+                        { "Desc": "旅", "202501": null, "202502": null, "202503": "7000", "202504": null, "202505": "6595",                 "202506": null, "202507": null, "202508": null, "202509": "36000", "202510": null, "202511": null, "202512": "0" },
+                    ]
+                    this.maindata_output = this.sumdata("sum支出", this.maindata_output);
+                    this.report.push(this.maindata_output.filter(x => x.Desc == "sum支出")[0])
+
+                    this.report = this.minus("月餘", this.report);
+                    //【Savings】
+                    this.maindata_savings = { "Desc": "儲蓄", "202502": "-200000", "202504": "-50000", "202505": "-50000","202506": "-50000", "202508": "-50000", "202509": null, "202510": "-50000", "202511": "-50000", "202512": null }
+                    this.report.push(this.maindata_savings)
+                    this.maindata_cash = { "Desc": "現金", }
+                    var sum = 0
+                    this.getYM().forEach(item => {
+                        sum += parseInt(this.report.filter(x => x.Desc == '月餘')[0][item] || 0)
+                        sum += parseInt(this.maindata_savings[item] || 0)
+                        this.maindata_cash[item] = sum
+                    })
+                    this.report.push(this.maindata_cash)
+                },
+                set_mydata() {
+                    this.mydata = [
+                        //投入
+                        { "Desc": "invest_input", "N_1":null , "N_2": null },
+                        //回收
+                        { "Desc": "invest_output", "N_1": 419342, "N_2": null },
+                        //損益
+                        { "Desc": "income_loss", "N_1": 1545, "N_2": null },
+                        { "Desc": "現金", "today": 2020 },
+                        { "Desc": "信用卡", "today": -25654 },
+                        { "Desc": "銀行", "today": 102363 },
+                        { "Desc": "預備金", "today": 301102 },
+                        { "Desc": "日幣", "today": 30000 },
+                        { "Desc": "投入", "today": 3577150 },
+                        { "Desc": "可下單現金", "today":420993 },
+                        { "Desc": "Total", "today": null }
+                    ]
+                },
+                set_stockdata() {
+                    this.stockdata = [
+                       { "Type2": "上市", "name": null, "number": '0050', "hold": 0, "now": 49.62, "buyin": 47, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+                        { "Type2": "上市", "name": null, "number": '006208', "hold": 0, "now": 116.25, "buyin": 110, "profit_stock": null, "profit": 2.07, "frequency": 2, "month": "1,7" },
+                        //15000
+                        { "Type2": "上市", "name": null, "number": '0056', "hold": 0, "now": 35.2, "buyin": 35.17, "profit_stock": null, "profit": 0.866, "frequency": 4, "month": "1,4,7,10" },
+                        { "Type2": "上市", "name": null, "number": '00878', "hold": 20000, "now": 21.09, "buyin": 21.64, "profit_stock": null, "profit": 0.47, "frequency": 4, "month": "2,5,8,11" },
+                        { "Type2": "上市", "name": null, "number": '00929', "hold": 2000, "now": 17.53, "buyin": 18.29, "parofit_stock": null, "profit": 0.07, "frequency": 12, "month": "1,2,3,4,5,6,7,8,9,10,11,12" },
+                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 26000, "now": 23.65, "buyin": 30.27, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
+                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 1000, "now": 30.95, "buyin": 35.35, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
+                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 10000, "now": 24.4, "buyin": 30.22, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 7 },
+                        //{ "Type2": "上市", "name": "光寶科", "number": 2301, "hold": 29, "now": 118, "buyin": 109.11, "profit_stock": null, "profit": 2.5, "frequency": 2, "month": "3,8" },
+                        { "Type2": "上市", "name": "錸德", "number": 2349, "hold": 47000, "now": 11, "buyin": 12.09, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 13000, "now": 41.6, "buyin": 43.13, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 8 },
+                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 11000, "now": 14.45, "buyin": 24.15, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上櫃", "name": "譜瑞-KY", "number": 4966, "hold": 184, "now": 593, "buyin": 702.76, "profit_stock": null, "profit": 8.93, "frequency": 2, "month": "3,8" },
+                        { "Type2": "上市", "name": "采鈺", "number": 6789, "hold": 260, "now": 228.5, "buyin": 298.58, "profit_stock": null, "profit": 3, "frequency": 1, "month": 7 }
+                    ]
+
+                    this.stock_headers_profit.push(...this.getYM().map(x => ({ text: x, value: x })));
+
+                    this.stockdata.forEach(item => {
+                        //var happenMonth = item.month.toString().split(',').map(m => m.padStart(2, '0'))
+                        //多取一個月
+                        var happenMonth = item.month.toString().split(',').map(m => (parseInt(m) + 1).toString().padStart(2, '0'))
+                        this.getYM().forEach(YM => {
+                            if (happenMonth.indexOf(YM.slice(-2)) != -1) {
+                                item[YM] = (item.hold * item.profit).toFixed(0)
+                            }
+                        })
+                    })
+                    this.stockdata = this.sumdata("total", this.stockdata);
+                    this.stockdata.map(x => x.stock_number = x.number)
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>
