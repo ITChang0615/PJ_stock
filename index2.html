@@ -462,7 +462,7 @@
 
                         */
 
-                        const allowedTypes = ['a', 'aa', 'b', 'c', 'd', 'e', 'f', 'v']; // 可擴充
+                        const allowedTypes = ['s','a', 'aa', 'b', 'c', 'd', 'e', 'f', 'v']; // 可擴充
                         if (allowedTypes.includes(d)) {
                             file = `./Result/checksun_${d}/${urlParams.get('date')}.xlsx`;
                         }
@@ -783,9 +783,11 @@
                 },
                 filter1() {
                     var vm = this
-
-                    vm.jsonData = vm.jsonData_.filter(x => x['MA_long'] > x['MA_longlong'] && x['now_price'] > x['MA_longlong'] && x['now_price'] < x['MA_longlong'] * 1.1 && x['MACD_%'] > 0)
-                    vm.sortBy = ['量能差', 'MACD_%']
+                    //vm.jsonData = vm.jsonData_.filter(x => x['MA_long'] > x['MA_longlong'] && x['now_price'] > x['MA_longlong'] && x['now_price'] < x['MA_longlong'] * 1.1 && x['MACD_%'] > 0)
+                    vm.jsonData = vm.jsonData_.filter(x => x['MACD_%'] > 0 && x['均價long_%'] > -1 && x['漲跌BYN天'] > -1)
+                    vm.jsonData = vm.jsonData.filter(x =>   x['量能max'] < 100  && x['量能max'] > 5  )
+                    
+                    vm.sortBy = [ 'MACD_%']
                     vm.sortDesc = [true, true]
                     //find 剛突破
                 },
