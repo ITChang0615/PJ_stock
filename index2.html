@@ -300,6 +300,22 @@
                         </td>
                         </tr>
                     </template>
+                   
+                     <template v-slot:item.macdpercent="{ item }">
+                        <tr></tr>
+                        <td>{{ item.量能差 }}</td>
+                        <td style="width: 20px;"></td>
+                        <td>
+                            (max){{ parseFloat(item.MACDpercent_max).toFixed(0) }}</span>
+                            <br />
+                            <span style="color:gray;">
+                            (now) {{ parseFloat(item['MACD_%']).toFixed(0) }}</span>
+                            <br />
+                            (min) {{ parseFloat(item.MACDpercent_min).toFixed(0)}}
+                        </td>
+                        </tr>
+                    </template>
+             
                     <template v-slot:item.desctxt="{ item }">
                         <tr>
                             <td v-html="formatDesc(item.madesc)"></td>
@@ -535,10 +551,13 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
                                 // 'MACD-SL', 'MACD','漲跌BYN天', '增縮BYN天', 
-                                arr = ['VPC_break', 'MACD-SL', '均價long_%', '均價_%', 'MA5_%', '當日漲跌', '總價差', '量能差', '量能均', '量能',
+                                arr = ['VPC_break', 'MACD-SL', '均價long_%', '均價_%', 'MA5_%', '當日漲跌', '總價差',
+                                    //'量能均',
                                     '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天', 'textdesc',
-                                    'frist_uptrend', 'frist_uptrendcheck', '量能max', '量能min', 'MACDpercent_max', 'MACDpercent_min',
-                                    '均價long_%', 'MACD_%', 'desctxt', '量能差', 'type',
+                                    //'frist_uptrend', 'frist_uptrendcheck', 
+                                    //'量能max', '量能min',     
+                                    // 'MACDpercent_max', 'MACDpercent_min','MACD_%', 
+                                    'macdpercent', 'desctxt', '量能差', 'type',
                                 ]// 'fullsummary'
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -588,6 +607,7 @@
                                         dummydataItem.量能 = maxdateitem.量能
                                         dummydataItem['均價_%'] = maxdateitem['均價_%']
                                         dummydataItem['MA5_%'] = maxdateitem['MA5_%']
+                                        dummydataItem.macdpercent= maxdateitem['MACD_%']
 
                                         // 總價差 (依據highlight_date 來計算，如果沒有使用mindate)
                                         //const targerdate = datalist.find(x => x.日期 === datalist[0].highlight_date)?.日期 ?? mindate;
@@ -596,6 +616,7 @@
 
                                         dummydataItem.量能min = datalist.map(x => parseInt(x.量能)).sort((a, b) => a - b)[0]
                                         dummydataItem.量能max = datalist.map(x => parseInt(x.量能)).sort((a, b) => a - b).reverse()[0]
+                                        
                                         dummydataItem.MACDpercent_max = datalist.map(x => parseInt(x['MACD_%'])).sort((a, b) => a - b).reverse()[0]
                                         dummydataItem.MACDpercent_min = datalist.map(x => parseInt(x['MACD_%'])).sort((a, b) => a - b)[0]
 
