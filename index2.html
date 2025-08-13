@@ -75,7 +75,8 @@
                                     <template v-slot:activator="{ on }">
                                         <div v-on="on">
                                             <span> {{data['Type0']}}</span>
-                                            <span>{{data['MACD_%']}}</span>
+                                            
+                                            <span>{{data['MACD-SL']}}</span>
                                             <span>
                                                 {{data.Typelevel.replace(data.Type1,'')}}
                                             </span>
@@ -274,7 +275,7 @@
                     </template>
                     <template v-slot:item.rt_price="{ item }">
                         <span style="color: rgb(124, 169, 173);" v-show="sync">
-                            {{item.rt_price}}
+                            {{item.price}} ({{item.rt_price}})
                         </span>
                     </template>
                     <template v-slot:item.rt_量="{ item }">
@@ -383,10 +384,14 @@
                     arrcount: 0,
                     uniqueValues: {},
 
-                    sortBy: ['frist_uptrend', '總價差'],
-                    sortDesc: [true, true],
+                    //sortBy: ['frist_uptrend', '總價差'],
+                    //sortDesc: [true, true],
+                    
+                    //量能差
                     sortBy: ['frist_uptrendcheck'],
-                    sortDesc: [false],
+                    sortBy: ['MACD_%'],
+                    
+                    sortDesc: [true],
                     dialog: false,
                     selectedItem: null,
                     realtimedata: [],
@@ -467,6 +472,7 @@
                 sync_data() {
                     this.jsonData.forEach(item => {
                         item.rt_price = ((this.realtimedata.filter(x => x.c == item.stock_number)[0]?.z / parseFloat(this.realtimedata.filter(x => x.c == item.stock_number)[0]?.y) - 1) * 100).toFixed(2);
+                        item.price=this.realtimedata.filter(x => x.c == item.stock_number)[0]?.z
                         var vol = this.realtimedata.filter(x => x.c == item.stock_number)[0]?.v;
                         item.rt_量 = (vol / parseFloat(item.max股數)).toFixed(1);
                     })
@@ -503,7 +509,7 @@
 
                         */
 
-                        const allowedTypes = ['s', 'a', 'aa', 'b', 'c', 'd', 'e', 'f', 'v']; // 可擴充
+                        const allowedTypes = ['ss','s', 'a', 'aa', 'b', 'c', 'd', 'e', 'f', 'v']; // 可擴充
                         if (allowedTypes.includes(d)) {
                             file = `./Result/checksun_${d}/${urlParams.get('date')}.xlsx`;
                         }
@@ -703,7 +709,8 @@
                                                 let cond15 = day_0.now_price > day_0["MA_longlong"] && day_1["MA_longlong"] > day_1.now_price
 
                                                 let cond16 = day_0.量能 > 2 && (day_0.量能 > day_0.量能均 * 1.75) && (!day_0.Full_Summary.includes('負')) && day_0["MACD_%"] > 0
-
+                                                
+                                                let cond17 = day_1["MACD-SL"]  < day_0["MACD-SL"]  &&day_1["MACD-SL"] <= 0&& day_0["MACD-SL"] >=0
                                                 // 將多組邏輯條件包進陣列，每組是一種邏輯成立條件
                                                 let conditionGroups = [
                                                     //[cond1, cond2, cond3],  // 三階段轉強
@@ -715,7 +722,10 @@
                                                     //[cond9, cond9_1], // 均線　轉正
                                                     //[cond13, cond14], // MACD 轉正
                                                     //[cond15, cond14],   // 站上 MA_longlong
-                                                    [cond16]
+
+
+                                                    //[cond16],  //有量 轉強
+                                                    [cond17]
                                                 ];
 
                                                 // 判斷是否有任一組邏輯成立
@@ -868,7 +878,7 @@
                 filter() {
                     var vm = this
                     vm.jsonData = vm.jsonData_.filter(x => x['MACD_%'] > 0 && x['均價long_%'] > -1 && x['漲跌BYN天'] > -1)
-                    vm.sortBy = ['量能差', 'MACD_%']
+                    vm.sortBy = ['量能差','MACD_%', ]
                     vm.sortDesc = [true, true]
                     //find 有量
                 },
