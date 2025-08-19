@@ -557,7 +557,7 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
                                 // 'MACD-SL', 'MACD','漲跌BYN天', '增縮BYN天', 
-                                arr = ['VPC_break', 'MACD-SL', '均價long_%', '均價_%', 'MA5_%', '當日漲跌', '總價差',
+                                arr = [...baseFields,'VPC_break', 'MACD-SL', '均價long_%', '均價_%', 'MA5_%', '當日漲跌', '總價差',
                                     //'量能均',
                                     '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天', 'textdesc',
                                     //'frist_uptrend', 'frist_uptrendcheck', 
