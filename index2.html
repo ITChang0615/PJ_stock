@@ -509,7 +509,7 @@
 
                         */
 
-                        const allowedTypes = ['ss','s', 'a', 'aa', 'b', 'c', 'd', 'e', 'f', 'v']; // 可擴充
+                        const allowedTypes = ['ss','s', 'a','sbk', 'aabk', 'aa', 'b', 'c', 'd', 'e', 'f', 'v']; // 可擴充
                         if (allowedTypes.includes(d)) {
                             file = `./Result/checksun_${d}/${urlParams.get('date')}.xlsx`;
                         }
@@ -546,7 +546,7 @@
 
                                 var dates = [...new Set(this.jsonData.map(x => x.日期))].sort()
 
-                                const baseFields = ['desc', '營業毛利率', '營業利益率', '淨值倍率', '殖利率', '總市值', '成交量', 'Type1',];// 'stock_number'
+                                const baseFields = ['desc', '營業毛利率', '營業利益率', '淨值倍率', '殖利率', '總市值', '成交量', 'Type1', '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)','累計營業收入-前期比較增減(%)',];// 'stock_number'
                                 //(價)
                                 const trendFields = ['MACD_%', '均價long_%', '均價_%', 'MA5_%', 'highlight_date',];//'價_起始日期',
                                 const dateFields = ['量價差天',];
@@ -564,7 +564,7 @@
                                     //'量能max', '量能min',     
                                     // 'MACDpercent_max', 'MACDpercent_min','MACD_%', 
                                     'now_price',
-                                    'macdpercent', 'desctxt', '量能差', 'type',
+                                    'macdpercent', 'desctxt','量能max', '量能差', 'type',
                                 ]// 'fullsummary'
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
