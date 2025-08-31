@@ -80,6 +80,8 @@
                                             <span>
                                                 {{data.Typelevel.replace(data.Type1,'')}}
                                             </span>
+                                            <!--  VPC_MA_%  volume_threshold ) -->
+                                            <span>{{parseInt(data['volume_threshold'])}}</span>
                                         </div>
                                     </template>
                                     <span style="color: #285376b8;">
@@ -557,7 +559,7 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
                                 // 'MACD-SL', 'MACD','漲跌BYN天', '增縮BYN天', 
-                                arr = [...baseFields,'VPC_break', 'MACD-SL', '均價long_%', '均價_%', 'MA5_%', '當日漲跌', '總價差',
+                                arr = [...baseFields,'VPC_break', 'MACD-SL', '均價long_%', '均價_%', 'MA5_%','VPC_MA_%', 'volume_threshold','當日漲跌', '總價差',
                                     //'量能均',
                                     '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天', 'textdesc',
                                     //'frist_uptrend', 'frist_uptrendcheck', 
@@ -750,9 +752,13 @@
                                         dummydataItem['MACD'] = datalist_last_date['MACD']
                                         dummydataItem['MACD-SL'] = datalist_last_date['MACD-SL']
                                         dummydataItem['MACD_%'] = datalist_last_date['MACD_%']
+                                        dummydataItem['VPC_MA_%'] = datalist_last_date['VPC_MA_%']
                                         dummydataItem['MA5_%'] = datalist_last_date['MA5_%']
+                                        
                                         dummydataItem['均價_%'] = datalist_last_date['均價_%']
                                         dummydataItem['均價long_%'] = datalist_last_date['均價long_%']
+                                         
+                                        dummydataItem.volume_threshold = datalist_last_date?.volume_threshold;
                                         dummydataItem.fullsummary = datalist_last_date?.Full_Summary;
                                         dummydataItem.Volume_Diff = datalist_last_date?.Volume_Diff;
                                         dummydataItem.成交股數 = datalist_last_date?.成交股數;
