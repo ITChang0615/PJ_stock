@@ -80,8 +80,15 @@
                                             <span>
                                                 {{data.Typelevel.replace(data.Type1,'')}}
                                             </span>
-                                            <!--  VPC_MA_%  volume_threshold ) -->
+                                             <br />
+                                            <!--  VPC_MA_%  volume_threshold )  parseInt    parseFloat(val.toFixed(2))  -->
+                                            <span>{{parseFloat(((data['volume_threshold']-data['volume_threshold_mean'])/ Math.abs(data['volume_threshold_mean'])).toFixed(2)  )}}</span>
+                                            <!--
+                                             <br />
                                             <span>{{parseInt(data['volume_threshold'])}}</span>
+                                             <br />
+                                            <span>{{parseInt(data['volume_threshold_mean'])}}</span>
+                                            -->
                                         </div>
                                     </template>
                                     <span style="color: #285376b8;">
@@ -629,6 +636,8 @@
                                         dummydataItem.MACDpercent_max = datalist.map(x => parseInt(x['MACD_%'])).sort((a, b) => a - b).reverse()[0]
                                         dummydataItem.MACDpercent_min = datalist.map(x => parseInt(x['MACD_%'])).sort((a, b) => a - b)[0]
 
+                                        dummydataItem.volume_threshold_mean = datalist.map(x => parseInt(x['volume_threshold'])).reduce((sum, val) => sum + val, 0) / datalist.map(x => parseInt(x['volume_threshold'])).length;
+
                                         //## 處理明細資料
                                         dummydataItem.datalist.forEach((item, index) => {
                                             let dl = dummydataItem.datalist.filter(q => q.日期 <= item.日期);
@@ -643,6 +652,7 @@
                                             // 新產判斷邏輯
                                             // ###【Flag】 新產判斷邏輯
                                             item.Flag = dl.filter(x => x["均價_%"] > 0 && x["MA5_%"] < 0).length   // 在表現好的狀況下去尋找有點被回拉的
+                                            item.volume_threshold_mean = datalist.map(x => parseInt(x['volume_threshold'])).reduce((sum, val) => sum + val, 0) / datalist.map(x => parseInt(x['volume_threshold'])).length;
                                         });
 
                                         //二次處理明細  要先經過一次計算
