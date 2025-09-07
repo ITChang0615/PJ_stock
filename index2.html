@@ -67,7 +67,7 @@
                             :key="index">
                             <div v-if="index==0" style="position: sticky; min-height: 100%;" :class="[
                                     (data['VPC_break']=='True' ) ? 'hightlight_line_box' : '',  
-                                    (item.highlight_date <= header.value  && item.highlight_date !='') ? 'hightlight_line_under' : '',
+                                    (item.highlight_date <= header.value  && item.highlight_date !='0' && item.highlight_date !='') ? 'hightlight_line_under' : '',
                                     (data.Flag_負向) ? 'big-x' : '',  
                                     (data.Flag_三階段 ) ? 'circle-x' : '',  
                                     ].filter(Boolean)">
@@ -573,7 +573,7 @@
                                     //'量能max', '量能min',     
                                     // 'MACDpercent_max', 'MACDpercent_min','MACD_%', 
                                     'now_price',
-                                    'macdpercent', 'desctxt','量能max', '量能差', 'type',
+                                    'macdpercent', 'desctxt','highlight_date','量能max', '量能差', 'type',
                                 ]// 'fullsummary'
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -630,8 +630,8 @@
                                         const targerdate = mindate
                                         dummydataItem.總價差 = parseFloat(((datalist.filter(q => q.日期 == this.para_date)[0].now_price / datalist.filter(q => q.日期 == targerdate)[0].now_price) - 1) * 100).toFixed(2);
 
-                                        dummydataItem.量能min = datalist.map(x => parseInt(x.量能)).sort((a, b) => a - b)[0]
-                                        dummydataItem.量能max = datalist.map(x => parseInt(x.量能)).sort((a, b) => a - b).reverse()[0]
+                                        //dummydataItem.量能min = datalist.map(x => parseInt(x.量能)).sort((a, b) => a - b)[0]
+                                        //dummydataItem.量能max = datalist.map(x => parseInt(x.量能)).sort((a, b) => a - b).reverse()[0]
                                         
                                         dummydataItem.MACDpercent_max = datalist.map(x => parseInt(x['MACD_%'])).sort((a, b) => a - b).reverse()[0]
                                         dummydataItem.MACDpercent_min = datalist.map(x => parseInt(x['MACD_%'])).sort((a, b) => a - b)[0]
@@ -646,6 +646,9 @@
 
                                             item.量能均 = dl.map(x => parseInt(x.量能)).slice().reverse().slice(-n).reduce((acc, current) => acc + current, 0)
                                             item.量能均 = parseInt(item.量能均 / n)
+
+                                            item.量能min = dl.map(x => parseInt(x.量能)).sort((a, b) => a - b)[0]
+                                            item.量能max = dl.map(x => parseInt(x.量能)).sort((a, b) => a - b).reverse()[0]
 
                                             item.Volume_Diff = dl.map(x => parseInt(x.Volume_Oscillator)).slice().reverse().slice(-2).reduce((acc, current) => -acc + current, 0)
 
@@ -779,10 +782,11 @@
                                         dummydataItem.漲跌BYN天Diff = datalist_last_date?.漲跌BYN天Diff;
                                         dummydataItem.量能差 = datalist_last_date?.量能差;
                                         dummydataItem.量能均 = datalist_last_date?.量能均;
+                                        dummydataItem.量能max = datalist_last_date?.量能max;
+                                        dummydataItem.highlight_date = datalist_last_date?.highlight_date;
                                         dummydataItem.textdesc = datalist_last_date?.textdesc;
                                         dummydataItem.VPC_break = datalist_last_date?.VPC_break;
                                         dummydataItem.Flag = datalist_last_date?.Flag;
-
                                         dummydataItem.now_price = datalist_last_date?.now_price;
                                         dummydataItem.MA_short = datalist_last_date?.MA_short;
                                         dummydataItem.MA_long = datalist_last_date?.MA_long;
@@ -832,9 +836,6 @@
                                         }).join('<br>');
                                         //////////////////////////////////////////////////////////////////////////
 
-
-
-
                                         //////////////////////////////////////////////////////////////////////////
                                         //確認漲跌
                                         var checkpoint_maxdateData = datalist.find(x => x.日期 === maxdate)
@@ -845,30 +846,6 @@
                                         //計算最大成交股數
                                         item.max股數 = parseInt(Math.max(...datalist.map(x => x.成交股數)));
                                         //
-                                        /*
-                                        dummydataItem.Flage_q4 = datalist.find(x => x.Flag == 4)?.日期
-                                   
-                                        //////////////////////////////////////////////////////////////////////////
-                                        //dummydataItem.frist_uptrend = datalist.filter(x => x.Full_Summary.includes('多頭')).map(x => x.日期).sort()[0]
-                                        dummydataItem.frist_uptrend = datalist.filter(x => x.textdesc.includes('價漲量增') | x.Full_Summary.includes('多頭') | x.Full_Summary.includes('爆量上攻')).map(x => x.日期).sort()[0]
-                                        dummydataItem.last_uptrend = datalist.filter(x => x.textdesc.includes('價漲量增') | x.Full_Summary.includes('多頭') | x.Full_Summary.includes('爆量上攻')).map(x => x.日期)[0]
-                                        dummydataItem.last_downtrend = datalist.filter(x => x.textdesc.includes('價跌量增')).map(x => x.日期)[0]
-                                        
-                                        // 價漲量增 又發生 價跌量增  將取消 frist_uptrend 標記
-                                        if (!!dummydataItem.last_downtrend && !!dummydataItem.frist_uptrend
-                                            && dummydataItem.last_downtrend > dummydataItem.frist_uptrend
-                                            && dummydataItem.last_downtrend > dummydataItem.last_uptrend) {
-                                            if (dummydataItem.last_downtrend > dummydataItem.last_uptrend) {
-
-                                            }
-                                            dummydataItem.frist_uptrend = undefined
-                                        }
-                                        //dummydataItem.frist_uptrend = datalist.filter(x => x.VPC_break).map(x => x.日期).sort()[0]
-                                        dummydataItem.frist_uptrendcheck = datalist.filter(x => x.日期 > dummydataItem.frist_uptrend).map(x => parseInt(x._quote)).slice().reduce((acc, current) => acc + current, 0);
-
-                                        //'均價long_%' '均價_%' 'MA5_%'
-                                        dummydataItem.frist_uptrend = datalist.filter(x => x['均價long_%'] > 0 && x['均價_%'] > 0 && x['MA5_%'] > 0).map(x => x.日期).sort()[0]
-                                        */
                                         dummydataItem.frist_uptrend = datalist.filter(x => x.Flag_三階段).map(x => x.日期).sort()[0]
                                         dummydataItem.frist_uptrendcheck = datalist.filter(x => x.日期 >= dummydataItem.frist_uptrend).map(x => parseInt(x._quote)).slice().reduce((acc, current) => acc + current, 0);
                                     }

@@ -46,8 +46,13 @@
                         <v-btn color="primary" @click="actionFilter">Filter</v-btn>
                     </v-col>
                     <v-col col="1">
-                        <v-btn color="primary" @click="jsonData=jsonData_.filter(x=>parseFloat(x._quote)>3)">_quote>3</v-btn>
-                           <v-btn color="primary" @click="actionFilter2">dd>3</v-btn>
+                        <v-btn color="primary"
+                            @click="jsonData=jsonData_.filter(x=>parseFloat(x._quote)>3)">_quote>3</v-btn>
+                        <v-btn color="primary" @click="actionFilter2">dd>3</v-btn>
+                    </v-col>
+                    <v-col col="1">
+                        <v-btn color="primary" @click="localStorage.setItem('aaalist',JSON.stringify(jsonData.map(x => ({stock_number: x.stock_number,分類標籤: x.分類標籤}))));">set</v-btn>
+                        <v-btn color="primary" @click="oldlabel=JSON.parse(localStorage.getItem('aaalist')|| '[]')">get</v-btn>
                     </v-col>
                 </v-row>
 
@@ -127,6 +132,12 @@
                         :items="filteredData(type.Typelevel)" :items-per-page="-1" item-key="id" :sort-by.sync="sortBy"
                         :sort-desc.sync="sortDesc" style="white-space: nowrap; min-width: 100%; max-height: 400px;"
                         class="custom-table">
+                        
+                        <template v-slot:item.分類標籤="{ item }"> 
+                            {{oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤}}
+                            {{ item.分類標籤 }} 
+      
+                        </template>
                         <template v-slot:item.stock_number="{ item }">
                             <v-btn text @click="openDialog(item)">
                                 {{ item.stock_number }} {{ item.Type0 }}
@@ -212,14 +223,15 @@
                     para_type: null,
                     url: '',
                     jsonData: [],
+                    oldlabel: [],
                     headers: [],
                     appheaderscol: ['stock_number', '_quote', 'rt_price', 'rt_量', 'highlight_date', '遠交易量o'],
                     filters: {},
                     uniqueValues: {},
                     //sortBy: 'highlight_date',
                     //sortBy: ['_quote'],
-                    sortBy :['量能差','MACD_%'],
-                    sortDesc: [true ,true],
+                    sortBy: ['量能差', 'MACD_%'],
+                    sortDesc: [true, true],
                     dialog: false,
                     selectedItem: null,
                     realtimedata: [],
@@ -272,7 +284,7 @@
                     return `${baseUrl}/index3.html?d=${urlParams.get('d')}&date=${urlParams.get('date')}&type=${this.sanitizedTypelevel(x)}`;
                 },
                 sanitizedTypelevel(x) {
-                    return  x.Type1
+                    return x.Type1
                     //return x.Typelevel.replace('右上', '').replace('平', '').replace('右下', '');
                 },
 
@@ -328,8 +340,8 @@
                 },
                 actionFilter2(i) {
                     var vm = this
-                    vm.jsonData=vm.jsonData_.filter(x=>parseFloat(x['MACD_%'])>0 && parseFloat(x['均價_%']) >0 && parseFloat(x['價能']) >-0.5 && parseFloat(x['盤後量']) >1)
-                    vm.sortBy='均價long_%'
+                    vm.jsonData = vm.jsonData_.filter(x => parseFloat(x['MACD_%']) > 0 && parseFloat(x['均價_%']) > 0 && parseFloat(x['價能']) > -0.5 && parseFloat(x['盤後量']) > 1)
+                    vm.sortBy = '均價long_%'
                     //vm.jsonData=vm.jsonData.filter(x=>x.Type1!='金融保險')
 
                 },
