@@ -118,7 +118,7 @@ async function getData(url) {
         let response = await fetch(url);
         if (!response.ok) {
             console.log(url)
-          
+			
             throw new Error('Network response was not ok');
         }
         let data = await response.json();
@@ -127,19 +127,27 @@ async function getData(url) {
         _data = _data.concat(newArray);
          
         _data.forEach(x => {
-            //debugger;
-            if(x.g){
+            try {
+                console.log('stocknumber==>', x.c)
+                console.log('data==>', x);
+                if (x.c == "8021") {
+                    debugger;
+                }
                 x.g = x.g?.split('_')[0];   //買量
                 x.b = parseFloat(x.b.split('_')[0]);  //買價
                 //x.a = parseFloat(x.a.split('_')[0]);   //賣價
                 x.a = (x.a=='-' )? parseFloat(x.u):parseFloat(x.a.split('_')[0])
-                if(x.a=='-' ){
+                 if(x.a=='-' ){
                     x.b=parseFloat(x.u)
                 }
+
                 x.f = x.f.split('_')[0]; //賣量
                 x.v = x.v.split('_')[0];  //成交量
                 x.z=  parseFloat(x.z)? x.z:x.b //盤中成交價
-                }
+                x.z = parseFloat(parseFloat(x.z) ? x.z : x.b) ? x.z : x.a
+            } catch (error) {
+                console.error('error stocknumber==>', x.c);
+            }
         });
        
     } catch (error) {

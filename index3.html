@@ -40,16 +40,6 @@
                     <v-col col="1">
                         <v-btn color="primary" @click="sortBy=['rt_price']">sortBy :rt_price</v-btn>
                     </v-col>
-                    <v-col cols="3" style="display: flex; gap: 10px; align-items: center;">
-                        <v-text-field v-model="filter1" label="短交易量" style="max-width: 150px;"></v-text-field>
-                        <v-text-field v-model="filter2" label="遠交易量" style="max-width: 150px;"></v-text-field>
-                        <v-btn color="primary" @click="actionFilter">Filter</v-btn>
-                    </v-col>
-                    <v-col col="1">
-                        <v-btn color="primary"
-                            @click="jsonData=jsonData_.filter(x=>parseFloat(x._quote)>3)">_quote>3</v-btn>
-                        <v-btn color="primary" @click="actionFilter2">dd>3</v-btn>
-                    </v-col>
                     <v-col col="1">
                         <v-btn color="primary" @click="localStorage.setItem('aaalist',JSON.stringify(jsonData.map(x => ({stock_number: x.stock_number,分類標籤: x.分類標籤}))));">set</v-btn>
                         <v-btn color="primary" @click="oldlabel=JSON.parse(localStorage.getItem('aaalist')|| '[]')">get</v-btn>
@@ -94,11 +84,14 @@
                                 {{ item.stock_number }} {{ item.Type0 }}
                             </v-btn>
                         </template>
+                        <!--
+                               {{(((realtimedata.filter(x=>x.c==item.stock_number)[0]?.a / item.now_price)-1
+                                )*100).toFixed(1)}}
+                        -->
                         <template v-slot:item.rt_price="{ item }">
                             <span style="color: rgb(124, 169, 173);"
                                 v-show="realtimedata.filter(x=>x.c==item.stock_number)[0]?.a">
-                                {{(((realtimedata.filter(x=>x.c==item.stock_number)[0]?.a / item.now_price)-1
-                                )*100).toFixed(1)}}
+                                {{item.rt_price}}
                             </span>
                         </template>
                         <template v-slot:item.rt_量="{ item }">
@@ -134,9 +127,17 @@
                         class="custom-table">
                         
                         <template v-slot:item.分類標籤="{ item }"> 
-                            {{oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤}}
-                            {{ item.分類標籤 }} 
-      
+                            <span style="color: rgb(228, 139, 5);"
+                                  v-if='oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0] !=item.分類標籤.split("【")[1]?.split("】")[0] ' 
+                                  v-show='item.分類標籤_=(oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0] !=item.分類標籤.split("【")[1]?.split("】")[0] )'
+                                  >
+
+                                  {{oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0] }}
+                                **
+                                {{ item.分類標籤.split("【")[1]?.split("】")[0] }} 
+
+                            </span>
+                            {{ item.分類標籤}} 
                         </template>
                         <template v-slot:item.stock_number="{ item }">
                             <v-btn text @click="openDialog(item)">
@@ -159,12 +160,14 @@
                                 </span>
                             </v-btn>
                         </template>
-
+                         <!--
+                               {{(((realtimedata.filter(x=>x.c==item.stock_number)[0]?.a / item.now_price)-1
+                                )*100).toFixed(1)}}
+                        -->
                         <template v-slot:item.rt_price="{ item }">
                             <span style="color: rgb(124, 169, 173);"
                                 v-show="realtimedata.filter(x=>x.c==item.stock_number)[0]?.a">
-                                {{(((realtimedata.filter(x=>x.c==item.stock_number)[0]?.a / item.now_price)-1
-                                )*100).toFixed(1)}}
+                                {{item.rt_price}}
                             </span>
                         </template>
                         <template v-slot:item.rt_量="{ item }">
@@ -293,7 +296,7 @@
                     if (this.sync) {
                         await this.sync_realtime();
                     }
-                    this.loadExcelData();
+                    //this.loadExcelData();
                 },
                 async sync_realtime() {
                     var vm = this
@@ -334,17 +337,8 @@
                     const url = window.location.href.replace(urlParams.get('date'), nextDateStr);
                     window.open(url, '_blank');
                 },
-                actionFilter(i) {
-                    var vm = this
-                    vm.jsonData = vm.jsonData_.filter(x => parseInt(x.短交易量) > vm.filter1 && parseInt(x.遠交易量) > vm.filter2)
-                },
-                actionFilter2(i) {
-                    var vm = this
-                    vm.jsonData = vm.jsonData_.filter(x => parseFloat(x['MACD_%']) > 0 && parseFloat(x['均價_%']) > 0 && parseFloat(x['價能']) > -0.5 && parseFloat(x['盤後量']) > 1)
-                    vm.sortBy = '均價long_%'
-                    //vm.jsonData=vm.jsonData.filter(x=>x.Type1!='金融保險')
+               
 
-                },
                 isNumberField(field) {
                     return field !== 'stock_number' && this.jsonData.some(item => {
                         const value = item[field];
@@ -437,6 +431,17 @@
                                     this.uniqueValues[key] = this.uniqueValues[key].map(val => ({ text: val, value: val }));
                                     this.uniqueValues[key].sort((a, b) => a.text.localeCompare(b.text));
                                 });
+
+                                //*
+                                this.oldlabel=JSON.parse(localStorage.getItem('aaalist')|| '[]')
+                                /*
+                                app.jsonData=app.jsonData.filter(x => x.分類標籤_)
+                                app.jsonData=app.jsonData.filter(x => x.分類標籤.split("【")[1]?.split("】")[0]!='e')
+
+                                app.sync_realtime()
+                                
+                                app.sync_data()
+                                */
                             }
                         })
                         .catch(error => console.error('Error loading Excel file:', error));
