@@ -43,6 +43,7 @@
                     <v-col col="1">
                         <v-btn color="primary" @click="localStorage.setItem('aaalist',JSON.stringify(jsonData.map(x => ({stock_number: x.stock_number,分類標籤: x.分類標籤}))));">set</v-btn>
                         <v-btn color="primary" @click="oldlabel=JSON.parse(localStorage.getItem('aaalist')|| '[]')">get</v-btn>
+                          <v-btn color="primary" @click="filterclick()">filter</v-btn>
                     </v-col>
                 </v-row>
 
@@ -445,7 +446,13 @@
                             }
                         })
                         .catch(error => console.error('Error loading Excel file:', error));
-                }
+                },
+                   filterclick(){
+                     var vm = this
+                      this.jsonData=this.jsonData.filter(x => x.分類標籤_)
+                                this.jsonData=this.jsonData.filter(x => x.分類標籤.split("【")[1]?.split("】")[0]!='e')
+
+                },
             }
         });
     </script>

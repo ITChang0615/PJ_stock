@@ -44,6 +44,8 @@
                             @click="localStorage.setItem('aalist', JSON.stringify(jsonData.map(x=>x.stock_number)))">set</v-btn>
                         <v-btn color="primary"
                             @click="jsonData=jsonData.filter(x => JSON.parse(localStorage.getItem('aalist') || '[]').includes(x.stock_number))">get</v-btn>
+                            
+                           
                     </v-col>
                 </v-row>
                 <v-row no-gutters v-show="collapse">
@@ -909,6 +911,7 @@
                     var vm = this
                     vm.jsonData = vm.jsonData_.filter(i => !vm.jsonData.map(x => x.stock_number).includes(i.stock_number))
                 },
+             
                 memo() {
 
                     //app.jsonData=app.jsonData.filter(x=>x['營業收入-去年同月增減(%)']>0 && x['營業收入-上月比較增減(%)']>0  && x['累計營業收入-前期比較增減(%)']>0  )
