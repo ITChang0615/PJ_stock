@@ -307,6 +307,7 @@
                             <br />
                             <span style="color:gray;">
                             (now) {{ parseFloat(item.量能).toFixed(0) }}</span>
+                            <span style="color:green;">【{{parseFloat(item.量能avg).toFixed(0) }}】</span>
                             <br />
                             (min) {{ parseFloat(item.量能min).toFixed(0)}}
                         </td>
@@ -322,6 +323,7 @@
                             <br />
                             <span style="color:gray;">
                             (now) {{ parseFloat(item['MACD_%']).toFixed(0) }}</span>
+                             
                             <br />
                             (min) {{ parseFloat(item.MACDpercent_min).toFixed(0)}}
                         </td>
@@ -347,18 +349,18 @@
                         </v-btn>
                     </template>
                     <template v-slot:item.type="{ item }">
+                        
                         <v-btn text @click="openDialog(item)">
                             {{ item.stock_number }}
                             {{ item.Type }}<br />
                             {{item.Typelevel}}
                         </v-btn>
                     </template>
+             
                     <template v-slot:item.desc="{ item }">
-                        <td v-html="formatDesc(item.desc)"></td>
+                        <td v-html="formatDesc(item.desc)" ></td>
                     </template>
-                    <template v-slot:item.fullsummary="{ item }">
-                        <td v-html="formatDesc(item.fullsummary)"></td>
-                    </template>
+        
                 </v-data-table>
                 <v-dialog v-model="dialog" max-width="90vw">
                     <v-card>
@@ -568,15 +570,16 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
                                 // 'MACD-SL', 'MACD','漲跌BYN天', '增縮BYN天', 
-                                arr = [...baseFields,'VPC_break', 'MACD-SL', '均價long_%', '均價_%', 'MA5_%','VPC_MA_%', 'volume_threshold','當日漲跌', '總價差',
+                                arr = [...baseFields,'VPC_break', 'MACD-SL','成交股數', '均價long_%', '均價_%', 'MA5_%','VPC_MA_%', 'volume_threshold',
+                                    'textdesc','當日漲跌', '總價差',
                                     //'量能均',
-                                    '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天', 'textdesc',
+                                    '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天', 
                                     //'frist_uptrend', 'frist_uptrendcheck', 
                                     //'量能max', '量能min',     
                                     // 'MACDpercent_max', 'MACDpercent_min','MACD_%', 
                                     'now_price',
-                                    'macdpercent', 'desctxt','highlight_date','量能max', '量能差', 'type',
-                                ]// 'fullsummary'
+                                    'macdpercent', 'desctxt','highlight_date','分類標籤','量能max','量能avg', '量能差', 'type',
+                                ]
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
                                 var set_date = this.set_date //-3//4 //-1 :max date     targer date =計算後的目標日 顯示在左上方
@@ -616,7 +619,7 @@
                                         if (!!!maxdateitem)
                                             return null
                                         //## 處理Header資料
-                                        dummydataItem.desc = dummydataItem.desc.replace('**', '<br/>')
+                                        dummydataItem.desc = dummydataItem.desc.replace('**', '<br/>')+'<br/><br/>'+dummydataItem.營收比重
                                         dummydataItem.箱型力量 = maxdateitem.箱型力量
                                         dummydataItem.箱型力量_5均 = maxdateitem.箱型力量_5均
                                         dummydataItem.highlight_date = maxdateitem.highlight_date
@@ -651,6 +654,7 @@
 
                                             item.量能min = dl.map(x => parseInt(x.量能)).sort((a, b) => a - b)[0]
                                             item.量能max = dl.map(x => parseInt(x.量能)).sort((a, b) => a - b).reverse()[0]
+
 
                                             item.Volume_Diff = dl.map(x => parseInt(x.Volume_Oscillator)).slice().reverse().slice(-2).reduce((acc, current) => -acc + current, 0)
 
@@ -729,6 +733,7 @@
                                                 let cond16 = day_0.量能 > 2 && (day_0.量能 > day_0.量能均 * 1.75) && (!day_0.Full_Summary.includes('負')) && day_0["MACD_%"] > 0
                                                 
                                                 let cond17 = day_1["MACD-SL"]  < day_0["MACD-SL"]  &&day_1["MACD-SL"] <= 0&& day_0["MACD-SL"] >=0
+                                                let cond18 = day_1["MACD-SL"]  < day_0["MACD-SL"]  &&day_1["MACD-SL"] <= 0&& day_0["MACD-SL"] >=0
                                                 // 將多組邏輯條件包進陣列，每組是一種邏輯成立條件
                                                 let conditionGroups = [
                                                     //[cond1, cond2, cond3],  // 三階段轉強
@@ -740,10 +745,10 @@
                                                     //[cond9, cond9_1], // 均線　轉正
                                                     //[cond13, cond14], // MACD 轉正
                                                     //[cond15, cond14],   // 站上 MA_longlong
-
-
                                                     //[cond16],  //有量 轉強
+                                                    [cond13],
                                                     [cond17]
+                                                    
                                                 ];
 
                                                 // 判斷是否有任一組邏輯成立
@@ -772,9 +777,7 @@
                                         
                                         dummydataItem['均價_%'] = datalist_last_date['均價_%']
                                         dummydataItem['均價long_%'] = datalist_last_date['均價long_%']
-                                         
-                                        dummydataItem.volume_threshold = datalist_last_date?.volume_threshold;
-                                        dummydataItem.fullsummary = datalist_last_date?.Full_Summary;
+                                        
                                         dummydataItem.Volume_Diff = datalist_last_date?.Volume_Diff;
                                         dummydataItem.成交股數 = datalist_last_date?.成交股數;
                                         dummydataItem.當日漲跌 = datalist_last_date?._quote;
@@ -785,6 +788,8 @@
                                         dummydataItem.量能差 = datalist_last_date?.量能差;
                                         dummydataItem.量能均 = datalist_last_date?.量能均;
                                         dummydataItem.量能max = datalist_last_date?.量能max;
+                                        dummydataItem.分類標籤 = datalist_last_date?.分類標籤.split("【")[1]?.split("】")[0];
+                                        
                                         dummydataItem.highlight_date = datalist_last_date?.highlight_date;
                                         dummydataItem.textdesc = datalist_last_date?.textdesc;
                                         dummydataItem.VPC_break = datalist_last_date?.VPC_break;
@@ -793,6 +798,11 @@
                                         dummydataItem.MA_short = datalist_last_date?.MA_short;
                                         dummydataItem.MA_long = datalist_last_date?.MA_long;
                                         dummydataItem.MA_longlong = datalist_last_date?.MA_longlong;
+                                        dummydataItem.volume_threshold = parseFloat(datalist_last_date?.volume_threshold).toFixed(1)
+                                        dummydataItem['營業收入-上月比較增減(%)'] = parseFloat(datalist_last_date['營業收入-上月比較增減(%)']).toFixed(1)
+                                        dummydataItem['營業收入-去年同月增減(%)'] = parseFloat(datalist_last_date['營業收入-去年同月增減(%)']).toFixed(1)
+                                        dummydataItem['累計營業收入-前期比較增減(%)'] = parseFloat(datalist_last_date['累計營業收入-前期比較增減(%)']).toFixed(1)
+                                        
                                         /////////////////////////////////////////////////////////////////
 
                                         const toNum = v => {
@@ -847,6 +857,8 @@
                                         item.確認漲跌 = arrlist_cc.reduce((acc, current) => acc + current, 0);
                                         //計算最大成交股數
                                         item.max股數 = parseInt(Math.max(...datalist.map(x => x.成交股數)));
+                                        item.量能avg=parseInt(datalist.map(x=>parseInt(x.量能)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)/datalist.map(x=>parseInt(x.量能)).length)
+                                        
                                         //
                                         dummydataItem.frist_uptrend = datalist.filter(x => x.Flag_三階段).map(x => x.日期).sort()[0]
                                         dummydataItem.frist_uptrendcheck = datalist.filter(x => x.日期 >= dummydataItem.frist_uptrend).map(x => parseInt(x._quote)).slice().reduce((acc, current) => acc + current, 0);
@@ -898,6 +910,11 @@
                     vm.jsonData = vm.jsonData_.filter(i => !vm.jsonData.map(x => x.stock_number).includes(i.stock_number))
                 },
                 memo() {
+
+                    //app.jsonData=app.jsonData.filter(x=>x['營業收入-去年同月增減(%)']>0 && x['營業收入-上月比較增減(%)']>0  && x['累計營業收入-前期比較增減(%)']>0  )
+
+                    //app.jsonData=app.jsonData.filter(x =>  x.desc.includes('記憶體'))
+
                     // app.jsonData=app.jsonData_.filter(x=>x['MACD_%']>0　&&x['均價long_%']>0)
                     //app.jsonData=app.jsonData_.filter(x=>x.VPC_break )
                     //app.jsonData=app.jsonData_.filter(x=>x['總價差']>0 && !!x.frist_uptrend )
