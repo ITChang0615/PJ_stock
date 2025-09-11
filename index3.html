@@ -41,9 +41,11 @@
                         <v-btn color="primary" @click="sortBy=['rt_price']">sortBy :rt_price</v-btn>
                     </v-col>
                     <v-col col="1">
-                        <v-btn color="primary" @click="localStorage.setItem('aaalist',JSON.stringify(jsonData.map(x => ({stock_number: x.stock_number,分類標籤: x.分類標籤}))));">set</v-btn>
-                        <v-btn color="primary" @click="oldlabel=JSON.parse(localStorage.getItem('aaalist')|| '[]')">get</v-btn>
-                          <v-btn color="primary" @click="filterclick()">filter</v-btn>
+                        <v-btn color="primary"
+                            @click="localStorage.setItem('aaalist',JSON.stringify(jsonData.map(x => ({stock_number: x.stock_number,分類標籤: x.分類標籤}))));">set</v-btn>
+                        <v-btn color="primary"
+                            @click="oldlabel=JSON.parse(localStorage.getItem('aaalist')|| '[]')">get</v-btn>
+                        <v-btn color="primary" @click="filterclick()">filter</v-btn>
                     </v-col>
                 </v-row>
 
@@ -126,19 +128,19 @@
                         :items="filteredData(type.Typelevel)" :items-per-page="-1" item-key="id" :sort-by.sync="sortBy"
                         :sort-desc.sync="sortDesc" style="white-space: nowrap; min-width: 100%; max-height: 400px;"
                         class="custom-table">
-                        
-                        <template v-slot:item.分類標籤="{ item }"> 
-                            <span style="color: rgb(228, 139, 5);"
-                                  v-if='oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0] !=item.分類標籤.split("【")[1]?.split("】")[0] ' 
-                                  v-show='item.分類標籤_=(oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0] !=item.分類標籤.split("【")[1]?.split("】")[0] )'
-                                  >
 
-                                  {{oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0] }}
+                        <template v-slot:item.分類標籤="{ item }">
+                            <span style="color: rgb(228, 139, 5);"
+                                v-if='oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0] !=item.分類標籤.split("【")[1]?.split("】")[0] '
+                                v-show='item.分類標籤_=(oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0] !=item.分類標籤.split("【")[1]?.split("】")[0] )'>
+
+                                {{oldlabel.filter(x=>x.stock_number==item.stock_number)[0]?.分類標籤.split("【")[1]?.split("】")[0]
+                                }}
                                 **
-                                {{ item.分類標籤.split("【")[1]?.split("】")[0] }} 
+                                {{ item.分類標籤.split("【")[1]?.split("】")[0] }}
 
                             </span>
-                            {{ item.分類標籤}} 
+                            {{ item.分類標籤}}
                         </template>
                         <template v-slot:item.stock_number="{ item }">
                             <v-btn text @click="openDialog(item)">
@@ -161,7 +163,7 @@
                                 </span>
                             </v-btn>
                         </template>
-                         <!--
+                        <!--
                                {{(((realtimedata.filter(x=>x.c==item.stock_number)[0]?.a / item.now_price)-1
                                 )*100).toFixed(1)}}
                         -->
@@ -338,7 +340,7 @@
                     const url = window.location.href.replace(urlParams.get('date'), nextDateStr);
                     window.open(url, '_blank');
                 },
-               
+
 
                 isNumberField(field) {
                     return field !== 'stock_number' && this.jsonData.some(item => {
@@ -357,6 +359,29 @@
                         .map(item => parseFloat(item[field]))
                         .filter(value => !isNaN(value));
                     return values.length ? Math.max(...values) : 100;
+                },
+                set_header() {
+                    const baseFields = ['desc', '營業毛利率', '營業利益率', '淨值倍率', '殖利率', '總市值', '成交量', 'Type1', '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)',];// 'stock_number'
+                    //(價)
+                    const trendFields = ['MACD_%', '均價long_%', '均價_%', 'MA5_%', 'highlight_date',];//'價_起始日期',
+                    const dateFields = ['量價差天',];
+                    const miscFields = ['當日漲跌', '總價差', '漲跌BYN天', '增縮BYN天', 'type']; //, 'count','總量增縮', 
+                    //(量)
+                    const volumeFields = ['量能均', '量能差', '量能', 'Volume_Oscillator', 'Volume_Diff']; //  ,'遠交易量' , '成交股數' ,'量','max量能', 'count量能',  
+                    const configFlag = ['確認漲跌']
+
+                    var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
+
+                    arr = [...baseFields, 'VPC_break', 'MACD-SL', '成交股數',
+                        '均價long_%', '均價_%', 'MA5_%', 'VPC_MA_%', 'volume_threshold',
+                        //'漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天',
+                        'textdesc', '當日漲跌', '總價差', 'now_price',
+                        'macdpercent', 'desctxt', 'highlight_date', '分類標籤', '量能max', '量能avg', '量能差', 'type',
+                    ]
+                    //
+                     arr =  ['分類標籤', '日期', 'stock_number', '_quote', '成交股數', 'rt_量', '量能', 'now_price', 'rt_price', 'highlight_date',  '盤後量', '成交量', 'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong', 'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 'VPC_MA_%', 'VPC_break', 'Volume_MA_short', 'Volume_MA_long', 'Volume_Oscillator', 'volume_threshold', 'Volume_Price_Change_sum', 'highlight_enddate', 'Type0', 'Type1', 'Type2', 'Full_Summary', 'textdesc', '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', '淨值倍率', '殖利率', '每股營收(元)', '本益比', '營業毛利率', '營業利益率', '同業平均本益比', '總市值', '營收比重', 'Type', 'Typelevel', '每股淨值(元)', 'desc']
+                    this.headers = arr.map(header => ({ text: header, value: header }));;
+
                 },
                 sync_data() {
                     this.jsonData.forEach(item => {
@@ -426,15 +451,19 @@
                                 if (this.type) {
                                     this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type));
                                 }
+                                this.jsonData.forEach(x => {
+                                    x.Typelevel += x?.分類標籤.split("【")[1]?.split("】")[0]
 
+                                });
                                 this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
                                 Object.keys(this.uniqueValues).forEach(key => {
                                     this.uniqueValues[key] = this.uniqueValues[key].map(val => ({ text: val, value: val }));
                                     this.uniqueValues[key].sort((a, b) => a.text.localeCompare(b.text));
                                 });
+                                this.set_header()
 
                                 //*
-                                this.oldlabel=JSON.parse(localStorage.getItem('aaalist')|| '[]')
+                                this.oldlabel = JSON.parse(localStorage.getItem('aaalist') || '[]')
                                 /*
                                 app.jsonData=app.jsonData.filter(x => x.分類標籤_)
                                 app.jsonData=app.jsonData.filter(x => x.分類標籤.split("【")[1]?.split("】")[0]!='e')
@@ -447,10 +476,10 @@
                         })
                         .catch(error => console.error('Error loading Excel file:', error));
                 },
-                   filterclick(){
-                     var vm = this
-                      this.jsonData=this.jsonData.filter(x => x.分類標籤_)
-                                this.jsonData=this.jsonData.filter(x => x.分類標籤.split("【")[1]?.split("】")[0]!='e')
+                filterclick() {
+                    var vm = this
+                    this.jsonData = this.jsonData.filter(x => x.分類標籤_)
+                    this.jsonData = this.jsonData.filter(x => x.分類標籤.split("【")[1]?.split("】")[0] != 'e')
 
                 },
             }
