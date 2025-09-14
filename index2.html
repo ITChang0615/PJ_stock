@@ -274,7 +274,11 @@
                                     height: 
                                     String(Math.sqrt(parseInt( ( data['MACD_%'] ))))+'px'
                                      }">
-                                        MACD_%:{{data['MACD_%']}}
+                                        MACD_%:{{parseInt(data['MACD_%'])}}
+                                           <span>
+                                            ({{data.MACD_diff}} )
+                                        </span>
+                                        
                                     </div>
                                 </div>
 
@@ -392,14 +396,10 @@
                     filters: {},
                     arrcount: 0,
                     uniqueValues: {},
-
                     //sortBy: ['frist_uptrend', '總價差'],
                     //sortDesc: [true, true],
-
                     //量能差
-                    sortBy: ['frist_uptrendcheck'],
                     sortBy: ['MACD_%'],
-
                     sortDesc: [true],
                     dialog: false,
                     selectedItem: null,
@@ -441,7 +441,6 @@
                         });
                     });
                 },
-
             },
             methods: {
                 async init() {
@@ -494,7 +493,6 @@
                     const setdate = urlParams.get('setdate');
 
                     if (d) {
-
                         const allowedTypes = ['ss', 's', 'a', 'sbk', 'aabk', 'aa', 'b', 'c', 'd', 'e', 'f', 'v']; // 可擴充
                         if (allowedTypes.includes(d)) {
                             file = `./Result/checksun_${d}/${urlParams.get('date')}.xlsx`;
@@ -543,11 +541,14 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
                                 
-                                arr = [...baseFields, 'VPC_break', 'MACD-SL', '成交股數',
-                                    '均價long_%', '均價_%', 'MA5_%', 'VPC_MA_%', 'volume_threshold',
+                                arr = [...baseFields, 
+                                    'VPC_break', 'MACD-SL', '成交股數', 
+
+                                    'textdesc','VPC_MA_%', //'volume_threshold',
                                     '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天',
-                                    'textdesc', '當日漲跌', '總價差','now_price',
-                                    'macdpercent', 'desctxt','Volume_Oscillator', 'highlight_date', '分類標籤', '量能max', '量能avg', '量能差', 'type',
+                                    '均價long_%', '均價_%', 'MA5_%',
+                                    '當日漲跌', '總價差','now_price',
+                                    'macdpercent', 'desctxt','Volume_Oscillator','MACD_diff', 'highlight_date', '分類標籤', '量能max', '量能avg', '量能差', 'type',
                                 ]
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -616,6 +617,7 @@
                                         //## 處理明細資料
                                         dummydataItem.datalist.forEach((item, index) => {
                                             let dl = dummydataItem.datalist.filter(q => q.日期 <= item.日期);
+                                            let dl_1 = dummydataItem.datalist.filter(q => q.日期 < item.日期);
                                             //【參數】
                                             var n = this.n
 
@@ -629,30 +631,37 @@
 
                                             // 新產判斷邏輯
                                             // ###【Flag】 新產判斷邏輯
-                                            item.Flag = dl.filter(x => x["均價_%"] > 0 && x["MA5_%"] < 0).length   // 在表現好的狀況下去尋找有點被回拉的
+                                            //item.Flag = dl.filter(x => x["均價_%"] > 0 && x["MA5_%"] < 0).length   // 在表現好的狀況下去尋找有點被回拉的
                                             item.量能avg = parseInt(datalist.map(x => parseInt(x.量能)).reduce((accumulator, currentValue) => accumulator + currentValue, 0) / datalist.map(x => parseInt(x.量能)).length)
 
                                             item.volume_threshold_mean = datalist.map(x => parseInt(x['volume_threshold'])).reduce((sum, val) => sum + val, 0) / datalist.map(x => parseInt(x['volume_threshold'])).length;
                                             item['volume_threshold_%'] = parseFloat(((item['volume_threshold'] - item['volume_threshold_mean']) / Math.abs(item['volume_threshold_mean'])).toFixed(2))
 
                                             item.分類標籤 = item?.分類標籤.split("【")[1]?.split("】")[0];
+                                            item.分類標籤_ = dl_1.map(x=>x.分類標籤)[0]?.split("【")[1]?.split("】")[0]+" ** "+item.分類標籤
+                                            item.MACD_diff =parseInt((item['MACD_%'])-parseFloat(dl_1.map(x=>x['MACD_%'])[0]))
+                                            
                                         });
 
                                         //二次處理明細  要先經過一次計算
                                         dummydataItem.datalist.forEach((item, index) => {
+                                            /*
                                             if (index < dummydataItem.datalist.length - 1) {
                                                 //item.量能差 = parseInt(item.量能均 - dummydataItem.datalist[index + 1].量能均);
 
                                             } else {
                                                 item.量能差 = 0; // 或者可以設定為 null/undefined 依據需求
                                             }
-
+                                            */
                                             item.量能差 = parseInt(item.量能 - item.量能均);
-                                            let dd1 = dummydataItem.datalist.filter(q => q.日期 <= item.日期);
+                                            
+                                            //let dd1 = dummydataItem.datalist.filter(q => q.日期 <= item.日期);
                                             // ###【Flag】------  
                                             nDay = -5 // 抓往前推幾天
+                                            /*
                                             let arrlist_dll6 = dd1.map(x => parseInt(x.Flag)).slice().reverse()
                                             item.Flag = arrlist_dll6.slice(nDay).filter(x => x > 0).length
+                                            */
                                             // ###【Flag】------    　end 
 
                                             let dl = dummydataItem.datalist.filter(q => q.日期 <= item.日期);
@@ -711,6 +720,7 @@
                                                 let cond18 =(day_0["分類標籤"] !='e') &&(day_0["分類標籤"] !=day_1["分類標籤"] )
                                                 let cond19 =(parseFloat(day_0.量能)/parseFloat(day_0.量能avg)).toFixed(0)>(parseFloat(day_1.量能)/parseFloat(day_1.量能avg)).toFixed(0)
                                                 
+                                                
                                                 // 將多組邏輯條件包進陣列，每組是一種邏輯成立條件
                                                 let conditionGroups = [
                                                     //[cond1, cond2, cond3],  // 三階段轉強
@@ -724,7 +734,7 @@
                                                     //[cond15, cond14],   // 站上 MA_longlong
                                                     //[cond16],  //有量 轉強
 
-                                                    //[cond13],　　// MACD_% 　負轉正
+                                                    [cond13],　　// MACD_% 　負轉正
                                                     //[cond17],     //　MACD-SL 　負轉正
                                                     //[cond18],
                                                     [cond18,cond19]
@@ -770,12 +780,14 @@
                                         dummydataItem.量能max = datalist_last_date?.量能max;
                                         dummydataItem.量能avg = datalist_last_date?.量能avg;
                                         
-                                        dummydataItem.分類標籤 = datalist_last_date?.分類標籤.split("【")[1]?.split("】")[0];
+                                        dummydataItem.分類標籤 = datalist_last_date?.分類標籤_
+                                        dummydataItem.MACD_diff = datalist_last_date?.MACD_diff
+                                        
 
                                         dummydataItem.highlight_date = datalist_last_date?.highlight_date;
                                         dummydataItem.textdesc = datalist_last_date?.textdesc;
                                         dummydataItem.VPC_break = datalist_last_date?.VPC_break;
-                                        dummydataItem.Flag = datalist_last_date?.Flag;
+                                        //dummydataItem.Flag = datalist_last_date?.Flag;
                                         dummydataItem.now_price = datalist_last_date?.now_price;
                                         dummydataItem.MA_short = datalist_last_date?.MA_short;
                                         dummydataItem.MA_long = datalist_last_date?.MA_long;
@@ -916,9 +928,12 @@
                     // app.jsonData_.filter(x=>parseInt(x['highlight_date'])=='0').map(x=>parseInt(x['總價差'])).sort(function(a, b) { return - a + b;})
 
                     /*
+                    //營收創新
                     var alist=
                     ["2059","2308","2345","2363","2368","2383","2476","2706","2727","2751","2755","2762","2947","3017","3167","3213","3260","3305","3413","4438","4770","4772","4953","5269","5284","5289","5312","6016","6199","6523","6596","6617","6640","6669","6739","6781","6805","6830","6881","6895","6913","6922","6951","6952","7708","7722","7734","7751","8021","8028","8059","8099","8431"]
-                  
+                    app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
+                    //別人選的
+
                     var alist= [
                         "2344", "2634", "5371", "3529", "8358", "3703", "3563", "3704", "3441", "5309",
                         "1608", "2454", "8033", "8028", "6223", "8046", "6182", "4966", "2481", "3443",
@@ -926,8 +941,12 @@
                         "3149", "3260", "6143"
                         ];
 
-                    app.jsonData=app.jsonData.filter(x=>alist.includes(x.stock_number))
+                    app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
 
+                    */
+                    /*
+                    [C]
+                        均價_%
                     */
                 }
             }
