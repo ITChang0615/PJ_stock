@@ -57,9 +57,13 @@
                             <td v-for="(header, index) in headers.filter(h => h.value !== 'Typelevel' && h.value !== '0')"
                                 :key="header.value">
                                 <br />
-                                {{
-                                jsonData.map(x=>x[header.value]).reduce((acc, current) => acc + current, 0).toFixed(1)
-                                }}
+                               {{
+        (
+          (jsonData || [])
+            .map(x => Number(x?.[header.value]) || 0)   // 保證是數字
+            .reduce((acc, current) => acc + current, 0) // 總和
+        ).toFixed(1)
+      }}
                             </td>
                         </tr>
                     </template>
