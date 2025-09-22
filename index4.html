@@ -147,8 +147,16 @@
             .map(h => h.value)
             .filter(key => this.isNumberField(key) && !key.startsWith('成長率_') && key !== 'Flag_連3日正成長');
 
+           const endIndex = 0; 
+           const countary = 3; 
+            let last3 =[];
           // 取最後三欄
-          const last3 = valueHeaders.slice(-3);
+          if(endIndex==0){
+             last3 = valueHeaders.slice(endIndex-countary);
+          }else{
+             last3 = valueHeaders.slice(endIndex-countary,endIndex);
+          }
+       
 
           const g1 = row['成長率_' + last3[0]];
           const g2 = row['成長率_' + last3[1]];
