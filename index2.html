@@ -387,7 +387,7 @@
                         <v-card-title class="headline">{{ selectedItem?.stock_number }}</v-card-title>
                         <v-card-text style="padding: 0; height:90vh;">
                             <iframe v-if="selectedItem"
-                                :src="`${charturl}?[${selectedItem.stock_number}]`"
+                                :src="`${charturl}?_[${selectedItem.stock_number}]`"
                                 width="80%" frameborder="0" style="padding: 0; height:80vh;">
                             </iframe>
                         </v-card-text>
