@@ -178,13 +178,13 @@
                                         <br /> &nbsp; 本日漲跌 : {{data._quote}}
                                         </blockquote>
                                         </blockquote>
-                                    
+
                                         <br />------------------------------------------------------------
-                                    
+
                                         <br />
                                     </div>
                                 </v-tooltip>
-                                
+
                                 <br />
                                 <!--
                                 <span :style="{ color: 
@@ -275,10 +275,10 @@
                                     String(Math.sqrt(parseInt( ( data['MACD_%'] ))))+'px'
                                      }">
                                         MACD_%:{{parseInt(data['MACD_%'])}}
-                                           <span>
+                                        <span>
                                             ({{data.MACD_diff}} )
                                         </span>
-                                        
+
                                     </div>
                                 </div>
 
@@ -308,7 +308,8 @@
                             <br />
                             <span style="color:gray;">
                                 (now) {{ parseFloat(item.量能).toFixed(0) }}</span>
-                            <span style="color:green;">【{{ (parseFloat(item.量能) /parseFloat(item.量能avg)).toFixed(0) }}】</span>
+                            <span style="color:green;">【{{ (parseFloat(item.量能) /parseFloat(item.量能avg)).toFixed(0)
+                                }}】</span>
                             <br />
                             (min) {{ parseFloat(item.量能min).toFixed(0)}}
                         </td>
@@ -355,6 +356,10 @@
                             {{ item.Type }}<br />
                             {{item.Typelevel}}
                         </v-btn>
+                        <br />
+                        <v-btn text @click="openchart(item)">
+                            chart
+                        </v-btn>
                     </template>
 
                     <template v-slot:item.desc="{ item }">
@@ -377,6 +382,21 @@
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
+                <v-dialog v-model="dialogchart" max-width="80vw">
+                    <v-card>
+                        <v-card-title class="headline">{{ selectedItem?.stock_number }}</v-card-title>
+                        <v-card-text style="padding: 0; height:90vh;">
+                            <iframe v-if="selectedItem"
+                                :src="`${charturl}?[${selectedItem.stock_number}]`"
+                                width="80%" frameborder="0" style="padding: 0; height:80vh;">
+                            </iframe>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="dialogchart = false">Close</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-container>
         </v-app>
     </div>
@@ -389,6 +409,7 @@
                     collapse: false,
                     sync: false,
                     url: '',
+                    charturl: '',
                     jsonData: [],
                     jsonData_: [],
                     dummydata: [],
@@ -402,6 +423,7 @@
                     sortBy: ['MACD_%'],
                     sortDesc: [true],
                     dialog: false,
+                    dialogchart: false,
                     selectedItem: null,
                     realtimedata: [],
                     /////////////////////////////
@@ -468,6 +490,28 @@
                     this.selectedItem = item;
                     this.dialog = true;
                 },
+                openchart(item) {
+                    this.selectedItem = item;
+                    var stock = item.stock_number
+                    //localStorage.setItem('ddata', JSON.stringify(app.jsonData.find(x => x.stock_number == stock).datalist.slice(0, 10).map(data => ({ name: data['日期'], x: data['均價long_%'], y: data['MACD_%'], q: data['_quote'] }))));
+                    localStorage.setItem('ddata', JSON.stringify(app.jsonData.find(x => x.stock_number == stock).datalist.slice(0, 10).map(data => ({ name: data['日期'], y: data['均價long_%'], x: data['MACD_%'], s: data['量能'], q: data['_quote'] }))));
+                    localStorage.setItem('ddata', JSON.stringify(app.jsonData.find(x => x.stock_number == stock).datalist.slice(0, 10).map(data => ({ name: data['日期'], y: data['均價long_%'], x: data['Volume_MA_long'], s: data['量能'], q: data['_quote'] }))));
+                    
+
+                    var targetPath = "/SZCMMM/che.html";
+
+                    // 如果有多環境差異、可加判斷（例如 DEV專案路徑不一樣）
+                    if (window.location.host.indexOf("615") !== -1) {
+                        targetPath = "/PJ_stock/che.html";
+                    };
+                     if (window.location.host.indexOf("host") !== -1) {
+                        targetPath = "/IT/che.html";
+                    };
+                    this.charturl=window.location.origin + targetPath
+                    
+                    this.dialogchart = true;
+                    //window.open(window.location.origin + targetPath, "_blank");
+                },
                 isNumberField(field) {
                     return field !== 'stock_number' && this.jsonData.some(item => {
                         const value = item[field];
@@ -500,7 +544,7 @@
                         if (d === 'sunmy') {
                             file = `./Result/checksunmy.xlsx`;
                         }
-                         if (d === 'sunGreat') {
+                        if (d === 'sunGreat') {
                             file = `./Result/checksunGreat.xlsx`;
                         }
 
@@ -543,15 +587,15 @@
                                 const configFlag = ['確認漲跌']
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
-                                
-                                arr = [...baseFields, 
-                                    'VPC_break', 'MACD-SL', '成交股數', 
 
-                                    'textdesc','VPC_MA_%', //'volume_threshold',
+                                arr = [...baseFields,
+                                    'VPC_break', 'MACD-SL', '成交股數',
+
+                                    'textdesc', 'VPC_MA_%', //'volume_threshold',
                                     '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天',
                                     '均價long_%', '均價_%', 'MA5_%',
-                                    '當日漲跌', '總價差','now_price',
-                                    'macdpercent', 'desctxt','Volume_Oscillator','MACD_diff', 'highlight_date', '分類標籤', '量能max', '量能avg', '量能差', 'type',
+                                    '當日漲跌', '總價差', 'now_price',
+                                    'macdpercent', 'desctxt', 'Volume_Oscillator', 'MACD_diff', 'highlight_date', '分類標籤', '量能max', '量能avg', '量能差', 'type',
                                 ]
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -641,9 +685,9 @@
                                             item['volume_threshold_%'] = parseFloat(((item['volume_threshold'] - item['volume_threshold_mean']) / Math.abs(item['volume_threshold_mean'])).toFixed(2))
 
                                             item.分類標籤 = item?.分類標籤.split("【")[1]?.split("】")[0];
-                                            item.分類標籤_ = dl_1.map(x=>x.分類標籤)[0]?.split("【")[1]?.split("】")[0]+" ** "+item.分類標籤
-                                            item.MACD_diff =parseInt((item['MACD_%'])-parseFloat(dl_1.map(x=>x['MACD_%'])[0]))
-                                            
+                                            item.分類標籤_ = dl_1.map(x => x.分類標籤)[0]?.split("【")[1]?.split("】")[0] + " ** " + item.分類標籤
+                                            item.MACD_diff = parseInt((item['MACD_%']) - parseFloat(dl_1.map(x => x['MACD_%'])[0]))
+
                                         });
 
                                         //二次處理明細  要先經過一次計算
@@ -657,7 +701,7 @@
                                             }
                                             */
                                             item.量能差 = parseInt(item.量能 - item.量能均);
-                                            
+
                                             //let dd1 = dummydataItem.datalist.filter(q => q.日期 <= item.日期);
                                             // ###【Flag】------  
                                             nDay = -5 // 抓往前推幾天
@@ -719,11 +763,11 @@
                                                 let cond16 = day_0.量能 > 2 && (day_0.量能 > day_0.量能均 * 1.75) && (!day_0.Full_Summary.includes('負')) && day_0["MACD_%"] > 0
 
                                                 let cond17 = day_1["MACD-SL"] < day_0["MACD-SL"] && day_1["MACD-SL"] <= 0 && day_0["MACD-SL"] >= 0
-                                                
-                                                let cond18 =(day_0["分類標籤"] !='e') &&(day_0["分類標籤"] !=day_1["分類標籤"] )
-                                                let cond19 =(parseFloat(day_0.量能)/parseFloat(day_0.量能avg)).toFixed(0)>(parseFloat(day_1.量能)/parseFloat(day_1.量能avg)).toFixed(0)
-                                                
-                                                
+
+                                                let cond18 = (day_0["分類標籤"] != 'e') && (day_0["分類標籤"] != day_1["分類標籤"])
+                                                let cond19 = (parseFloat(day_0.量能) / parseFloat(day_0.量能avg)).toFixed(0) > (parseFloat(day_1.量能) / parseFloat(day_1.量能avg)).toFixed(0)
+
+
                                                 // 將多組邏輯條件包進陣列，每組是一種邏輯成立條件
                                                 let conditionGroups = [
                                                     //[cond1, cond2, cond3],  // 三階段轉強
@@ -740,7 +784,7 @@
                                                     [cond13],　　// MACD_% 　負轉正
                                                     //[cond17],     //　MACD-SL 　負轉正
                                                     //[cond18],
-                                                    [cond18,cond19]
+                                                    [cond18, cond19]
 
                                                 ];
 
@@ -782,10 +826,10 @@
                                         dummydataItem.量能均 = datalist_last_date?.量能均;
                                         dummydataItem.量能max = datalist_last_date?.量能max;
                                         dummydataItem.量能avg = datalist_last_date?.量能avg;
-                                        
+
                                         dummydataItem.分類標籤 = datalist_last_date?.分類標籤_
                                         dummydataItem.MACD_diff = datalist_last_date?.MACD_diff
-                                        
+
 
                                         dummydataItem.highlight_date = datalist_last_date?.highlight_date;
                                         dummydataItem.textdesc = datalist_last_date?.textdesc;
@@ -923,7 +967,7 @@
 
                     app.sync_data()
                     */
-                    
+
                     // 量太低不要
                     //app.jsonData=app.jsonData_.filter(x=>parseInt(x['量能avg'])>5)
 
