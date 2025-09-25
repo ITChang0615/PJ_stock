@@ -14,7 +14,7 @@
     <script src="./Content/common.js"></script>
     <script src="./Content/getRealTime.js"></script>
     <style>
-        .highlight-cell {   
+        .highlight-cell {
             color: initial;
             font-weight: bold;
         }
@@ -80,26 +80,27 @@
                                                     -mydata.filter(x=>x.Desc=='invest_input')[0].N_2
                                                     +(mydata.filter(x=>x.Desc=='invest_output')[0].N_1)
                                                     +(mydata.filter(x=>x.Desc=='invest_output')[0].N_2)
+                                                    +(mydata.filter(x=>x.Desc=='股息')[0].N_1)
+                                                    +(mydata.filter(x=>x.Desc=='股息')[0].N_2)
                                                     }}
                                                 </span>
                                                 <span v-show="item.Desc=='Total'">
-                                                    {{ mydata.filter(x=>x.Desc=='現金')[0].today
-                                                    +mydata.filter(x=>x.Desc=='信用卡')[0].today
-                                                    +mydata.filter(x=>x.Desc=='銀行')[0].today
-                                                    +mydata.filter(x=>x.Desc=='預備金')[0].today
-                                                    +mydata.filter(x=>x.Desc=='日幣')[0].today
-                                                    +mydata.filter(x=>x.Desc=='投入')[0].today
-                                                    +mydata.filter(x=>x.Desc=='可下單現金')[0].today
-                                                    }}
+
                                                 </span>
                                             </template>
                                             <template v-slot:body.append>
                                                 <tr class="sticky-table-footer">
                                                     <td></td>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td> {{ mydata.filter(x=>x.Desc=='現金')[0].today
+                                                        +mydata.filter(x=>x.Desc=='信用卡')[0].today
+                                                        +mydata.filter(x=>x.Desc=='銀行')[0].today
+                                                        +mydata.filter(x=>x.Desc=='預備金')[0].today
+                                                        +mydata.filter(x=>x.Desc=='日幣')[0].today
+                                                        +mydata.filter(x=>x.Desc=='投入')[0].today
+                                                        +mydata.filter(x=>x.Desc=='可下單現金')[0].today
+                                                        }}</td>
                                                     <td>{{stockdata_sum}}</td>
-                                                    <td>{{
+                                                    <td>={{
                                                         mydata.filter(x=>x.Desc=='現金')[0].today
                                                         +mydata.filter(x=>x.Desc=='信用卡')[0].today
                                                         +mydata.filter(x=>x.Desc=='銀行')[0].today
@@ -109,6 +110,10 @@
                                                         +mydata.filter(x=>x.Desc=='可下單現金')[0].today
                                                         +stockdata_sum
                                                         }}</td>
+
+
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr class="sticky-table-footer">
                                                     <td>預期</td>
@@ -187,14 +192,14 @@
                                                     <td />
                                                     <td />
                                                     <td />
-                                                    <td>{{parseFloat(100*stockdata_sum/stockdata_input).toFixed(2)}}% 
+                                                    <td>{{parseFloat(100*stockdata_sum/stockdata_input).toFixed(2)}}%
                                                     </td>
                                                     <td>{{stockdata_input}}
-                                                           <BR/>
+                                                        <BR />
                                                         ({{stockdata_input+stockdata_sum}})
                                                     </td>
                                                     <td>{{stockdata_sum}}</td>
-                                                    
+
                                                 </tr>
                                             </template>
                                         </v-data-table>
@@ -275,7 +280,7 @@
                                         <br />
                                         <v-data-table hide-default-footer :headers="headers" :items="maindata_output"
                                             style="white-space: nowrap;" :items-per-page="50">
-                                              <template v-slot:[`item.${currentym}`]="{ item }">
+                                            <template v-slot:[`item.${currentym}`]="{ item }">
                                                 <span :class="class_current_ym(currentym, item)">
                                                     {{ item[currentym] }}
                                                 </span>
@@ -600,7 +605,7 @@
                     //Now
                     var current = [
                         { Desc: '生活-LPP', value: 5000 },
-                        { Desc: '生活', value: 1928 },
+                        { Desc: '生活', value: 2173 },
                         { Desc: '固-3C影音', value: 3904 },
                         { Desc: '固-阿罵', value: 0 },
                         { Desc: '固-車', value: 1537 },
@@ -634,16 +639,17 @@
                 },
                 set_mydata() {
                     this.mydata = [
-                        { "Desc": "invest_input", "N_1":41200, "N_2": null },//買進
-                        { "Desc": "invest_output", "N_1": 716000, "N_2": null},//賣出
-                        { "Desc": "income_loss", "N_1":28492 , "N_2": null },//損益
-                        { "Desc": "現金", "today": 0},
-                        { "Desc": "信用卡", "today": -31459},
-                        { "Desc": "銀行", "today": 40000},
-                        { "Desc": "預備金", "today": 320200},
+                        { "Desc": "invest_input", "N_1": null, "N_2": 48100 },//買進
+                        { "Desc": "invest_output", "N_1": 671574, "N_2": null },//賣出
+                        { "Desc": "income_loss", "N_1": 28492, "N_2": null },//損益
+                        { "Desc": "股息", "N_1": 30600, "N_2": null },//股息
+                        { "Desc": "現金", "today": 800 },
+                        { "Desc": "信用卡", "today": -24849 },
+                        { "Desc": "銀行", "today": 39000 },
+                        { "Desc": "預備金", "today": 313824 },
                         { "Desc": "日幣", "today": 30000 },
-                        { "Desc": "投入", "today": 2771836},
-                        { "Desc": "可下單現金", "today": 1320749},
+                        { "Desc": "投入", "today": 2771836 },
+                        { "Desc": "可下單現金", "today": 1320749 },
                         { "Desc": "Total", "today": null }
                     ]
                 },
@@ -655,15 +661,15 @@
                         { "Type2": "上市", "name": null, "number": '006208', "hold": 0, "now": 133.7, "buyin": 110, "profit_stock": null, "profit": 2.07, "frequency": 2, "month": "1,7" },
                         { "Type2": "上市", "name": null, "number": '00929', "hold": 0, "now": 18.87, "buyin": 17.91, "parofit_stock": null, "profit": 0.07, "frequency": 12, "month": "1,2,3,4,5,6,7,8,9,10,11,12" },
                         { "Type2": "上市", "name": null, "number": '00878', "hold": 0, "now": 21.38, "buyin": 21.32, "profit_stock": null, "profit": 0.4, "frequency": 4, "month": "2,5,8,11" },
-                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 0, "now": 44.75, "buyin": 42.96, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
+                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 0, "now": 41.2, "buyin": 42.96, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
                         // 興富發 16000
 
-                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 32000, "now": 23.45, "buyin": 29.2, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
-                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 2000, "now": 29.95, "buyin": 33.49, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
-                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 22000, "now": 22.15, "buyin": 26.87, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
-                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 15.25, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
-                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 100, "now": 426.5, "buyin": 414.41, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
-                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 0, "now": 243.50, "buyin": 241.50, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 34000, "now": 23.95, "buyin": 28.91, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
+                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 2000, "now": 29.35, "buyin": 33.49, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
+                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 22000, "now": 22.35, "buyin": 26.87, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
+                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 15.45, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 100, "now": 405, "buyin": 414.41, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 0, "now": 235.50, "buyin": 241.50, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
                     ]
 
                     this.stock_headers_profit.push(...this.getYM().map(x => ({ text: x, value: x })));
@@ -680,20 +686,20 @@
                     this.stockdata = this.sumdata("total", this.stockdata);
                     this.stockdata.map(x => x.stock_number = x.number)
                 },
-                memo(){
-                    app.jsonData.filter(x=>x.量能max>10 &&x.量能max < 80)
-                    app.jsonData=app.jsonData_.filter(x=>x.總價差>0)
-                    app.jsonData=app.jsonData_.filter(x=>x.總價差>0 &&x.量能max <80  &&x.量能max >20)
-                    app.jsonData_.filter(x=>x.rt_price>2)
-                    app.jsonData=app.jsonData.filter(x=>x['營業收入-去年同月增減(%)']>0 && x['營業收入-上月比較增減(%)']>0  && x['累計營業收入-前期比較增減(%)']>0  )
-                    
-                    //取網頁中資料 放入 data.json
-                    console.log(JSON.stringify(app.jsonData.map(data => ({ name: data.Type,x:data['均價long_%'],y:data['MACD_%'],q:data['當日漲跌'] }))));
-                    console.log(JSON.stringify(app.jsonData.map(data => ({ name: data.Type,x:data['均價long_%'],y:data['MACD_%'],q:data['確認漲跌'] }))));
-                    console.log(JSON.stringify(app.jsonData.find(x=>x.stock_number=='8069').datalist.slice(0,10).map(data => ({ name: data['日期'],x:data['均價long_%'],y:data['MACD_%'],q:data['_quote'] }))));
+                memo() {
+                    app.jsonData.filter(x => x.量能max > 10 && x.量能max < 80)
+                    app.jsonData = app.jsonData_.filter(x => x.總價差 > 0)
+                    app.jsonData = app.jsonData_.filter(x => x.總價差 > 0 && x.量能max < 80 && x.量能max > 20)
+                    app.jsonData_.filter(x => x.rt_price > 2)
+                    app.jsonData = app.jsonData.filter(x => x['營業收入-去年同月增減(%)'] > 0 && x['營業收入-上月比較增減(%)'] > 0 && x['累計營業收入-前期比較增減(%)'] > 0)
 
-                    localStorage.setItem('ddata',JSON.stringify(app.jsonData.find(x=>x.stock_number=='8069').datalist.slice(0,10).map(data => ({ name: data['日期'],x:data['均價long_%'],y:data['MACD_%'],q:data['_quote'] }))));
-                    
+                    //取網頁中資料 放入 data.json
+                    console.log(JSON.stringify(app.jsonData.map(data => ({ name: data.Type, x: data['均價long_%'], y: data['MACD_%'], q: data['當日漲跌'] }))));
+                    console.log(JSON.stringify(app.jsonData.map(data => ({ name: data.Type, x: data['均價long_%'], y: data['MACD_%'], q: data['確認漲跌'] }))));
+                    console.log(JSON.stringify(app.jsonData.find(x => x.stock_number == '8069').datalist.slice(0, 10).map(data => ({ name: data['日期'], x: data['均價long_%'], y: data['MACD_%'], q: data['_quote'] }))));
+
+                    localStorage.setItem('ddata', JSON.stringify(app.jsonData.find(x => x.stock_number == '8069').datalist.slice(0, 10).map(data => ({ name: data['日期'], x: data['均價long_%'], y: data['MACD_%'], q: data['_quote'] }))));
+
 
                 }
             },
