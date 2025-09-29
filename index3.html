@@ -248,6 +248,9 @@
             },
             created() {
                 this.url = window.location.href.split('/').slice(0, 4).join('/') + '/Html/'
+                 if (window.location.host.indexOf("it-chang") !== -1) {
+                        this.url =  this.url.replace('PJ_stock','PJ_stock2')
+                };
                 let urlParams = new URLSearchParams(window.location.search);
                 if (urlParams.has('mode')) {
                     // &mode=app 
