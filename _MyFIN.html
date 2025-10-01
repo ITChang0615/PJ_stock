@@ -591,14 +591,14 @@
                     this.report.push(this.maindata_input.filter(x => x.Desc == "sum收入")[0])
                     // 【OUTPUT】
                     this.maindata_output = [
-                        { "Desc": "生活-LPP", "202501": "8000", "202502": "5000", "202503": "7000", "202504": "7000", "202505": "8500", "202506": "8000", "202507": "8000", "202508": "6000", "202509": "5000", "202510": "8000", "202511": "8000", "202512": "8000" },
-                        { "Desc": "生活", "202501": "4213", "202502": "1527", "202503": "1129", "202504": "3467", "202505": "2894", "202506": "4521", "202507": "2206", "202508": "5001", "202509": "1833", "202510": "3000", "202511": "3000", "202512": "3000" },
-                        { "Desc": "固-3C影音", "202501": "943", "202502": "943", "202503": "3594", "202504": "1700", "202505": "3594", "202506": "1606", "202507": "3604", "202508": "1606", "202509": "3906", "202510": "1606", "202511": "3606", "202512": "1606" },
-                        { "Desc": "固-阿罵", "202501": "61500", "202502": "9000", "202503": "1800", "202504": "1000", "202505": null, "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": "0" },
-                        { "Desc": "固-車", "202501": "3325", "202502": "776", "202503": "3481", "202504": "1680", "202505": "3500", "202506": "2263", "202507": "2352", "202508": "1937", "202509": "746", "202510": "2000", "202511": "2000", "202512": "2000" },
+                        { "Desc": "生活-LPP", "202501": "8000", "202502": "5000", "202503": "7000", "202504": "7000", "202505": "8500", "202506": "8000", "202507": "8000", "202508": "6000", "202509": "7000", "202510": "8000", "202511": "8000", "202512": "8000" },
+                        { "Desc": "生活", "202501": "4213", "202502": "1527", "202503": "1129", "202504": "3467", "202505": "2894", "202506": "4521", "202507": "2206", "202508": "5001", "202509": "2296", "202510": "3000", "202511": "3000", "202512": "3000" },
+                        { "Desc": "固-3C影音", "202501": "943", "202502": "943", "202503": "3594", "202504": "1700", "202505": "3594", "202506": "1606", "202507": "3604", "202508": "1606", "202509": "3904", "202510": "1606", "202511": "3606", "202512": "1606" },
+                        { "Desc": "固-阿罵", "202501": "61500", "202502": "9000", "202503": "1800", "202504": "1000", "202505": null, "202506": null, "202507": null, "202508": null, "202509": 3339, "202510": null, "202511": null, "202512": "0" },
+                        { "Desc": "固-車", "202501": "3325", "202502": "776", "202503": "3481", "202504": "1680", "202505": "3500", "202506": "2263", "202507": "2352", "202508": "1937", "202509": "5910", "202510": "2000", "202511": "2000", "202512": "2000" },
                         { "Desc": "固-車稅/保養", "202501": null, "202502": null, "202503": null, "202504": "4320", "202505": null, "202506": "17358", "202507": "17314", "202508": null, "202509": null, "202510": null, "202511": null, "202512": "10000" },
                         { "Desc": "固-稅", "202501": null, "202502": null, "202503": null, "202504": null, "202505": "7168", "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": "" },
-                        { "Desc": "運動", "202501": "2400", "202502": "7400", "202503": null, "202504": null, "202505": null, "202506": null, "202507": "5400", "202508": "5000", "202509": "6253", "202510": "5000", "202511": "5000", "202512": "5000" },
+                        { "Desc": "運動", "202501": "2400", "202502": "7400", "202503": null, "202504": null, "202505": null, "202506": null, "202507": "5400", "202508": "5000", "202509": "7333", "202510": "5000", "202511": "5000", "202512": "5000" },
                         { "Desc": "購物/娛樂", "202501": "13195", "202502": "7002", "202503": "5880", "202504": "13000", "202505": "10000", "202506": "4750", "202507": "5340", "202508": "4010", "202509": "0", "202510": "5000", "202511": "5000", "202512": "5000" },
                         { "Desc": "旅", "202501": null, "202502": null, "202503": "5380", "202504": null, "202505": "6595", "202506": null, "202507": "3000", "202508": null, "202509": "60474", "202510": null, "202511": null, "202512": "0" },
                     ]
@@ -615,7 +615,7 @@
                         { Desc: '購物/娛樂', value: 0 },
                         { Desc: '旅', value: 60474 },
                     ]
-                    this.currentym = '202509'
+                    this.currentym = '202500'
 
                     current.forEach(current => {
                         this.maindata_output.find(x => x.Desc == current.Desc)[this.currentym] = current.value
@@ -639,36 +639,36 @@
                 },
                 set_mydata() {
                     this.mydata = [
-                        { "Desc": "invest_input", "N_1": 106700, "N_2": null },//買進 
+                        { "Desc": "invest_input", "N_1": null, "N_2": null },//買進 
                         { "Desc": "invest_output", "N_1": null, "N_2": null },//賣出
                         { "Desc": "income_loss", "N_1": null, "N_2": null },//損益
                         { "Desc": "股息", "N_1": null, "N_2": null },//股息
                         { "Desc": "現金", "today": 4200 },
-                        { "Desc": "信用卡", "today": -29305 },
+                        { "Desc": "信用卡", "today": -30007 },
                         { "Desc": "銀行", "today": 29141 },
                         { "Desc": "預備金", "today": 313824 },
                         { "Desc": "日幣", "today": 30000 },
-                        { "Desc": "投入", "today": 2176922 },
-                        { "Desc": "可下單現金", "today": 1974099 },
+                        { "Desc": "投入", "today": 	2283622 },
+                        { "Desc": "可下單現金", "today": 	1867399 },
                         { "Desc": "Total", "today": null }
                     ]
                 },
                 set_stockdata() {
                     this.stockdata = [
-                        { "Type2": "上市", "name": null, "number": '0050', "hold": 0, "now": 57.8, "buyin": 47, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
-                        { "Type2": "上市", "name": null, "number": '0056', "hold": 0, "now": 36.8, "buyin": 35.17, "profit_stock": null, "profit": 0.866, "frequency": 4, "month": "1,4,7,10" },
-                        { "Type2": "上市", "name": null, "number": '00713', "hold": 0, "now": 51.5, "buyin": 51.2, "profit_stock": null, "profit": 0.78, "frequency": 4, "month": "3,6,9,12" },
-                        { "Type2": "上市", "name": null, "number": '006208', "hold": 0, "now": 134.8, "buyin": 110, "profit_stock": null, "profit": 2.07, "frequency": 2, "month": "1,7" },
-                        { "Type2": "上市", "name": null, "number": '00929', "hold": 0, "now": 18.6, "buyin": 17.91, "parofit_stock": null, "profit": 0.07, "frequency": 12, "month": "1,2,3,4,5,6,7,8,9,10,11,12" },
-                        { "Type2": "上市", "name": null, "number": '00878', "hold": 0, "now": 21.36, "buyin": 21.32, "profit_stock": null, "profit": 0.4, "frequency": 4, "month": "2,5,8,11" },
-                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 0, "now": 40.25, "buyin": 42.95, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
+                        { "Type2": "上市", "name": null, "number": '0050', "hold": 0, "now": 58.1, "buyin": 47, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+                        { "Type2": "上市", "name": null, "number": '0056', "hold": 0, "now": 36.81, "buyin": 35.17, "profit_stock": null, "profit": 0.866, "frequency": 4, "month": "1,4,7,10" },
+                        { "Type2": "上市", "name": null, "number": '00713', "hold": 0, "now": 51.4, "buyin": 51.2, "profit_stock": null, "profit": 0.78, "frequency": 4, "month": "3,6,9,12" },
+                        { "Type2": "上市", "name": null, "number": '006208', "hold": 0, "now": 135.35, "buyin": 110, "profit_stock": null, "profit": 2.07, "frequency": 2, "month": "1,7" },
+                        { "Type2": "上市", "name": null, "number": '00929', "hold": 0, "now": 18.49, "buyin": 17.91, "parofit_stock": null, "profit": 0.07, "frequency": 12, "month": "1,2,3,4,5,6,7,8,9,10,11,12" },
+                        { "Type2": "上市", "name": null, "number": '00878', "hold": 0, "now": 21.23, "buyin": 21.32, "profit_stock": null, "profit": 0.4, "frequency": 4, "month": "2,5,8,11" },
+                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 0, "now": 40, "buyin": 42.95, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
                         // 興富發 16000
-                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 36000, "now": 24, "buyin": 28.63, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
-                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 28.9, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
-                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 22000, "now": 22.15, "buyin": 26.87, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
+                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 36000, "now": 23.8, "buyin": 28.63, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
+                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 28.6, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
+                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 22000, "now": 22.2, "buyin": 26.87, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
                         { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 14.95, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
-                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 100, "now": 395, "buyin": 414.41, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
-                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 0, "now": 240.5, "buyin": 241.50, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 100, "now": 385.5, "buyin": 414.41, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 0, "now": 235.5, "buyin": 241.50, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
                     ]
 
                     this.stock_headers_profit.push(...this.getYM().map(x => ({ text: x, value: x })));
@@ -701,7 +701,13 @@
 
                     localStorage.setItem('ddata', JSON.stringify(app.jsonData.find(x => x.stock_number == '8069').datalist.slice(0, 10).map(data => ({ name: data['日期'], x: data['均價long_%'], y: data['MACD_%'], q: data['_quote'] }))));
 
+                    //---------------------------------------------
+                    app.jsonData=app.jsonData_.filter(x=>!(x['MA5_%']<1 && x.總價差<3 ))
+                    app.jsonData=app.jsonData_.filter(x=>x['highlight_date']=='2025-09-30' && x['量能avg']>=10 && x['量能max']>=10 && x['量能max']<98 && (x['量能max']/ x['量能avg'])<3.5 && (x['量能max']/ x['量能avg'])>1.7 && x['成交股數']>200  )
+                    app.jsonData=app.jsonData_.filter(x=>(x['rt_price']>5))
 
+                    app.jsonData_.filter(x=>(x['均價long_%']>0)).map(x=>parseInt(x['rt_price'])).sort(function(a, b) { return - a + b;})
+                    app.jsonData=app.jsonData_.filter(x=>(x['均價long_%']>0))
                 }
             },
         });
