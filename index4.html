@@ -92,7 +92,8 @@
         },
         computedHref2(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
-          return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0]}&type=${this.sanitizedTypelevel(x)}`;
+          
+          return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_",'')}&type=${this.sanitizedTypelevel(x)}`;
         },
         isNumberField(field) {
           return field !== 'stock_number' && this.jsonData.some(item => {
