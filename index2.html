@@ -281,7 +281,7 @@
                                      }">
                                         MACD_%:{{parseInt(data['MACD_%'])}}
                                         <span>
-                                            ({{data.MACD_diff}} )
+                                            ({{data.MACD_minus}} )
                                         </span>
 
                                     </div>
@@ -602,10 +602,11 @@
                                     'textdesc', 'VPC_MA_%', //'volume_threshold',
                                     '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天',
                                     '均價long_%', '均價_%', 'MA5_%','%D', '%K', 
-                                    '當日漲跌',  'now_price',
+                                    '當日漲跌',  'now_price','分類標籤',
                                     'macdpercent', 'desctxt', 'Volume_Oscillator',// 'MACD_diff', 
+                                    'MACD_minus',
                                     'highlight_date','cond_entry','LevelArea','VPC_MA_%', 
-                                    '分類標籤', '量能max', '量能avg', '量能差', '總價差','type',
+                                     '量能max', '量能avg', '量能差', '總價差','type',
                                 ]
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -697,6 +698,8 @@
                                             item.分類標籤 = item?.分類標籤.split("【")[1]?.split("】")[0];
                                             item.分類標籤_ = dl_1.map(x => x.分類標籤)[0]?.split("【")[1]?.split("】")[0] + " ** " + item.分類標籤
                                             item.MACD_diff = parseInt((item['MACD_%']) - parseFloat(dl_1.map(x => x['MACD_%'])[0]))
+                                            //
+                                            item.MACD_minus=  Math.abs((parseFloat(item['MACD']) -  parseFloat(item['MACD-SL']) )).toFixed(2)
 
                                         });
 
@@ -837,9 +840,12 @@
                                         dummydataItem.量能均 = datalist_last_date?.量能均;
                                         dummydataItem.量能max = datalist_last_date?.量能max;
                                         dummydataItem.量能avg = datalist_last_date?.量能avg;
+                                        
+                                        
 
                                         dummydataItem.分類標籤 = datalist_last_date?.分類標籤_
                                         dummydataItem.MACD_diff = datalist_last_date?.MACD_diff
+                                        dummydataItem.MACD_minus = datalist_last_date?.MACD_minus;
 
 
                                         dummydataItem.highlight_date = datalist_last_date?.highlight_date;
