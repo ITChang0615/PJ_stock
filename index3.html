@@ -361,7 +361,7 @@
                     ]
                     //
                     arr = ['分類標籤', '日期', 'stock_number', '_quote', '成交股數', 'rt_量', '量能', 'now_price', 'rt_price', 'highlight_date','量倍率', 'highlight_%', 'cond_entry', 'LevelArea',
-                        '盤後量', '成交量', 'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong', 'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 'VPC_MA_%', 'VPC_break',
+                       '均價long_%','成交量', '盤後量',  'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong', 'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 'VPC_MA_%', 'VPC_break',
                         'Volume_MA_short', 'Volume_MA_long', 'Volume_Oscillator', 'volume_threshold', 'Volume_Price_Change_sum', 'highlight_enddate', 'Type0', 'Type1', 'Type2', 'Full_Summary',
                         'textdesc', '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', '淨值倍率', '殖利率', '每股營收(元)', '本益比', '營業毛利率', '營業利益率', '同業平均本益比', '總市值', '營收比重', 'Type',
                         'Typelevel', '每股淨值(元)', 'desc']
@@ -459,6 +459,7 @@
                                 
                                 //app.jsonData.filter(x=> parseInt(x.rt_price)>3).map(x=>x.Volume_Oscillator).sort(function(a, b) { return - a + b;})
                                 */
+                                // app.jsonData=app.jsonData_.filter(x=> x['highlight_date']!='0'&&x['均價long_%']>0)
                             }
                         })
                         .catch(error => console.error('Error loading Excel file:', error));
