@@ -49,35 +49,11 @@
                     </v-col>
                 </v-row>
 
-                <!-- 篩選區域
-                <v-expansion-panels>
-                    <v-expansion-panel>
-                        <v-expansion-panel-header>
-                            <v-icon>mdi-filter</v-icon>
-                            篩選條件
-                        </v-expansion-panel-header>
-                        <v-expansion-panel-content>
-                            <v-form>
-                                <v-row>
-                                    <v-col v-for="(header, index) in headers" :key="index" cols="12" md="4">
-                                        {{ header.text }}
-                                        <v-select v-if="!isNumberField(header.value)" v-model="filters[header.value]"
-                                            :items="uniqueValues[header.value]" item-value="value" item-text="text"
-                                            multiple solo>
-                                        </v-select>
-                                        <v-range-slider v-else v-model="filters[header.value]" :label="header.text"
-                                            :min="getMinValue(header.value)" :max="getMaxValue(header.value)"
-                                            hide-details ticks="always" tick-size="4" thumb-label>
-                                        </v-range-slider>
-                                    </v-col>
-                                </v-row>
-                            </v-form>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel>
-                </v-expansion-panels> -->
+
 
                 <div v-for="(type, index) in distinct_type" v-show="appmode">
                     {{type.Typelevel }} {{parseFloat(type.Volume_Price_Change_sum).toFixed(0)}}
+
                     <br>
                     <v-data-table disable-pagination fixed-header hide-default-footer :headers="appheaderData"
                         :items="appfilteredData(type.Typelevel )" :items-per-page="-1" item-key="id"
@@ -108,20 +84,21 @@
 
                 <div v-for="(type, index) in distinct_type" v-show="!appmode"
                     style="max-height: 400px; overflow-x: auto;">
-                    {{ type.Typelevel }}
-                    【分類】
-                    <a :href="computedHref2(type)" target="_blank" rel="noopener">
-                        {{ sanitizedTypelevel(type) }}
-                    </a>
-                    {{parseFloat(type.Volume_Price_Change_sum).toFixed(0)}}
-                    【太陽】
-                    <a :href="computedHref(type)" target="_blank" rel="noopener">
-                        {{ sanitizedTypelevel(type) }}
-                    </a>
+                    {{ type.Typelevel }} {{parseFloat(type.Volume_Price_Change_sum).toFixed(0)}}
                     <span>
                         {{filteredData(type.Typelevel).filter(x=>x._quote>5).length}} /
                         {{filteredData(type.Typelevel).length}}
                     </span>
+                    【分類】
+                    <a :href="computedHref2(type)" target="_blank" rel="noopener">
+                        {{ sanitizedTypelevel(type) }}
+                    </a>
+
+                    【太陽】
+                    <a :href="computedHref(type)" target="_blank" rel="noopener">
+                        {{ sanitizedTypelevel(type) }}
+                    </a>
+
 
                     <br>
                     <v-data-table disable-pagination fixed-header hide-default-footer :headers="headers"
@@ -248,8 +225,8 @@
             },
             created() {
                 this.url = window.location.href.split('/').slice(0, 4).join('/') + '/Html/'
-                 if (window.location.host.indexOf("it-chang") !== -1) {
-                        this.url =  this.url.replace('PJ_stock/Html','PJ_Stock2')
+                if (window.location.host.indexOf("it-chang") !== -1) {
+                    this.url = this.url.replace('PJ_stock/Html', 'PJ_Stock2')
                 };
                 let urlParams = new URLSearchParams(window.location.search);
                 if (urlParams.has('mode')) {
@@ -293,8 +270,9 @@
                     return `${baseUrl}/index3.html?d=${urlParams.get('d')}&date=${urlParams.get('date')}&type=${this.sanitizedTypelevel(x)}`;
                 },
                 sanitizedTypelevel(x) {
-                    return x.Type1
-                    //return x.Typelevel.replace('右上', '').replace('平', '').replace('右下', '');
+
+                    //return x.Type1
+                    return x.Typelevel.replace('右上', '').replace('平', '').replace('右下', '').replace('b', '').replace('c', '').replace('d', '').replace('e', '');
                 },
 
                 async init() {
@@ -379,10 +357,14 @@
                         '均價long_%', '均價_%', 'MA5_%', 'VPC_MA_%', 'volume_threshold',
                         //'漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天',
                         'textdesc', '當日漲跌', '總價差', 'now_price',
-                        'macdpercent', 'desctxt', 'highlight_date','cond_entry', '分類標籤', '量能max', '量能avg', '量能差', 'type',
+                        'macdpercent', 'desctxt', 'highlight_date', 'cond_entry', '分類標籤', '量能max', '量能avg', '量能差', 'type',
                     ]
                     //
-                     arr =  ['分類標籤', '日期', 'stock_number', '_quote', '成交股數', 'rt_量', '量能', 'now_price', 'rt_price', 'highlight_date','cond_entry','LevelArea',  '盤後量', '成交量', 'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong', 'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 'VPC_MA_%', 'VPC_break', 'Volume_MA_short', 'Volume_MA_long', 'Volume_Oscillator', 'volume_threshold', 'Volume_Price_Change_sum', 'highlight_enddate', 'Type0', 'Type1', 'Type2', 'Full_Summary', 'textdesc', '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', '淨值倍率', '殖利率', '每股營收(元)', '本益比', '營業毛利率', '營業利益率', '同業平均本益比', '總市值', '營收比重', 'Type', 'Typelevel', '每股淨值(元)', 'desc']
+                    arr = ['分類標籤', '日期', 'stock_number', '_quote', '成交股數', 'rt_量', '量能', 'now_price', 'rt_price', 'highlight_date','量倍率', 'highlight_%', 'cond_entry', 'LevelArea',
+                        '盤後量', '成交量', 'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong', 'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 'VPC_MA_%', 'VPC_break',
+                        'Volume_MA_short', 'Volume_MA_long', 'Volume_Oscillator', 'volume_threshold', 'Volume_Price_Change_sum', 'highlight_enddate', 'Type0', 'Type1', 'Type2', 'Full_Summary',
+                        'textdesc', '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', '淨值倍率', '殖利率', '每股營收(元)', '本益比', '營業毛利率', '營業利益率', '同業平均本益比', '總市值', '營收比重', 'Type',
+                        'Typelevel', '每股淨值(元)', 'desc']
                     this.headers = arr.map(header => ({ text: header, value: header }));;
 
                 },
@@ -400,7 +382,7 @@
                     if (urlParams.get('d') == 'A') {
                         file = './Result/checkall/' + urlParams.get('date') + '.xlsx'
                         this.paraDate = new Date(urlParams.get('date'))
-                    }else {
+                    } else {
                         file = './Result/checksun_others/' + urlParams.get('date') + '.xlsx'
                         this.paraDate = new Date(urlParams.get('date'))
                     }
@@ -491,5 +473,4 @@
         });
     </script>
 </body>
-
 </html>

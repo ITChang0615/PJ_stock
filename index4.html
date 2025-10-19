@@ -49,24 +49,24 @@
               {{ sanitizedTypelevel(item) }}
             </a>
           </template>
-           <template v-slot:body.append>
-                        <tr class="sticky-table-footer">
-                            <td></td>
-                            <td></td>
+          <template v-slot:body.append>
+            <tr class="sticky-table-footer">
+              <td></td>
+              <td></td>
 
-                            <td v-for="(header, index) in headers.filter(h => h.value !== 'Typelevel' && h.value !== '0')"
-                                :key="header.value">
-                                <br />
-                               {{
-        (
-          (jsonData || [])
-            .map(x => Number(x?.[header.value]) || 0)   // 保證是數字
-            .reduce((acc, current) => acc + current, 0) // 總和
-        ).toFixed(1)
-      }}
-                            </td>
-                        </tr>
-                    </template>
+              <td v-for="(header, index) in headers.filter(h => h.value !== 'Typelevel' && h.value !== '0')"
+                :key="header.value">
+                <br />
+                {{
+                (
+                (jsonData || [])
+                .map(x => Number(x?.[header.value]) || 0) // 保證是數字
+                .reduce((acc, current) => acc + current, 0) // 總和
+                ).toFixed(1)
+                }}
+              </td>
+            </tr>
+          </template>
         </v-data-table>
       </v-container>
     </v-app>
@@ -92,8 +92,8 @@
         },
         computedHref2(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
-          
-          return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_",'')}&type=${this.sanitizedTypelevel(x)}`;
+
+          return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
         },
         isNumberField(field) {
           return field !== 'stock_number' && this.jsonData.some(item => {
@@ -141,23 +141,23 @@
 
         // 計算 Flag_連3日正成長
 
-       
+
         this.jsonData.forEach(row => {
           // 取得數值欄位（排除非數字與特別欄位）
           const valueHeaders = this.headers
             .map(h => h.value)
             .filter(key => this.isNumberField(key) && !key.startsWith('成長率_') && key !== 'Flag_連3日正成長');
 
-           const endIndex = 0; 
-           const countary = 3; 
-            let last3 =[];
+          const endIndex = 0;
+          const countary = 3;
+          let last3 = [];
           // 取最後三欄
-          if(endIndex==0){
-             last3 = valueHeaders.slice(endIndex-countary);
-          }else{
-             last3 = valueHeaders.slice(endIndex-countary,endIndex);
+          if (endIndex == 0) {
+            last3 = valueHeaders.slice(endIndex - countary);
+          } else {
+            last3 = valueHeaders.slice(endIndex - countary, endIndex);
           }
-       
+
 
           const g1 = row['成長率_' + last3[0]];
           const g2 = row['成長率_' + last3[1]];
@@ -166,7 +166,7 @@
           const v1 = row[last3[0]];
           const v2 = row[last3[1]];
           const v3 = row[last3[2]];
-          
+
 
           if (
             [g1, g2, g3].every(g => g !== null && g > 0) &&
