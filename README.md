@@ -37,3 +37,12 @@ MACD
 |              e *            *  d   
 |                  *        *       
 |                    *    *         
+
+
+app.jsonData=app.jsonData_.filter(x=> x['總價差']>0 && x['MA5_%'] >0 && x['均價_%']<0 && x['均價long_%']>0 )
+
+app.jsonData=app.jsonData_.filter(x=>x.highlight_date>'2025-10-14'&& parseFloat(x['highlight_%'])<7 && parseFloat(x['%K'])>parseFloat(x['%D'])&& x.量能avg>10 )
+
+app.jsonData=app.jsonData_.filter(x=> parseFloat(x['MACD_minus'])>0.1 && parseFloat(x['%K'])<50 && parseFloat(x['%K'])>parseFloat(x['%D']) )
+
+app.jsonData=app.jsonData_.filter(x=> parseFloat(x['rt_price'])>3 )
