@@ -410,6 +410,9 @@
                     var vm = this
                     vm.jsonData = vm.jsonData_.filter(i => !vm.jsonData.map(x => x.stock_number).includes(i.stock_number))
                 },
+                memo(){
+                    // app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_1)&& parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_2)&&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_2) &&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_1)  &&x.highlight_stardate收盤價_1!=0 )
+                }
             }
         });
     </script>
