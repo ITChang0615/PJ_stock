@@ -189,7 +189,7 @@
             created() {
                 this.url = window.location.href.split('/').slice(0, 4).join('/') + '/Html/'
                 if (window.location.host.indexOf("it-chang") !== -1) {
-                        this.url =  this.url.replace('PJ_stock/Html','PJ_Stock2')
+                    this.url = this.url.replace('PJ_stock/Html', 'PJ_Stock2')
                 };
                 let urlParams = new URLSearchParams(window.location.search);
                 if (urlParams.has('mode')) {
@@ -294,7 +294,7 @@
                     vm.jsonData = vm.jsonData_.filter(x => parseFloat(x['MACD_%']) > 0 && parseFloat(x['均價_%']) > 0 && parseFloat(x['盤後量']) > 1)
                     vm.sortBy = '成交量'
                     vm.jsonData = vm.jsonData.filter(x => x.Type1 != '金融保險')
-    
+
                 },
                 isNumberField(field) {
                     return field !== 'stock_number' && this.jsonData.some(item => {
@@ -329,11 +329,11 @@
                         if (urlParams.get('d') == 'M') {
                             file = './Result/checkmy.xlsx'
                         }
-                         if (urlParams.get('d') == 'checkGreat') {
+                        if (urlParams.get('d') == 'checkGreat') {
                             file = './Result/checkGreat.xlsx'
                         }
-                       
-                     
+
+
                         /**********************/
                         if (urlParams.get('d') == 'C') {
                             file = './Result/checkall/' + urlParams.get('date') + '.xlsx'
@@ -345,7 +345,16 @@
                             file = './Result/checksun_others/' + urlParams.get('date') + '.xlsx'
                             this.paraDate = new Date(urlParams.get('date'))
                         }
+                        /**********************/
+                        this.type = urlParams.get('type');
+                        if (urlParams.get('d') == 'A') {
+                            file = './Result/checkall/' + urlParams.get('date') + '.xlsx'
+                            this.paraDate = new Date(urlParams.get('date'))
+                        }
                     }
+
+
+
                     await fetch(file)
                         .then(response => response.arrayBuffer())
                         .then(data => {
@@ -392,6 +401,9 @@
                                         }
                                     });
                                 });
+                                if (this.type) {
+                                    this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type));
+                                }
                                 this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
                                 Object.keys(this.uniqueValues).forEach(key => {
                                     this.uniqueValues[key] = this.uniqueValues[key].map(val => ({ text: val, value: val }));
@@ -413,57 +425,57 @@
                     var vm = this
                     vm.jsonData = vm.jsonData_.filter(i => !vm.jsonData.map(x => x.stock_number).includes(i.stock_number))
                 },
-                dataCache(){
-                   
+                dataCache() {
+
                     //app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_1)&& parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_2)&&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_2) &&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_1)  &&x.highlight_stardate收盤價_1!=0 &&x.Type2!='上櫃' && x.highlight_date!='0')
-                    app.sortBy='highlight_%'
-                    return  app.jsonData.sort(function (a, b) { return  b['highlight_%'] -a['highlight_%'] ;})
-                            .map((str, idx) => ({
-                              key: idx + 1,   // 根據排序結果給 key (從 1 開始)
-                              value: str.stock_number
-                            }));
+                    app.sortBy = 'highlight_%'
+                    return app.jsonData.sort(function (a, b) { return b['highlight_%'] - a['highlight_%']; })
+                        .map((str, idx) => ({
+                            key: idx + 1,   // 根據排序結果給 key (從 1 開始)
+                            value: str.stock_number
+                        }));
                 },
-                
-                setCache(){
+
+                setCache() {
                     var vm = this
-                    localStorage.setItem('cache',JSON.stringify(vm.dataCache()));
-            		var cache =JSON.parse(localStorage.getItem('cache')|| '[]')
-            		app.jsonData.map(y=>y.分類標籤=(cache.find(x=>x.value==y.stock_number)?.key+y.分類標籤))
-                    
+                    localStorage.setItem('cache', JSON.stringify(vm.dataCache()));
+                    var cache = JSON.parse(localStorage.getItem('cache') || '[]')
+                    app.jsonData.map(y => y.分類標籤 = (cache.find(x => x.value == y.stock_number)?.key + y.分類標籤))
+
                 },
-                getCache(){
+                getCache() {
                     var vm = this
-                    localStorage.setItem('cachenew',JSON.stringify(vm.dataCache()));
-                    var cachenew =JSON.parse(localStorage.getItem('cachenew')|| '[]')
-                    app.jsonData.map(y=>y.分類標籤=(cachenew.find(x=>x.value==y.stock_number)?.key+y.分類標籤))
-                    
-                    var cache =JSON.parse(localStorage.getItem('cache')|| '[]')
-                    app.jsonData.map(y=>y.分類標籤=(cache.find(x=>x.value==y.stock_number)?.key+'->'+y.分類標籤))
-                    
-                    app.jsonData.map(y=>y.分類標籤=(cachenew.find(x=>x.value==y.stock_number)?.key< cache.find(x=>x.value==y.stock_number)?.key? 'T':'')+'   '+y.分類標籤)
+                    localStorage.setItem('cachenew', JSON.stringify(vm.dataCache()));
+                    var cachenew = JSON.parse(localStorage.getItem('cachenew') || '[]')
+                    app.jsonData.map(y => y.分類標籤 = (cachenew.find(x => x.value == y.stock_number)?.key + y.分類標籤))
+
+                    var cache = JSON.parse(localStorage.getItem('cache') || '[]')
+                    app.jsonData.map(y => y.分類標籤 = (cache.find(x => x.value == y.stock_number)?.key + '->' + y.分類標籤))
+
+                    app.jsonData.map(y => y.分類標籤 = (cachenew.find(x => x.value == y.stock_number)?.key < cache.find(x => x.value == y.stock_number)?.key ? 'T' : '') + '   ' + y.分類標籤)
 
                     /**/
-                    var cache =JSON.parse(localStorage.getItem('cache')|| '[]')
-                    var cachenew =JSON.parse(localStorage.getItem('cachenew')|| '[]')
-                    app.jsonData=app.jsonData.filter(y=>(cachenew.find(x=>x.value==y.stock_number)?.key< cache.find(x=>x.value==y.stock_number)?.key))
-                    app.jsonData.map(y=>y.分類標籤=(-cachenew.find(x=>x.value==y.stock_number)?.key+ cache.find(x=>x.value==y.stock_number)?.key))
-                    
+                    var cache = JSON.parse(localStorage.getItem('cache') || '[]')
+                    var cachenew = JSON.parse(localStorage.getItem('cachenew') || '[]')
+                    app.jsonData = app.jsonData.filter(y => (cachenew.find(x => x.value == y.stock_number)?.key < cache.find(x => x.value == y.stock_number)?.key))
+                    app.jsonData.map(y => y.分類標籤 = (-cachenew.find(x => x.value == y.stock_number)?.key + cache.find(x => x.value == y.stock_number)?.key))
 
 
-                    
+
+
                 },
-                memo(){
+                memo() {
                     // app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_1)&& parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_2)&&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_2) &&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_1)  &&x.highlight_stardate收盤價_1!=0 )
 
 
                     // app.jsonData=app.jsonData.filter(x=>parseInt(x['累計營業收入-前期比較增減(%)'])>0 &&x.Type1!='生技醫療業' )
                     // app.jsonData=app.jsonData.filter(x=>x.LevelArea<90  && x.LevelArea>-50 && x.diff_quote>2)
 
-                     var cache =JSON.parse(localStorage.getItem('cache')|| '[]')
-                     var cachenew =JSON.parse(localStorage.getItem('cachenew')|| '[]')
-                        app.jsonData=app.jsonData.filter(y=>(cachenew.find(x=>x.value==y.stock_number)?.key< cache.find(x=>x.value==y.stock_number)?.key))
-                        app.jsonData.map(y=>y.分類標籤=(+cachenew.find(x=>x.value==y.stock_number)?.key+ cache.find(x=>x.value==y.stock_number)?.key))
-                    
+                    var cache = JSON.parse(localStorage.getItem('cache') || '[]')
+                    var cachenew = JSON.parse(localStorage.getItem('cachenew') || '[]')
+                    app.jsonData = app.jsonData.filter(y => (cachenew.find(x => x.value == y.stock_number)?.key < cache.find(x => x.value == y.stock_number)?.key))
+                    app.jsonData.map(y => y.分類標籤 = (+cachenew.find(x => x.value == y.stock_number)?.key + cache.find(x => x.value == y.stock_number)?.key))
+
                 }
             }
         });
