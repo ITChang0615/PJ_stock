@@ -161,11 +161,17 @@
                                 <!--【Flag】-->
                                 <v-tooltip slot="append" bottom>
                                     <template v-slot:activator="{ on }">
-                                        <span v-on="on" :style="{
+                                        <!--span v-on="on" :style="{
                                                 color:
                                                parseInt(data._quote) > 1  &&   parseInt(data.量能) > 50 && parseInt(data.量能)> parseInt(data.量能均)* 1.5  ? 'red' :
                                                parseInt(data._quote) > 1  &&   parseInt(data.量能) > 20 && parseInt(data.量能)> parseInt(data.量能均)* 1.5 ? 'orange' :
                                                parseInt(data._quote) > 1  &&   parseInt(data.量能) > 20 && parseInt(data.量能)> parseInt(data.量能均) ? 'blue' :
+                                                'gray'  }"-->
+                                         <span v-on="on" :style="{
+                                                color:
+                                               parseInt(data['VPC_MA_%']) > 40  ? 'red' :
+                                               parseInt(data['VPC_MA_%']) > 30    ? 'orange' :
+                                               parseInt(data['VPC_MA_%'])  >20      ? 'blue' :
                                                 'gray'  }">
                                             量能:{{data.量能 }}(均: {{data.量能均 }})
                                         <br />
