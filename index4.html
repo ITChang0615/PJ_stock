@@ -84,7 +84,7 @@
       },
       methods: {
         sanitizedTypelevel(x) {
-          return x.Typelevel.replace('右上', '').replace('平', '').replace('右下', '');
+          return x.Typelevel.replace('右上', '').replace('平', '').replace('右下', '').replace('上市', '').replace('上櫃', '');
         },
         computedHref(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址

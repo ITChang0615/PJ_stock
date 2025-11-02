@@ -154,6 +154,8 @@
                                             MA_long {{ data['MA_long']}}
                                             <br />
                                             MA_longlong {{ data['MA_longlong']}}
+                                            <br />
+                                            MA_longlonglong {{ data['MA_longlonglong']}}
                                         </span>
                                     </div>
                                 </v-tooltip>
@@ -596,23 +598,24 @@
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
 
                                 arr = [...baseFields,
-                                    'VPC_break', 'MACD-SL',  'MACD','成交股數',
+                                    'VPC_break', 'MACD-SL',  'MACD','成交股數','成交金額平均','成交金額',
 
                                     'textdesc',  //'volume_threshold',
-                                    '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天',
+                                    '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天','均價longlong_%',
                                     '均價long_%', '均價_%', 'MA5_%','%D', '%K', 
                                     '當日漲跌',  'now_price','分類標籤',
                                     'Volume_Oscillator',// 'MACD_diff', 
                                     'VPC_MA_%', '量能max', 
                                     'highlight_enddate_2','highlight_stardate_2','highlight_enddate收盤價_2','highlight_stardate收盤價_2',
                                     'highlight_enddate_1','highlight_stardate_1','highlight_enddate收盤價_1','highlight_stardate收盤價_1',
-                                    'macdpercent', 'desctxt', 
+                                    'macdpercent', 
                                     'cond_entry','LevelArea', 'MACD_minus',
                                     'highlight_%_2','highlight_%_1',
                                     'highlight_收盤價', 
                                     'highlight_%',
                                     //'highlight_enddate_1','highlight_stardate_1',
                                      'highlight_date',
+                                     'desctxt', 
                                     '量倍率','量能avg', '量能差', '總價差','type',
                                 ]
                                 //
@@ -655,7 +658,7 @@
                                         if (!!!maxdateitem)
                                             return null
                                         //## 處理Header資料
-                                        dummydataItem.desc = dummydataItem.desc.replace('**', '<br/>') + '<br/><br/>' + dummydataItem.營收比重
+                                        dummydataItem.desc = dummydataItem.desc?.replace('**', '<br/>') + '<br/><br/>' + dummydataItem.營收比重
                                         dummydataItem.箱型力量 = maxdateitem.箱型力量
                                         dummydataItem.箱型力量_5均 = maxdateitem.箱型力量_5均
                                         dummydataItem.highlight_date = maxdateitem.highlight_date
@@ -713,8 +716,8 @@
 
                                         });
 
-                                        var add=item.datalist.filter(x=>x._quote>3).map(data=> parseFloat((parseInt(data.量能)/ parseInt(data.量能均)).toFixed(2))% Infinity  || 0).slice(0, 7).reduce((sum, val) => sum + val, 0) 
-                                        var minus=item.datalist.filter(x=>x._quote<-2).map(data=> parseFloat((parseInt(data.量能)/ parseInt(data.量能均)).toFixed(2))% Infinity  || 0).slice(0, 7).reduce((sum, val) => sum + val, 0) 
+                                        var add=item.datalist.filter(x=>x._quote>1).map(data=> parseFloat((parseInt(data.量能)/ parseInt(data.量能均)).toFixed(2))% Infinity  || 0).slice(0, 7).reduce((sum, val) => sum + val, 0) 
+                                        var minus=item.datalist.filter(x=>x._quote<-1).map(data=> parseFloat((parseInt(data.量能)/ parseInt(data.量能均)).toFixed(2))% Infinity  || 0).slice(0, 7).reduce((sum, val) => sum + val, 0) 
                                         dummydataItem.量倍率= parseFloat(add-minus).toFixed(2)
                                         
                                         //二次處理明細  要先經過一次計算
@@ -798,7 +801,10 @@
                                                              day_1["MACD_minus"] <= day_0["MACD_minus"] && 
                                                              day_1["MACD_minus"] >= 0
 
-
+                                                //'成交金額平均','成交金額',
+                                                debugger;
+                                                  let cond21 =parseInt( day_0["成交金額平均"]) < parseInt(day_0["成交金額"] )
+                                                
                                                 // 將多組邏輯條件包進陣列，每組是一種邏輯成立條件
                                                 let conditionGroups = [
                                                     //[cond1, cond2, cond3],  // 三階段轉強
@@ -816,7 +822,11 @@
                                                     [cond17],     //　MACD-SL 　負轉正
                                                     [cond18, cond19], // 分類標籤改變 & 有量能
 */
-                                                    [cond20],
+                                                     //[cond20],
+                                                     [cond21],
+
+                                                    
+
                                                 ];
 
                                                 // 判斷是否有任一組邏輯成立
@@ -844,6 +854,8 @@
 
                                         dummydataItem['均價_%'] = datalist_last_date['均價_%']
                                         dummydataItem['均價long_%'] = datalist_last_date['均價long_%']
+                                        dummydataItem['均價longlong_%'] = datalist_last_date['均價longlong_%']
+                                        
                                         dummydataItem['highlight_%'] = datalist_last_date['highlight_%']
                                         
                                         dummydataItem['highlight_收盤價'] = datalist_last_date['highlight_收盤價']
@@ -876,6 +888,7 @@
                                         dummydataItem.MA_short = datalist_last_date?.MA_short;
                                         dummydataItem.MA_long = datalist_last_date?.MA_long;
                                         dummydataItem.MA_longlong = datalist_last_date?.MA_longlong;
+                                        dummydataItem.MA_longlonglong = datalist_last_date?.MA_longlonglong;
                                         dummydataItem.volume_threshold = parseFloat(datalist_last_date?.volume_threshold).toFixed(1)
                                         dummydataItem['營業收入-上月比較增減(%)'] = parseFloat(datalist_last_date['營業收入-上月比較增減(%)']).toFixed(1)
                                         dummydataItem['營業收入-去年同月增減(%)'] = parseFloat(datalist_last_date['營業收入-去年同月增減(%)']).toFixed(1)
@@ -894,6 +907,7 @@
                                         const v5 = toNum(dummydataItem.MA_short);
                                         const v20 = toNum(dummydataItem.MA_long);
                                         const v50 = toNum(dummydataItem.MA_longlong);
+                                        const v80 = toNum(dummydataItem.MA_longlonglong);
 
                                         // 現價顏色（紅：高於所有均線；綠：低於所有均線；灰：其餘）
                                         const maOnly = [v5, v20, v50].filter(Number.isFinite);
@@ -911,7 +925,9 @@
                                             { name: '現價', period: 0, value: vNow, color: nowColor },
                                             { name: '(5)', period: 5, value: v5 },
                                             { name: '(20)', period: 20, value: v20 },
-                                            { name: '(50)', period: 50, value: v50 }
+                                            { name: '(50)', period: 50, value: v50 },
+                                            { name: '(80)', period: 80, value: v80 }
+
                                         ];
 
                                         // 降序；同值時 period 越短越前
