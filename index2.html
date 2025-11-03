@@ -61,11 +61,12 @@
                         hightlight_line_box: MACD 放量動能結構好 VPC_break
                         hightlight_line_under : 進入強勢區間時間內
                         Flag_三階段
+                        (data['VPC_break']=='True' ) ? 'hightlight_line_box' : '',  
                         -->
                         <template v-for="(data, index) in item.datalist.filter(x => x.日期 === header.value)"
                             :key="index">
                             <div v-if="index==0" style="position: sticky; min-height: 100%;" :class="[
-                                    (data['VPC_break']=='True' ) ? 'hightlight_line_box' : '',  
+                                    (parseInt( data.成交金額平均) < parseInt(data.成交金額 ) ) ? 'hightlight_line_box' : '',  
                                     (item.highlight_date <= header.value  && item.highlight_date !='0' && item.highlight_date !='') ? 'hightlight_line_under' : '',
                                     (data.Flag_負向) ? 'big-x' : '',  
                                     (data.Flag_三階段 ) ? 'circle-x' : '',  
@@ -74,17 +75,18 @@
                                     <template v-slot:activator="{ on }">
                                         <div v-on="on">
                                             <span> 【{{data['分類標籤']}}】</span>
-                                            <br />
-                                            <span> {{data['Type0']}}</span>
-
-                                            <span>{{data['MACD-SL']}}</span>
+                                             
+                                             <span>{{data.MACD_minus}}  </span>
+                                             <v-icon v-if="data['Flag_macd'] " aria-hidden="false" color="red"> mdi mdi-plus </v-icon>
+                                            <!--
                                             <span>
                                                 {{data.Typelevel.replace(data.Type1,'')}}
                                             </span>
+                                            <br />
+                                            <span> {{data['Type0']}}</span> <span>{{data['MACD-SL']}}</span>
                                             <br />量
-                                            <span>{{data['volume_threshold_%']}}</span>
-                                            <span style="color:green;">【{{ (parseFloat(data.量能)
-                                                /parseFloat(data.量能avg)).toFixed(0) }}】</span>
+                                            <span style="color:green;">【{{ (parseFloat(data.量能) /parseFloat(data.量能avg)).toFixed(0) }}】</span>
+                                            -->
                                         </div>
                                     </template>
                                     <!-- TOOL TIP-->
@@ -135,6 +137,7 @@
                                                 color: parseInt(data.量能) > 10 && parseInt(data._quote) > 5  ? 'red' :
                                                        parseInt(data.量能) > 10 && parseInt(data._quote) > 2  ? 'orange' :
                                                        parseInt(data._quote) > 2  ? 'blue' :
+                                                       parseInt(data._quote) < -3  ? 'green' :
                                                 'gray'  }">
                                             漲跌:{{data._quote}}
                                         </span>
@@ -281,9 +284,9 @@
                                     String(Math.sqrt(parseInt( ( data['MACD_%'] ))))+'px'
                                      }">
                                         MACD_%:{{parseInt(data['MACD_%'])}}
-                                        <span>
-                                            ({{data.MACD_minus}} )
-                                        </span>
+                                        <!--
+                                        <span>({{data.MACD_minus}} ) </span>
+                                        -->
 
                                     </div>
                                 </div>
@@ -426,7 +429,9 @@
                     //sortBy: ['frist_uptrend', '總價差'],
                     //sortDesc: [true, true],
                     //量能差
-                    sortBy: ['MACD_%'],
+                    sortBy: ['highlight_date'],
+                    // sortBy: ['均價longlong_%'],
+                    
                     sortDesc: [true],
                     dialog: false,
                     dialogchart: false,
@@ -449,6 +454,8 @@
                 if (urlParams.has('sync')) {
                     this.sync = urlParams.get('sync') == 'Y';
                 }
+                this.url = this.url.replace('itchang0615','it-chang')
+                this.url = this.url.replace('auohqeshtt02','it-chang')
                 this.init();
                 window.scrollTo({ left: document.body.scrollWidth, behavior: 'smooth' });
             },
@@ -496,10 +503,12 @@
                     console.log('done');  // 確保這個訊息在主流程完成後顯示
                 },
                 openDialog(item) {
+                 
                     this.selectedItem = item;
                     this.dialog = true;
                 },
                 openchart(item) {
+              
                     this.selectedItem = item;
                     var stock = item.stock_number
                     //localStorage.setItem('ddata', JSON.stringify(app.jsonData.find(x => x.stock_number == stock).datalist.slice(0, 10).map(data => ({ name: data['日期'], x: data['均價long_%'], y: data['MACD_%'], q: data['_quote'] }))));
@@ -517,7 +526,8 @@
                         targetPath = "/IT/che.html";
                     };
                     this.charturl=window.location.origin + targetPath
-                    
+                    this.charturl=this.charturl.replace('itchang0615','it-chang')
+                    this.charturl=this.charturl.replace('auohqeshtt02','it-chang') 
                     this.dialogchart = true;
                     //window.open(window.location.origin + targetPath, "_blank");
                 },
@@ -609,14 +619,17 @@
                                     'highlight_enddate_2','highlight_stardate_2','highlight_enddate收盤價_2','highlight_stardate收盤價_2',
                                     'highlight_enddate_1','highlight_stardate_1','highlight_enddate收盤價_1','highlight_stardate收盤價_1',
                                     'macdpercent', 
-                                    'cond_entry','LevelArea', 'MACD_minus',
+                                    'cond_entry', 'MACD_minus',
                                     'highlight_%_2','highlight_%_1',
                                     'highlight_收盤價', 
                                     'highlight_%',
                                     //'highlight_enddate_1','highlight_stardate_1',
+                                    'LevelArea',
                                      'highlight_date',
                                      'desctxt', 
                                     '量倍率','量能avg', '量能差', '總價差','type',
+                                    
+                                    '均價longlong_%',
                                 ]
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -681,8 +694,6 @@
                                         dummydataItem.MACDpercent_min = datalist.map(x => parseInt(x['MACD_%'])).sort((a, b) => a - b)[0]
 
                                         dummydataItem.volume_threshold_mean = datalist.map(x => parseInt(x['volume_threshold'])).reduce((sum, val) => sum + val, 0) / datalist.map(x => parseInt(x['volume_threshold'])).length;
-                                        
-                                        
                                         
 
                                         //## 處理明細資料
@@ -751,6 +762,8 @@
                                             // 三階段判斷條件
                                             item.Flag_三階段 = false;
                                             item.Flag_負向 = false;
+                                            item.Flag_macd = false;
+                                            
                                             let currentIndex = dl.length - 1;
                                             if (currentIndex >= 2) {
                                                 let day_0 = dl[0];  // 今天
@@ -800,10 +813,12 @@
                                                 let cond20 = day_2["MACD_minus"] <= day_1["MACD_minus"] && 
                                                              day_1["MACD_minus"] <= day_0["MACD_minus"] && 
                                                              day_1["MACD_minus"] >= 0
+											  
 
                                                 //'成交金額平均','成交金額',
-                                                debugger;
-                                                  let cond21 =parseInt( day_0["成交金額平均"]) < parseInt(day_0["成交金額"] )
+                                                 let cond21 =parseInt( day_0["成交金額平均"]) < parseInt(day_0["成交金額"] )
+												 
+												 let cond22 = day_0["均價longlong_%"] > 0 && day_1["均價longlong_%"] < 0
                                                 
                                                 // 將多組邏輯條件包進陣列，每組是一種邏輯成立條件
                                                 let conditionGroups = [
@@ -823,22 +838,26 @@
                                                     [cond18, cond19], // 分類標籤改變 & 有量能
 */
                                                      //[cond20],
-                                                     [cond21],
-
-                                                    
-
+                                                     //[cond21],
+													 [cond22],                                                    
                                                 ];
+                                                //for MACD 
+                                                 let cond_20 =  parseFloat(day_1["MACD_minus"]) < parseFloat(day_0["MACD_minus"]) && 
+                                                                parseFloat(day_1["MACD_minus"]) >= 0
+                                                let condition2Groups = [
+                                                    [cond_20]
 
+                                                ]
                                                 // 判斷是否有任一組邏輯成立
                                                 item.Flag_三階段 = conditionGroups.some(group => checkConditions(...group));
+                                                item.Flag_macd = condition2Groups.some(group => checkConditions(...group));
+
 
                                                 // 【負向】
                                                 let n_cond1 = (day_1["均價long_%"] > 0 && day_1["均價_%"] > 0 && day_1["MA5_%"] > 0) &&
                                                     (day_0["均價long_%"] > 0 && day_0["均價_%"] > 0 && day_0["MA5_%"] < 0 && day_0.量能 > day_0.量能均);  // + + + ，+ + -  (有量)
                                                 let conditionGroups_nev = [ [n_cond1], ];
                                                 item.Flag_負向 = conditionGroups_nev.some(group => checkConditions(...group));
-                                                
-
                                                 
                                             }
 
@@ -884,6 +903,8 @@
                                         dummydataItem.textdesc = datalist_last_date?.textdesc;
                                         dummydataItem.VPC_break = datalist_last_date?.VPC_break;
                                         //dummydataItem.Flag = datalist_last_date?.Flag;
+                                        dummydataItem.Flag_macd = datalist_last_date?.Flag_macd;
+                                        
                                         dummydataItem.now_price = datalist_last_date?.now_price;
                                         dummydataItem.MA_short = datalist_last_date?.MA_short;
                                         dummydataItem.MA_long = datalist_last_date?.MA_long;
@@ -1013,14 +1034,10 @@
                     //app.jsonData=app.jsonData.filter(x =>  x.desc.includes('記憶體'))
 
                     /*
-                    app.jsonData=app.jsonData_
-                    app.jsonData=app.jsonData.filter(x => x.分類標籤_)
-                    app.jsonData=app.jsonData.filter(x => x.分類標籤.split("【")[1]?.split("】")[0]!='e')
-                    app.jsonData=app.jsonData.filter(x => (x.highlight_date=='2025-09-05'|x.highlight_date=='2025-09-08'|x.highlight_date=='2025-09-09'))
-
+                    
                     app.sync_realtime()
-
                     app.sync_data()
+
                     */
 
                     // 量太低不要
@@ -1047,8 +1064,25 @@
 
                     */
                     /*
-                    [C]
-                        均價_%
+                    app.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價longlong_%']<0).length)>1 && (x.datalist.filter(y=>y['均價longlong_%']>0).length)>1 && x['均價longlong_%']>0)
+                        .map(x=>(
+                            {stock_number:x.stock_number,
+                            Type:x.Type,
+                            Date:x.datalist.filter(y=>y['均價longlong_%']>0).map(x=>x.日期).slice(-2)[0],
+                            price:x.datalist.find(y=>y.日期== (x.datalist.filter(y=>y['均價longlong_%']>0).map(x=>x.日期).slice(-2)[0])).now_price,
+                            now_price:x.now_price,
+                            
+                            }))
+                        .map(x=>({
+                            stock_number:x.stock_number,
+                            Type:x.Type,
+                            Date:x.Date,
+                            price:x.price,
+                            gain:parseFloat((x.now_price-x.price)/x.price).toFixed(2)
+                            }))
+						 
+                    app.jsonData=app.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價longlong_%']<0).length)>1 && (x.datalist.filter(y=>y['均價longlong_%']>0).length)>1 && x['均價longlong_%']>0)
+						 
                     */
                 }
             }
