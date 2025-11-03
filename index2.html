@@ -1001,7 +1001,11 @@
                 },
                 filter() {
                     var vm = this
-                    vm.jsonData = vm.jsonData_.filter(x => x['MACD_%'] > 0 && x['均價long_%'] > -1 && x['漲跌BYN天'] > -1)
+                    //vm.jsonData = vm.jsonData_.filter(x => x['MACD_%'] > 0 && x['均價long_%'] > -1 && x['漲跌BYN天'] > -1)
+                   //x.Flag_macd && 
+                    vm.jsonData=vm.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價longlong_%']<0).length)>1 && (x.datalist.filter(y=>y['均價longlong_%']>0).length)>1 && x['均價longlong_%']>0)
+                    vm.jsonData=vm.jsonData_.filter(x=> parseFloat(x['均價longlong_%'])> 0 &&  parseFloat(x['總價差'])> 0 )
+                    
                     vm.sortBy = ['量能差', 'MACD_%',]
                     vm.sortDesc = [true, true]
                     //find 有量
