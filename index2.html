@@ -361,9 +361,11 @@
                     <template v-slot:item.type="{ item }">
 
                         <v-btn text @click="openDialog(item)">
-                            {{ item.stock_number }}
-                            {{ item.Type }}<br />
+                            <span style="    text-align: justify;">
+                            {{ item.stock_number }}<br />
+                            {{ item.Type0 }}<br />
                             {{item.Typelevel}}
+                            </span>
                         </v-btn>
                         <br />
                         <v-btn text @click="openchart(item)">

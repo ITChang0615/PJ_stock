@@ -14,6 +14,7 @@ Vue.prototype.$headerinfo=[
 	{text:"淨值倍率",renametext:"*淨值倍率*",tooltip:''},
 	{text:"貝他值",renametext:"*貝他值*",tooltip:''},
 	{text:"價能",renametext:"*價能*",tooltip:''},
+	{text:"均價longlong_%'",renametext:"*長均價啪*",tooltip:''},
 ]
 Vue.prototype.$renameHeaders = function(headers) {
 	headers.forEach(header => {
