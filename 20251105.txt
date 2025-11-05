@@ -1,0 +1,145 @@
+
+app.sync_realtime()
+app.sync=true
+app.sync_data()
+
+##################################################################################################################
+
+---
+app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_1) && parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_2) 
+																&& x.LevelArea>-90 && x['MACD-SL']>-1 && x.量能>10 &&x.Type1!='生技醫療業'&& x['%D']<x['%K']*1.1 )
+
+---
+app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_1) && parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_2) 
+																&& x.LevelArea>-90 && x['MACD-SL']>0)
+
+var alist=['8299', '8086', '8016', '7751', '7749', '7712', '6937', '6695', '6515', '6488', '6271', '6239', '6223', '6138', '5487', '5347', '5285', '3707', '3556', '3532', '3530', '3260', '3227', '3016', '3014', '2434', '2329']
+ app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
+
+app.jsonData=app.jsonData_.filter(x=>parseFloat(x.淨值倍率)>1  && x['成交股數'] >1000  && x['均價long_%']>0 && x['highlight_%_2']<0  && x['%K'] > x['%D'] *1.1 && x['MACD'] > x['MACD-SL'] *1.1)
+
+##################################################################################################################
+##################################################################################################################
+
+
+app.jsonData=app.jsonData_.filter(x=>x.highlight_enddate=='2025-10-29' && x['highlight_%_1']==0 && x['highlight_%_2']<=0)
+
+app.jsonData=app.jsonData_.filter(x=>x.Type1=='電子零組件業')
+
+
+app.jsonData=app.jsonData.filter(x =>  x.Full_Summary.includes('建議關注買點'))
+
+	 
+app.jsonData.map(x => x['%K'] =x['%K'] -x['%D'] )
+	 
+app.jsonData=app.jsonData_.filter(x=> x['%K'] > 0  x.LevelArea>-40 )
+
+app.jsonData=app.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價long_%']<0).length)>1 && (x.datalist.filter(y=>y['均價long_%']>0).length)>1 && x['均價long_%']>0 && x.highlight_date!='0' )
+	 
+
+app.jsonData.filter(x=> parseFloat(x['MACD_%'] )> 0 && parseFloat( x['MACD-SL'] )> 1 ).map(x=>x.分類標籤="TT")	
+
+app.jsonData.filter(x=>   parseFloat( x['%D']) <  parseFloat( x['%K']) ).map(x=>x.分類標籤="")	
+
+-------
+app.jsonData.map(x=>x.分類標籤="")
+app.jsonData.filter(x=>  
+							parseFloat( x['MA_longlonglong']) <  parseFloat( x['MA_long'])  && 
+							parseFloat( x['MA_longlonglong']) <  parseFloat( x['MA_short']) &&
+							parseFloat( x['MACD-SL'] )<2 &&
+							!( parseFloat(x['成交金額']) > parseFloat( x['成交金額平均']) && x._quote<-2
+								)
+						).map(x=>x.分類標籤="TT")	
+
+-------
+
+app.jsonData.map(x=>x.分類標籤="")
+app.jsonData.filter(x=>  
+						    parseFloat( x['MA_longlonglong']) <  parseFloat( x['MA_short']) &&
+							parseFloat( x['MACD-SL'] )<2 &&
+							parseFloat( x['%D']) <  parseFloat( x['%K'])   &&
+							
+							
+							!( parseFloat(x['成交金額']) > parseFloat( x['成交金額平均']) && x._quote<-2) &&
+							((parseFloat(x.Volume_MA_short-x.Volume_MA_long)/x.Volume_MA_long)*100).toFixed(1) >0 
+						).map(x=>x.分類標籤="TT")	
+
+
+app.jsonData.map(x=>x.分類標籤=  x.分類標籤 + ' '+((parseFloat(x.Volume_MA_short-x.Volume_MA_long)/x.Volume_MA_long)*100).toFixed(1)  )
+						
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@					 
+
+
+var alist=
+
+app.jsonData_.map(x=>({
+		stock_number:x.stock_number,
+		stock_name:x.Type,
+		Ongoing:x.highlight_date!='0',
+		Check:(x.highlight_date!=0? parseFloat(x.now_price):parseFloat(x.highlight_stardate收盤價_1) )>parseFloat(x.highlight_enddate收盤價_2),
+		Period:1,
+		"date Start":x.highlight_stardate_1,
+		date_End:x.highlight_enddate_1 ,
+		"price Start":x.highlight_stardate收盤價_1,
+		price_End:x.highlight_date!=0? x.now_price:x.highlight_enddate收盤價_1 ,
+		u_gain:(parseFloat(((x.highlight_date!=0? x.now_price:x.highlight_enddate收盤價_1)-x.highlight_stardate收盤價_1)/x.highlight_stardate收盤價_1)*100).toFixed(1),
+		u_gaind: ((Math.abs(new Date(x.highlight_enddate_1)  - new Date(x.highlight_stardate_1) )) / (1000 * 60 * 60 * 24))
+		}))
+		
+		
+.concat(
+
+app.jsonData_.map(x=>({
+		stock_number:x.stock_number,
+		stock_name:x.Type,
+		Ongoing:x.highlight_date!='0',
+		Period:2,
+		"date Start":x.highlight_stardate_2,
+		date_End:x.highlight_enddate_2 ,
+		"price Start":x.highlight_stardate收盤價_2,
+		 price_End:x.highlight_enddate收盤價_2 ,
+		u_gain:((parseFloat(x.highlight_enddate收盤價_2-x.highlight_stardate收盤價_2)/x.highlight_stardate收盤價_2)*100).toFixed(1),
+		u_gaind: ((Math.abs(new Date(x.highlight_enddate_2)  - new Date(x.highlight_stardate_2) )) / (1000 * 60 * 60 * 24))
+		}))
+		
+)
+
+	
+.filter(x=> x.Check && x.Ongoing    &&  x.u_gain> 1 &&  x.u_gaind> 10 )		
+.map(x=>x.stock_number)
+
+// app.jsonData.filter(x=>alist.includes(x.stock_number)).map(x=>x.分類標籤="TT"+x.分類標籤)	
+
+app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
+
+
+
+app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['MA_long'])  && parseFloat(x['MA_long']) > parseFloat( x['MA_longlong'])  && parseFloat(x['MA_longlong']) > parseFloat( x['MA_longlonglong']))
+app.jsonData.map(x=>x.分類標籤= x['均價longlong_%'])
+
+app.jsonData=app.jsonData.filter(x=> parseFloat(x['成交金額']) > parseFloat( x['成交金額平均']))
+
+
+
+app.sortBy= ['量倍率']
+app.sortBy= ['diff_quote']
+
+app.jsonData.map(x=>x.分類標籤= x['Type1']+'/'+ x['均價longlong_%']) 
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+app.sortBy= ['每股淨值(元)']
+
+
+app.jsonData.map(x=>x.分類標籤=  x['均價long_%']+'/'+x['均價longlong_%'])
+
+
+
+
+
+
+
+
+

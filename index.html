@@ -416,7 +416,56 @@
                 },
                 filter() {
                     var vm = this
-                    vm.jsonData = vm.jsonData_.filter(x => x['MACD_%'] > 0 && x['均價long_%'] > -1 && x['漲跌BYN天'] > -1)
+                   var alist=
+
+                    app.jsonData_.map(x=>({
+                        stock_number:x.stock_number,
+                        stock_name:x.Type,
+                        Ongoing:x.highlight_date!='0',
+                        Check:(x.highlight_date!=0? parseFloat(x.now_price):parseFloat(x.highlight_stardate收盤價_1) )>parseFloat(x.highlight_enddate收盤價_2),
+                        Period:1,
+                        "date Start":x.highlight_stardate_1,
+                        date_End:x.highlight_enddate_1 ,
+                        "price Start":x.highlight_stardate收盤價_1,
+                        price_End:x.highlight_date!=0? x.now_price:x.highlight_enddate收盤價_1 ,
+                        u_gain:(parseFloat(((x.highlight_date!=0? x.now_price:x.highlight_enddate收盤價_1)-x.highlight_stardate收盤價_1)/x.highlight_stardate收盤價_1)*100).toFixed(1),
+                        u_gaind: ((Math.abs(new Date(x.highlight_enddate_1)  - new Date(x.highlight_stardate_1) )) / (1000 * 60 * 60 * 24))
+                        }))
+                        
+                        
+                    .concat(
+
+                    app.jsonData_.map(x=>({
+                        stock_number:x.stock_number,
+                        stock_name:x.Type,
+                        Ongoing:x.highlight_date!='0',
+                        Period:2,
+                        "date Start":x.highlight_stardate_2,
+                        date_End:x.highlight_enddate_2 ,
+                        "price Start":x.highlight_stardate收盤價_2,
+                            price_End:x.highlight_enddate收盤價_2 ,
+                        u_gain:((parseFloat(x.highlight_enddate收盤價_2-x.highlight_stardate收盤價_2)/x.highlight_stardate收盤價_2)*100).toFixed(1),
+                        u_gaind: ((Math.abs(new Date(x.highlight_enddate_2)  - new Date(x.highlight_stardate_2) )) / (1000 * 60 * 60 * 24))
+                        }))
+                        
+                    )
+
+
+                    .filter(x=> x.Check && x.Ongoing    &&  x.u_gain> 1 &&  x.u_gaind> 10 )		
+                    .map(x=>x.stock_number)
+
+                    // app.jsonData.filter(x=>alist.includes(x.stock_number)).map(x=>x.分類標籤="TT"+x.分類標籤)	
+
+                    app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
+
+
+
+                    app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['MA_long'])  && parseFloat(x['MA_long']) > parseFloat( x['MA_longlong'])  && parseFloat(x['MA_longlong']) > parseFloat( x['MA_longlonglong']))
+                    app.jsonData.map(x=>x.分類標籤= x['均價longlong_%'])
+
+                    app.jsonData=app.jsonData.filter(x=> parseFloat(x['成交金額']) > parseFloat( x['成交金額平均']))
+
+
                     vm.sortBy = ['量能', 'MACD_%']
                     vm.sortDesc = [true, true]
                     //find 有量
