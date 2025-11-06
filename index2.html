@@ -33,7 +33,9 @@
                         <v-btn color="primary" @click="reset">reset</v-btn>
                         <v-btn color="primary" @click="reverse">reverse</v-btn>
                         <v-btn color="primary" @click="filter">Filter</v-btn>
-                        <v-btn color="primary" @click="filter1">Filter1</v-btn>
+                        <v-btn color="primary" @click="
+                                            app.jsonData=app.jsonData.filter(x=> parseFloat(x['均價longlong_%']) >0 && parseFloat( x['總價差']) >0  && parseFloat( x['LevelArea']) <90);
+                                            app.sortBy= ['總價差']">Filter1</v-btn>
                     </v-col>
                     <v-col col="1">
                         <v-btn color="primary" @click="collapse=!collapse">Collapse</v-btn>
@@ -617,8 +619,9 @@
                                     'VPC_break', 'MACD-SL',  'MACD','成交股數','成交金額平均','成交金額',
 
                                     'textdesc',  //'volume_threshold',
-                                    '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天','均價longlong_%',
-                                    '均價long_%', '均價_%', 'MA5_%','%D', '%K', 
+                                    '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天',
+                                 
+                                    '%D', '%K', 
                                     '當日漲跌',  'now_price','分類標籤',
                                     'Volume_Oscillator', 'Volume_MA_short','Volume_MA_long','Volume_MA_long50',
                                     'VPC_MA_%', '量能max', 
@@ -630,11 +633,14 @@
                                     'highlight_收盤價', 
                                     'highlight_%',
                                     //'highlight_enddate_1','highlight_stardate_1',
-                                    'LevelArea',
+                                    
                                      'highlight_date',
                                      'desctxt', 
-                                    '量倍率','量能avg', '量能差', '總價差','type',
-                                    '均價longlong_%',
+                                    '量倍率',
+                                    
+                                    '量能avg', '量能差', 
+                                    'LevelArea','type','總價差',
+                                    '均價longlong_%','均價long_%', '均價_%', 'MA5_%',
                                 ]
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -1018,16 +1024,7 @@
                     vm.sortDesc = [true, true]
                     //find 有量
                 },
-                filter1() {
-                    var vm = this
-                    //vm.jsonData = vm.jsonData_.filter(x => x['MA_long'] > x['MA_longlong'] && x['now_price'] > x['MA_longlong'] && x['now_price'] < x['MA_longlong'] * 1.1 && x['MACD_%'] > 0)
-                    vm.jsonData = vm.jsonData_.filter(x => x['MACD_%'] > 0 && x['均價long_%'] > -1 && x['漲跌BYN天'] > -1)
-                    vm.jsonData = vm.jsonData.filter(x => x['量能max'] < 100 && x['量能max'] > 5)
 
-                    vm.sortBy = ['MACD_%']
-                    vm.sortDesc = [true, true]
-                    //find 剛突破
-                },
                 jsonDataChange(x) {
                     var vm = this
                     vm.jsonData = vm.jsonData.filter(y => y["Typelevel"] == x)

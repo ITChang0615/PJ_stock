@@ -14,9 +14,17 @@ body {
 	color: #16456d;
 	background-color: #f1eeee4d;
 }
-.v-data-table>.v-data-table__wrapper>table>tbody>tr>td {
-	padding:0 5px
+.v-data-table>.v-data-table__wrapper>table>tbody>tr>td,.v-data-table>.v-data-table__wrapper>table>tbody>tr>th,
+.v-data-table>.v-data-table__wrapper>table>tfoot>tr>td,.v-data-table>.v-data-table__wrapper>table>tfoot>tr>th,
+.v-data-table>.v-data-table__wrapper>table>thead>tr>td,.v-data-table>.v-data-table__wrapper>table>thead>tr>th {
+    padding:0 5px!important;
+  
 }
+.v-btn:not(.v-btn--round).v-size--default {
+    padding: 0 8px;
+}
+
+
 .theme--light.v-data-table.v-data-table--fixed-header thead th {
     background: #f1eeee4d;
 }
