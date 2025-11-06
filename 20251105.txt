@@ -30,11 +30,7 @@ app.jsonData=app.jsonData_.filter(x=>x.Type1=='電子零組件業')
 app.jsonData=app.jsonData.filter(x =>  x.Full_Summary.includes('建議關注買點'))
 
 	 
-app.jsonData.map(x => x['%K'] =x['%K'] -x['%D'] )
-	 
 app.jsonData=app.jsonData_.filter(x=> x['%K'] > 0  x.LevelArea>-40 )
-
-app.jsonData=app.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價long_%']<0).length)>1 && (x.datalist.filter(y=>y['均價long_%']>0).length)>1 && x['均價long_%']>0 && x.highlight_date!='0' )
 	 
 
 app.jsonData.filter(x=> parseFloat(x['MACD_%'] )> 0 && parseFloat( x['MACD-SL'] )> 1 ).map(x=>x.分類標籤="TT")	
@@ -76,7 +72,8 @@ var alist=
 app.jsonData_.map(x=>({
 		stock_number:x.stock_number,
 		stock_name:x.Type,
-		Ongoing:x.highlight_date!='0',
+		now_price:x.now_price,
+		Ongoing:x.highlight_date!='0' && (new Date().toISOString().slice(0, 10).replaceAll("/","-")+" 00:00:00")==x.highlight_enddate_1,
 		Check:(x.highlight_date!=0? parseFloat(x.now_price):parseFloat(x.highlight_stardate收盤價_1) )>parseFloat(x.highlight_enddate收盤價_2),
 		Period:1,
 		"date Start":x.highlight_stardate_1,
@@ -88,12 +85,17 @@ app.jsonData_.map(x=>({
 		}))
 		
 		
+//.filter(x=> x.Ongoing )
+//.map(x=>x.stock_number)
+//app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
+
+			
 .concat(
 
 app.jsonData_.map(x=>({
 		stock_number:x.stock_number,
 		stock_name:x.Type,
-		Ongoing:x.highlight_date!='0',
+		Ongoing:false,
 		Period:2,
 		"date Start":x.highlight_stardate_2,
 		date_End:x.highlight_enddate_2 ,
@@ -107,39 +109,61 @@ app.jsonData_.map(x=>({
 
 	
 .filter(x=> x.Check && x.Ongoing    &&  x.u_gain> 1 &&  x.u_gaind> 10 )		
+
 .map(x=>x.stock_number)
 
 // app.jsonData.filter(x=>alist.includes(x.stock_number)).map(x=>x.分類標籤="TT"+x.分類標籤)	
 
 app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
 
-
-
+//
+------
 app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['MA_long'])  && parseFloat(x['MA_long']) > parseFloat( x['MA_longlong'])  && parseFloat(x['MA_longlong']) > parseFloat( x['MA_longlonglong']))
-app.jsonData.map(x=>x.分類標籤= x['均價longlong_%'])
 
-app.jsonData=app.jsonData.filter(x=> parseFloat(x['成交金額']) > parseFloat( x['成交金額平均']))
-
-
-
-app.sortBy= ['量倍率']
-app.sortBy= ['diff_quote']
-
-app.jsonData.map(x=>x.分類標籤= x['Type1']+'/'+ x['均價longlong_%']) 
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
+// ########  sortBy
 app.sortBy= ['每股淨值(元)']
+app.sortBy= ['量倍率']
+app.sortBy= ['分類標籤','diff_quote']
 
 
+// ########  確認使用
+------
+app.jsonData.map(x=>x.分類標籤= x['均價longlong_%'])
+app.jsonData.map(x=>x.分類標籤= x['Type1']+'/'+ x['均價longlong_%']) 
+------
+app.jsonData.map(x=>x.分類標籤=   parseFloat( x['%D']) <  parseFloat( x['%K']))
+------
+ 
 app.jsonData.map(x=>x.分類標籤=  x['均價long_%']+'/'+x['均價longlong_%'])
+------
+app.jsonData.map(x=>x.分類標籤= (parseFloat(x['MACD'])-parseFloat(x['MACD-SL'])).toFixed(1))
+app.jsonData.map(x=>x.分類標籤= '【'+x.分類標籤+'】'+ x['MACD']+'/'+x['MACD-SL'])
+------
+
+app.jsonData.map(x=>x.分類標籤=  x.分類標籤 + ' '+((parseFloat(x.Volume_MA_short-x.Volume_MA_long)/x.Volume_MA_long)*100).toFixed(1)  )
+
+// ########  Filter
+------
+app.jsonData=app.jsonData.filter(x=> parseFloat(x['成交金額']) > parseFloat( x['成交金額平均']))
+------
+app.jsonData=app.jsonData_
+app.jsonData=app.jsonData.filter(x=> parseFloat(x['MACD']) > parseFloat( x['MACD-SL']))
+app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['MA_longlonglong']) 　&&　 parseFloat( x['now_price']) > parseFloat( x['MA_longlonglong']) 　)
+app.jsonData=app.jsonData.filter(x=> parseFloat( x['%K']) >parseFloat( x['%D']) )
+app.jsonData=app.jsonData.filter(x=> parseFloat( x['成交金額']) >parseFloat( x['Volume_MA_short']) && parseFloat( x['Volume_MA_short']) >parseFloat( x['Volume_MA_long']) )
 
 
 
 
+---
+app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['MA_longlonglong']) 　
+							  &&　 parseFloat( x['now_price']) > parseFloat( x['MA_longlonglong']) 
+								　&&　 parseFloat( x['MA_longlong']) > parseFloat( x['MA_short'])  
+								　&&　 parseFloat( x['MA_short']) > parseFloat( x['MA_longlonglong'])  
+					　)
 
 
-
-
-
+//'Volume_MA_short','Volume_MA_long','Volume_MA_long50',

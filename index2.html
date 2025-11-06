@@ -78,6 +78,7 @@
                                              
                                              <span>{{data.MACD_minus}}  </span>
                                              <v-icon v-if="data['Flag_macd'] " aria-hidden="false" color="red"> mdi mdi-plus </v-icon>
+                                             <v-icon v-if="parseFloat(data['Volume_MA_short']) >parseFloat(data['Volume_MA_long50'])  " aria-hidden="false" color="orange"> mdi mdi-plus </v-icon>           
                                             <!--
                                             <span>
                                                 {{data.Typelevel.replace(data.Type1,'')}}
@@ -359,7 +360,7 @@
                         </v-btn>
                     </template>
                     <template v-slot:item.type="{ item }">
-
+                        
                         <v-btn text @click="openDialog(item)">
                             <span style="    text-align: justify;">
                             {{ item.stock_number }}<br />
@@ -371,6 +372,9 @@
                         <v-btn text @click="openchart(item)">
                             chart
                         </v-btn>
+                        <br />
+                        <v-icon v-if="item['Flag_macd'] " aria-hidden="false" color="red"> mdi mdi-plus </v-icon>           
+                        <v-icon v-if="parseFloat(item['Volume_MA_short']) >parseFloat(item['Volume_MA_long50'])  " aria-hidden="false" color="orange"> mdi mdi-plus </v-icon>           
                     </template>
 
                     <template v-slot:item.desc="{ item }">
@@ -616,7 +620,7 @@
                                     '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天','均價longlong_%',
                                     '均價long_%', '均價_%', 'MA5_%','%D', '%K', 
                                     '當日漲跌',  'now_price','分類標籤',
-                                    'Volume_Oscillator',// 'MACD_diff', 
+                                    'Volume_Oscillator', 'Volume_MA_short','Volume_MA_long','Volume_MA_long50',
                                     'VPC_MA_%', '量能max', 
                                     'highlight_enddate_2','highlight_stardate_2','highlight_enddate收盤價_2','highlight_stardate收盤價_2',
                                     'highlight_enddate_1','highlight_stardate_1','highlight_enddate收盤價_1','highlight_stardate收盤價_1',
@@ -630,7 +634,6 @@
                                      'highlight_date',
                                      'desctxt', 
                                     '量倍率','量能avg', '量能差', '總價差','type',
-                                    
                                     '均價longlong_%',
                                 ]
                                 //
@@ -881,6 +884,10 @@
                                         
                                         dummydataItem['highlight_收盤價'] = datalist_last_date['highlight_收盤價']
                                     
+
+                                        dummydataItem.Volume_MA_short = datalist_last_date?.Volume_MA_short;
+                                        dummydataItem.Volume_MA_long = datalist_last_date?.Volume_MA_long;
+                                        dummydataItem.Volume_MA_long50 = datalist_last_date?.Volume_MA_long50;
                                         dummydataItem.Volume_Diff = datalist_last_date?.Volume_Diff;
                                         dummydataItem.成交股數 = datalist_last_date?.成交股數;
                                         dummydataItem.當日漲跌 = datalist_last_date?._quote;
@@ -904,7 +911,6 @@
                                         
                                         dummydataItem.textdesc = datalist_last_date?.textdesc;
                                         dummydataItem.VPC_break = datalist_last_date?.VPC_break;
-                                        //dummydataItem.Flag = datalist_last_date?.Flag;
                                         dummydataItem.Flag_macd = datalist_last_date?.Flag_macd;
                                         
                                         dummydataItem.now_price = datalist_last_date?.now_price;
