@@ -36,6 +36,9 @@
                                                      app.sortBy = ['Type1','MA_last_cross_date'];
                                                       app.sortDesc = [true,true]">highlight_date</v-btn>
                     <v-btn color="primary" @click="app.jsonData=app.jsonData_.filter(x=> parseFloat(x['均價long_%']) >0);
+                                                　　app.jsonData=app.jsonData.filter(x=> parseFloat( x['MACD-SL']) <  parseFloat( x['MACD']) )
+                                                　　app.jsonData=app.jsonData.filter(x=>   parseFloat( x['%D']) <  parseFloat( x['%K']) )
+                                                
                                                    app.sortBy = ['Type1','MA_last_cross_%','MA_last_cross_date'];
                                                    app.sortDesc = [true,true,true]">均價long</v-btn>
                                                       

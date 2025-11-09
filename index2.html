@@ -36,6 +36,9 @@
                         <v-btn color="primary" @click="
                                             app.jsonData=app.jsonData.filter(x=> parseFloat(x['均價longlong_%']) >0 && parseFloat( x['總價差']) >0  && parseFloat( x['LevelArea']) <90);
                                             app.sortBy= ['總價差']">Filter1</v-btn>
+                        <v-btn color="primary" @click="app.jsonData=app.jsonData_.filter(x=> parseFloat(x['均價long_%']) >0);
+                                            app.sortBy = ['Type1','MA_last_cross_date','MA_last_cross_%'];
+                                            app.sortDesc = [true,true,true]">均價long</v-btn>
                     </v-col>
                     <v-col col="1">
                         <v-btn color="primary" @click="collapse=!collapse">Collapse</v-btn>
@@ -620,6 +623,11 @@
                                     'VPC_break', 'MACD-SL',  'MACD','成交股數','成交金額平均','成交金額',
 
                                     'textdesc',  //'volume_threshold',
+                                    
+                                    
+                                    
+                                    
+
                                     '漲跌BYN天Diff', '漲跌BYN天', '增縮BYN天Diff', '增縮BYN天',
                                  
                                     '%D', '%K', 
@@ -854,7 +862,8 @@
 													 [cond22],                                                    
                                                 ];
                                                 //for MACD 
-                                                 let cond_20 =  parseFloat(day_1["MACD_minus"]) < parseFloat(day_0["MACD_minus"]) && 
+                                                 let cond_20 =  parseFloat(day_1["MACD_minus"]) < parseFloat(day_0["MACD_minus"]) 
+                                                                && 
                                                                 parseFloat(day_1["MACD_minus"]) >= 0
                                                 let condition2Groups = [
                                                     [cond_20]
@@ -888,9 +897,10 @@
                                         dummydataItem['均價longlong_%'] = datalist_last_date['均價longlong_%']
                                         
                                         dummydataItem['highlight_%'] = datalist_last_date['highlight_%']
-                                        
+                                        dummydataItem['MA_last_cross_date'] = datalist_last_date['MA_last_cross_date']
+                                        dummydataItem['MA_last_cross_%'] = datalist_last_date['MA_last_cross_%']
                                         dummydataItem['highlight_收盤價'] = datalist_last_date['highlight_收盤價']
-                                    
+
 
                                         dummydataItem.Volume_MA_short = datalist_last_date?.Volume_MA_short;
                                         dummydataItem.Volume_MA_long = datalist_last_date?.Volume_MA_long;
@@ -1127,3 +1137,4 @@
 </body>
 
 </html>
+
