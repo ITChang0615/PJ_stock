@@ -32,42 +32,17 @@
                         <v-btn color="primary" @click="reset">reset</v-btn>
                         <v-btn color="primary" @click="reverse">reverse</v-btn>
                         <v-btn color="primary" @click="filter">Filter</v-btn>
-                        <v-btn color="primary" @click="app.jsonData=app.jsonData.filter(x=>x.highlight_date!='0')">highlight_date</v-btn>
+                        <v-btn color="primary" @click="app.jsonData=app.jsonData.filter(x=>x.highlight_date!='0');
+                                                     app.sortBy = ['Type1','MA_last_cross_date'];
+                                                      app.sortDesc = [true,true]">highlight_date</v-btn>
+                    <v-btn color="primary" @click="app.jsonData=app.jsonData_.filter(x=> parseFloat(x['均價long_%']) >0);
+                                                   app.sortBy = ['Type1','MA_last_cross_%','MA_last_cross_date'];
+                                                   app.sortDesc = [true,true,true]">均價long</v-btn>
+                                                      
                         <v-btn color="primary" @click="setCache()">set</v-btn>
                         <v-btn color="primary" @click="getCache()">get</v-btn>
-
                     </v-col>
-
                 </v-row>
-
-                <!-- 篩選區域 -->
-                <!--
-                <v-expansion-panels>
-                    <v-expansion-panel>
-                        <v-expansion-panel-header>
-                            <v-icon>mdi-filter</v-icon>
-                            篩選條件
-                        </v-expansion-panel-header>
-                        <v-expansion-panel-content>
-                            <v-form>
-                                <v-row>
-                                    <v-col v-for="(header, index) in headers" :key="index" cols="12" md="4">
-                                        {{ header.text }}
-                                        <v-select v-if="!isNumberField(header.value)" v-model="filters[header.value]"
-                                            :items="uniqueValues[header.value]" item-value="value" item-text="text"
-                                            multiple solo>
-                                        </v-select>
-                                        <v-range-slider v-else v-model="filters[header.value]" :label="header.text"
-                                            :min="getMinValue(header.value)" :max="getMaxValue(header.value)"
-                                            hide-details ticks="always" tick-size="4" thumb-label>
-                                        </v-range-slider>
-                                    </v-col>
-                                </v-row>
-                            </v-form>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel>
-                </v-expansion-panels>
-                -->
 
                 <!-- Vuetify DataTable  -->
                 <v-data-table disable-pagination fixed-header height="90vh" hide-default-footer :headers="appheaderData"
@@ -91,15 +66,20 @@
                             {{(realtimedata.filter(x=>x.c==item.stock_number)[0]?.v/parseFloat(item.成交股數)).toFixed(1)}}
                         </span>
                     </template>
-
                 </v-data-table>
+
                 <v-data-table disable-pagination fixed-header height="95vh" hide-default-footer :headers="headers"
                     :items="filteredData" v-show="!appmode" :items-per-page="-1" item-key="id" :sort-by.sync="sortBy"
                     :sort-desc.sync="sortDesc" style="white-space: nowrap;">
                     <!-- 自訂第一個欄位為超連結 -->
                     <template v-slot:item.stock_number="{ item }">
                         <v-btn text @click="openDialog(item)">
-                            {{ item.stock_number }} {{ item.Type0 }}{{item['Volume_%']}}
+                            {{ item.stock_number }} {{ item.Type0 }} {{item['Volume_%']}}
+                        </v-btn>
+                    </template>
+                     <template v-slot:item.stock_name="{ item }">
+                        <v-btn text @click="openDialog(item)">
+                            {{ item.stock_number }} {{ item.Type0 }} {{item['Volume_%']}}
                         </v-btn>
                     </template>
 
@@ -404,6 +384,12 @@
                                     this.uniqueValues[key].sort((a, b) => a.text.localeCompare(b.text));
                                 });
                             }
+                            app.sortBy = ['總市值']
+                            app.sortDesc = [true]
+                             //app.sortBy = ['MA_last_cross_date']
+                            //app.sortDesc = [true]
+                            
+                
                             //app.jsonData=app.jsonData.filter(x => x["MACD"]<5 && x["價能"]>0 && x["MA5_%"]>0 && x["Volume_Oscillator"]>-30)
                         })
                         .catch(error => console.error('Error loading Excel file:', error));
@@ -461,6 +447,7 @@
 
                     vm.sortBy = ['分類標籤', 'MACD_%']
                     vm.sortDesc = [true, true]
+                 
 
                     //----
                     //app.jsonData=app.jsonData_.filter(x=>x.highlight_date!='0')
@@ -502,7 +489,7 @@
                     /**/
                     var cache = JSON.parse(localStorage.getItem('cache') || '[]')
                     var cachenew = JSON.parse(localStorage.getItem('cachenew') || '[]')
-                    app.jsonData = app.jsonData.filter(y => (cachenew.find(x => x.value == y.stock_number)?.key < cache.find(x => x.value == y.stock_number)?.key))
+                    //app.jsonData = app.jsonData.filter(y => (cachenew.find(x => x.value == y.stock_number)?.key < cache.find(x => x.value == y.stock_number)?.key))
                     app.jsonData.map(y => y.分類標籤 = (-cachenew.find(x => x.value == y.stock_number)?.key + cache.find(x => x.value == y.stock_number)?.key))
 
 
