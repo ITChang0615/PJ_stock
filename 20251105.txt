@@ -178,3 +178,59 @@ app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['
 <v-icon v-if="parseFloat(data['Volume_MA_short']) >parseFloat(data['Volume_MA_long50'])  " aria-hidden="false" color="orange"> mdi mdi-plus </v-icon>           
 
 
+
+
+
+
+
+
+
+
+
+(() => {
+  // 工具：取得完整 URL
+  const abs = (url) => (url?.startsWith('http') ? url : location.origin + '/' + url.replace(/^\/+/, ''));
+
+  // 清理文字
+  const clean = (txt) => txt?.trim().replace(/\s+/g, ' ') ?? '';
+
+  const data = [];
+
+  // 抓主分類 (例：首頁上所有 .card 或 a[href*="introduce.php?ic="])
+  const mainLinks = [...document.querySelectorAll('a[href*="introduce.php?ic="]')];
+  const mains = [];
+  mainLinks.forEach(a => {
+    const url = abs(a.getAttribute('href'));
+    const text = clean(a.innerText || a.title);
+    if (text && !mains.find(x => x.url === url))
+      mains.push({ 主分類: text, url });
+  });
+
+  // 當前頁面如果是主分類內頁，可抓細項層級
+  // 假設結構是 .card a 或 .list-group a
+  const subLinks = [...document.querySelectorAll('.card a, .list-group a, a[href*="introduce.php?ic="]')];
+  subLinks.forEach(a => {
+    const url = abs(a.getAttribute('href'));
+    const text = clean(a.innerText || a.title);
+    if (!text) return;
+    // 判斷階層關係：看 breadcrumb 或標題（視網站結構而定）
+    const bc = document.querySelector('.breadcrumb')?.innerText || '';
+    const parent = bc.split(/\s*>\s*/)[1] || '';
+	debugger;
+    data.push({
+		
+      主分類: parent || document.title.replace(/-.*$/, '').trim(),
+      細項2: text,
+      細項3: '',
+      url
+    });
+  });
+
+  // 若要手動擴展下一層，可在細項頁面重新執行一次
+
+  const json = JSON.stringify(data, null, 2);
+  console.log('✅ 產出結果 ↓');
+  console.log(json);
+  copy(json);
+  console.log('（JSON 已複製到剪貼簿）');
+})();
