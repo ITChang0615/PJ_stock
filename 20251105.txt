@@ -167,3 +167,14 @@ app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['
 
 
 //'Volume_MA_short','Volume_MA_long','Volume_MA_long50',
+
+
+
+---------------------------------------------------
+2025-11-09
+	2434
+
+<v-icon v-if="data['Flag_macd'] " aria-hidden="false" color="red"> mdi mdi-plus </v-icon>
+<v-icon v-if="parseFloat(data['Volume_MA_short']) >parseFloat(data['Volume_MA_long50'])  " aria-hidden="false" color="orange"> mdi mdi-plus </v-icon>           
+
+

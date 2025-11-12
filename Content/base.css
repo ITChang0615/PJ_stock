@@ -99,3 +99,44 @@ body {
   transform-origin: center;
 }*/
 
+
+/*自訂箱型圖*/
+/* 迷你 K 線區塊的外框（可依需求微調高度/寬度） */
+.mini-candle-box {
+  width: 28px;         /* 每根 K 線的視覺寬度 */
+  height: 44px;        /* 高度愈高，細節愈明顯 */
+  margin-top: 2px;
+  margin-bottom: 2px;
+ display: inline-block;
+}
+.candle-wick { stroke-width: 2; }
+.candle-body { stroke-width: 1; rx: 2; }
+.candle-up{fill:#ef5350;stroke:#c62828}
+.candle-down{fill:#66bb6a;stroke:#2e7d32}
+.candle-wick-up{stroke:#c62828}
+.candle-wick-down{stroke:#2e7d32}
+
+/* 外層容器：橫向排列、上下置中 */
+.cell-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start; /* 左對齊 */
+  gap: 8px; /* 文字與圖之間的間距 */
+}
+
+/* 左邊內容 */
+.cell-info {
+  flex: 0 1 auto; /* 固定寬度內容 */
+  white-space: nowrap;
+}
+
+/* 右邊圖表 */
+.cell-chart {
+  flex: 0 0 auto;
+  display: inline-block;
+}
+
+.cell-flex {
+  justify-content: space-between;
+}
