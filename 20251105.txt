@@ -211,17 +211,19 @@ app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['
   const subLinks = [...document.querySelectorAll('.card a, .list-group a, a[href*="introduce.php?ic="]')];
   subLinks.forEach(a => {
     const url = abs(a.getAttribute('href'));
-    const text = clean(a.innerText || a.title);
+	debugger;
+	const title = clean( a.title);
+    const text = clean(a.innerText );
     if (!text) return;
     // 判斷階層關係：看 breadcrumb 或標題（視網站結構而定）
     const bc = document.querySelector('.breadcrumb')?.innerText || '';
     const parent = bc.split(/\s*>\s*/)[1] || '';
-	debugger;
+	
     data.push({
 		
       主分類: parent || document.title.replace(/-.*$/, '').trim(),
-      細項2: text,
-      細項3: '',
+      細項2: title,
+      細項3: text,
       url
     });
   });
