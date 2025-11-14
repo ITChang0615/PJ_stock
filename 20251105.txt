@@ -26,6 +26,7 @@ app.jsonData=app.jsonData_.filter(x=>x.highlight_enddate=='2025-10-29' && x['hig
 
 app.jsonData=app.jsonData_.filter(x=>x.Type1=='電子零組件業')
 
+app.jsonData=app.jsonData.filter(x =>  x.desc.includes(' IC封裝測試'))
 
 app.jsonData=app.jsonData.filter(x =>  x.Full_Summary.includes('建議關注買點'))
 
@@ -174,65 +175,121 @@ app.jsonData=app.jsonData.filter(x=> parseFloat(x['MA_short']) > parseFloat( x['
 2025-11-09
 	2434
 
-<v-icon v-if="data['Flag_macd'] " aria-hidden="false" color="red"> mdi mdi-plus </v-icon>
-<v-icon v-if="parseFloat(data['Volume_MA_short']) >parseFloat(data['Volume_MA_long50'])  " aria-hidden="false" color="orange"> mdi mdi-plus </v-icon>           
+	
 
-
-
-
-
-
-
-
-
+------------------------------------------------
 
 
 (() => {
-  // 工具：取得完整 URL
-  const abs = (url) => (url?.startsWith('http') ? url : location.origin + '/' + url.replace(/^\/+/, ''));
-
-  // 清理文字
-  const clean = (txt) => txt?.trim().replace(/\s+/g, ' ') ?? '';
-
-  const data = [];
-
-  // 抓主分類 (例：首頁上所有 .card 或 a[href*="introduce.php?ic="])
-  const mainLinks = [...document.querySelectorAll('a[href*="introduce.php?ic="]')];
-  const mains = [];
-  mainLinks.forEach(a => {
-    const url = abs(a.getAttribute('href'));
-    const text = clean(a.innerText || a.title);
-    if (text && !mains.find(x => x.url === url))
-      mains.push({ 主分類: text, url });
-  });
-
-  // 當前頁面如果是主分類內頁，可抓細項層級
-  // 假設結構是 .card a 或 .list-group a
-  const subLinks = [...document.querySelectorAll('.card a, .list-group a, a[href*="introduce.php?ic="]')];
-  subLinks.forEach(a => {
-    const url = abs(a.getAttribute('href'));
-	debugger;
-	const title = clean( a.title);
-    const text = clean(a.innerText );
-    if (!text) return;
-    // 判斷階層關係：看 breadcrumb 或標題（視網站結構而定）
-    const bc = document.querySelector('.breadcrumb')?.innerText || '';
-    const parent = bc.split(/\s*>\s*/)[1] || '';
+	// 工具：取得完整 URL
+	const abs = (url) => (url?.startsWith('http') ? url : location.origin + '/' + url.replace(/^\/+/, ''));
 	
-    data.push({
+	// 清理文字
+	const clean = (txt) => txt?.trim().replace(/\s+/g, ' ') ?? '';
+	const data = [];
+	const main =[...document.querySelectorAll('.Content_2 .item')]; 
+	main.forEach(a => {
+		let  url = abs(a.querySelector('a').getAttribute('href'));
+		let  title = clean( a.innerText);
+		let  subtitle = '';
+		let  item = '';
 		
-      主分類: parent || document.title.replace(/-.*$/, '').trim(),
-      細項2: title,
-      細項3: text,
-      url
-    });
-  });
-
+		if(a.querySelector('ul')){
+			const sub1 =[...a.querySelectorAll('.listItem a')]
+			
+			sub1.forEach(b => {
+				url=abs(b.getAttribute('href'));
+				subtitle= clean( b.querySelectorAll('span')[1].innerText);
+				if(b.querySelector('.thirdMenu')){
+					const sub2= b.querySelectorAll('.thirdMenu .itemLink ')
+					sub2.forEach(c => {
+						url=abs(c.getAttribute('onclick').replace('location.href=','').replaceAll("'",""));
+						item= clean( c.innerText);
+						data.push({title,subtitle,item,url});
+					});
+				}else{
+				data.push({title,subtitle,item,url});	
+				}
+			});
+		}
+		else{
+			data.push({title,subtitle,item,url});
+		}
+	});
+  
   // 若要手動擴展下一層，可在細項頁面重新執行一次
 
   const json = JSON.stringify(data, null, 2);
   console.log('✅ 產出結果 ↓');
+  console.log(data.length)
   console.log(json);
   copy(json);
   console.log('（JSON 已複製到剪貼簿）');
 })();
+
+
+------------------------------------------------
+
+(() => {
+	const areadata = [];
+	const data = [];
+	const clean = (txt) => txt?.trim().replace(/\s+/g, '') ?? '';
+	const abs = (url) => (url?.startsWith('http') ? url : location.origin + '/' + url.replace(/^\/+/, ''));
+	
+	const maintitle  =[...document.querySelectorAll('.chain')]; 
+		maintitle.forEach(a => {
+			let area=a.querySelector('.chain-title-panel').innerText;
+			const subtitle=[...a.querySelectorAll('.company-chain-panel')]; 
+			subtitle.forEach(b => {
+				let title=clean(b.innerText)
+				areadata.push({area,title});	
+			});
+		});
+	
+	const main =[...document.querySelectorAll('.ui-dialog')]; 
+	main.forEach(a => {
+		let  title =a.querySelector('.ui-dialog-title').innerText;
+		const sub= [...a.querySelectorAll('.company-text-over')]
+	
+		sub.forEach(b => {
+			let name=b.innerText;
+			let url=abs(b.getAttribute('href'));
+			let number=b.getAttribute('href').split('stk_code=')[1]
+			let area=areadata.find(x=>x.title==title)?.area;
+			data.push({area,title,number,name,url});		
+		});
+	});
+	
+	  const json = JSON.stringify(data, null, 2);
+	  console.log('✅ 產出結果 ↓');
+	  console.log(json);
+	  copy(json);
+	  console.log('（JSON 已複製到剪貼簿）');
+})();
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	--------------------------------------------------------
+	
+	
+	
+	
+	
+	
+	
+	
+	
+    

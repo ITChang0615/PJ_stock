@@ -20,7 +20,7 @@
           :items="jsonData" :items-per-page="-1" style="white-space: nowrap;">
           <!-- 自訂數值欄位，含成長率顯示 -->
           <template
-            v-for="header in headers.filter(h => h.value !== 'Typelevel' && h.value !== 'desc' && h.value !== 'Flag_連3日正成長')"
+            v-for="header in headers.filter(h =>h.value !== '0'  && h.value !== dtext  && h.value !== 'desc' && h.value !== 'Flag_連3日正成長') "
             v-slot:[`item.${header.value}`]="{ item }" :key="header.value">
             <span :style="{ color: item[header.value] >= 0 ? 'red' : 'blue' }">
               {{ parseFloat(item[header.value]).toFixed(1) }}
@@ -82,12 +82,16 @@
       data() {
         return {
           headers: [],
-          jsonData: []
+          jsonData: [],
+          d:0,
+          dtext:'Typelevel',
         };
       },
       methods: {
         sanitizedTypelevel(x) {
-          return x.Typelevel.replace('右上', '').replace('平', '').replace('右下', '').replace('上市', '').replace('上櫃', '');
+          if(this.d==4)
+            return x.title
+          return x.Typelevel?.replace('右上', '').replace('平', '').replace('右下', '').replace('上市', '').replace('上櫃', '');
         },
         computedHref(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
@@ -111,13 +115,21 @@
         }
       },
       async created() {
-        const file = './Result/analyze_2.xlsx'; // ← 你的檔案路徑
+        let urlParams = new URLSearchParams(window.location.search);
+        let file = ''; // 預設檔案
+        const d = urlParams.get('d');
+        this.d=d;
+        if(this.d==4)
+          this.dtext='title'
+        
+        file = `./Result/analyze_${d}.xlsx`;
+        
         const response = await fetch(file);
         const data = await response.arrayBuffer();
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
+        
         // 建 headers
         this.headers = json[0].map(h => ({ text: h, value: h }));
         this.headers.push({ text: 'Flag_連3日正成長', value: 'Flag_連3日正成長' });
