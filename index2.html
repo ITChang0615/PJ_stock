@@ -103,6 +103,9 @@
                                                 <v-icon
                                                     v-if="parseFloat(data['Volume_MA_short']) >parseFloat(data['Volume_MA_long50'])  "
                                                     aria-hidden="false" color="orange"> mdi mdi-plus </v-icon>
+                                                <v-icon
+                                                    v-if="data['flag_stat']=='True'"
+                                                    aria-hidden="false" color="orange"> mdi mdi-star </v-icon>
                                                 <!--
                                             <span>
                                                 {{data.Typelevel.replace(data.Type1,'')}}
@@ -433,15 +436,14 @@
                         <v-icon v-if="
                                      item.datalist.filter(x=> x._quote>8).length ==0 && item.datalist.filter(x=> x._quote>2).length >2
                                     " aria-hidden="false" color="orange">mdi-star</v-icon>
+                                  
                     </template>
 
                     <template v-slot:item.desc="{ item }">
                         <td v-html="formatDesc(item.desc)"></td>
                     </template>
                     <template v-slot:item.text_desc="{ item }">
-                        <td style="white-space: pre-line; max-width: 400px; word-break: break-all;">
-                            {{ item.text_desc }}
-                        </td>
+                        <td style="white-space: pre; max-width: 400px; word-break: break-all;">{{ item.text_desc }}</td>
                     </template>
 
                 </v-data-table>
@@ -833,6 +835,9 @@
                         if (d === 'type') {
                             file = `./Result/checksun/${type}.xlsx`;
                         }
+                        if (d === 'type2') {
+                            file = `./Result/checksun_type/${type}.xlsx`;
+                        }
                     }
                     if (setdate) {
                         this.set_date = setdate
@@ -870,10 +875,11 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
 
-                                arr = [...baseFields,
+                                arr = [...baseFields,'flag_stat',
                                     'text_desc',
 
-                                    'VPC_break', 'MACD-SL', 'MACD', '成交股數', '成交金額平均', '成交金額',
+                                    
+                                    'MACD-SL', 'MACD', '成交股數', '成交金額平均', '成交金額',
                                     '開盤價', '最高價', '最低價', '收盤價',
 
                                     'textdesc',  //'volume_threshold',

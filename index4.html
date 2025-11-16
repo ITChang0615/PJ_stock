@@ -52,6 +52,16 @@
               {{ sanitizedTypelevel(item) }}
             </a>
           </template>
+           <template v-slot:item.title="{ item }">
+            
+          </template>
+          <template v-slot:item.成長率2="{ item }">
+            {{parseFloat(item.成長率2).toFixed(1)}}
+          </template>
+             <template v-slot:item.成長率1="{ item }">
+            {{parseFloat(item.成長率1).toFixed(1)}}
+          </template>
+        
           <template v-slot:body.append>
             <tr class="sticky-table-footer">
               <td></td>
@@ -90,16 +100,19 @@
       methods: {
         sanitizedTypelevel(x) {
           if(this.d==4)
-            return x.title
+            return x.title.replace(/[\\/:*?"<>|]/g, "_")
           return x.Typelevel?.replace('右上', '').replace('平', '').replace('右下', '').replace('上市', '').replace('上櫃', '');
         },
         computedHref(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
+          if(this.d==4)
+            return `${baseUrl}/index2.html?d=type2&type=${this.sanitizedTypelevel(x)}`;
+          
           return `${baseUrl}/index2.html?d=type&type=${this.sanitizedTypelevel(x)}`;
         },
         computedHref2(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
-
+         
           return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
         },
         computedHref3(x) {
@@ -133,6 +146,8 @@
         // 建 headers
         this.headers = json[0].map(h => ({ text: h, value: h }));
         this.headers.push({ text: 'Flag_連3日正成長', value: 'Flag_連3日正成長' });
+        this.headers.push({ text: '成長率2', value: '成長率2' });
+        this.headers.push({ text: '成長率1', value: '成長率1' });
         this.headers.push({ text: 'desc', value: 'desc' })
 
         // 轉換資料為物件陣列
@@ -166,7 +181,10 @@
           // 取得數值欄位（排除非數字與特別欄位）
           const valueHeaders = this.headers
             .map(h => h.value)
-            .filter(key => this.isNumberField(key) && !key.startsWith('成長率_') && key !== 'Flag_連3日正成長');
+            .filter(key => this.isNumberField(key) && !key.startsWith('成長率_') 
+            && !key.startsWith('成長率2') 
+            && !key.startsWith('成長率1') 
+            && key !== 'Flag_連3日正成長');
 
           const endIndex = 0;
           const countary = 3;
@@ -196,6 +214,8 @@
           } else {
             row['Flag_連3日正成長'] = false;
           }
+          row['成長率2']=g2
+          row['成長率1']=g3
         });
       }
     });
