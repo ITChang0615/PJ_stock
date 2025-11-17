@@ -611,8 +611,8 @@
                     //Now
                     var current = [
 					    { Desc: '購物/娛樂', value: 41053 },
+                        { Desc: '運動', value: 5600 },
                         { Desc: '生活-LPP', value: 5000 },
-                        { Desc: '運動', value: 4200 },
 						{ Desc: '固-3C影音', value: 2857 },
 						
                         { Desc: '生活', value: 1977 },
@@ -652,8 +652,8 @@
                         { "Desc": "income_loss", "N_1": null, "N_2": null },//損益
                         { "Desc": "股息", "N_1": null, "N_2": null },//股息
                         { "Desc": "現金", "today": 1100 },
-                        { "Desc": "信用卡", "today": -52870 },
-                        { "Desc": "銀行", "today": 89441},
+                        { "Desc": "信用卡", "today": -53098 },
+                        { "Desc": "銀行", "today": 88041},
                         { "Desc": "預備金", "today": 320100 },
                         { "Desc": "日幣", "today": 29697 },
                         { "Desc": "投入", "today": 	3170013 },
@@ -755,7 +755,7 @@
 					
                     //------------------------
                     //app.jsonData=app.jsonData_.filter(x=>x.總價差>0 && x.LevelArea<=90  && x['highlight_date']!=="0"  && x.madesc.includes('(20),(50),(80)') )
-                    app.jsonData=app.jsonData_.filter(x=>x.總價差>5  && x.madesc.includes('(50),(80)') &&   x['MA_last_cross_%']>0 )
+                    app.jsonData=app.jsonData_.filter(x=>x.總價差>5  && x.madesc.includes('(50),(80)') &&   x['MA_last_cross_%']>5 )
                     
                     app.sortBy = ['MA_last_cross_date'];
                     app.sortDesc = [true]
