@@ -1285,7 +1285,8 @@
                                 //************
                                 dummydata.filter(x=>x.highlight_date=='0').map(x=>x.MA_last_cross_date=0)
                                 dummydata.filter(x=>x.highlight_date=='0').map(x=>x['MA_last_cross_%']=0)
-                                dummydata.filter(x=>x['MA_last_cross_%']>0).map(x=>x.MA_last_cross_date=0)
+                                dummydata.filter(x=>x['MA_last_cross_%']<0).map(x=>x.MA_last_cross_date=0)
+                                dummydata.filter(x=>x['MA_last_cross_%']<0).map(x=>x['MA_last_cross_%']=0)
                                 //************
                                 
 
