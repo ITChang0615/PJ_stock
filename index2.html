@@ -1282,8 +1282,16 @@
                                 var para_x = 7 // 不要前兩個日期的圖表資訊 (因有計算前三日均值，落差值會不正常)
                                 this.arrcount = this.arrcount - para_x
                                 this.headers = this.headers.slice(para_x, this.headers.length)
+                                //************
+                                dummydata.filter(x=>x.highlight_date=='0').map(x=>x.MA_last_cross_date=0)
+                                dummydata.filter(x=>x.highlight_date=='0').map(x=>x['MA_last_cross_%']=0)
+                                //************
+                                
+
                                 this.jsonData = dummydata
                                 this.jsonData_ = dummydata
+                        
+                                
                             }
                             if (this.realtimedata.length > 0) {
                                 this.sync_data();
