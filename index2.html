@@ -103,9 +103,8 @@
                                                 <v-icon
                                                     v-if="parseFloat(data['Volume_MA_short']) >parseFloat(data['Volume_MA_long50'])  "
                                                     aria-hidden="false" color="orange"> mdi mdi-plus </v-icon>
-                                                <v-icon
-                                                    v-if="data['flag_stat']=='True'"
-                                                    aria-hidden="false" color="orange"> mdi mdi-star </v-icon>
+                                                <v-icon v-if="data['flag_stat']=='True'" aria-hidden="false"
+                                                    color="orange"> mdi mdi-star </v-icon>
                                                 <!--
                                             <span>
                                                 {{data.Typelevel.replace(data.Type1,'')}}
@@ -373,7 +372,8 @@
                             (max){{ parseFloat(item.量能max).toFixed(0) }}
                             <br />
                             <span style="color:gray;"> (now) {{ parseFloat(item.量能).toFixed(0) }}</span>
-                            <span style="color:green;">【{{ (parseFloat(item.量能) /parseFloat(item.量能avg)).toFixed(0)}}】</span>
+                            <span style="color:green;">【{{ (parseFloat(item.量能)
+                                /parseFloat(item.量能avg)).toFixed(0)}}】</span>
 
                             <br />
                             (min) {{ parseFloat(item.量能min).toFixed(0)}}
@@ -437,7 +437,7 @@
                         <v-icon v-if="
                                      item.datalist.filter(x=> x._quote>8).length ==0 && item.datalist.filter(x=> x._quote>2).length >2
                                     " aria-hidden="false" color="orange">mdi-star</v-icon>
-                                  
+
                     </template>
 
                     <template v-slot:item.desc="{ item }">
@@ -688,7 +688,7 @@
                     //sortBy: ['frist_uptrend', '總價差'],
                     //sortDesc: [true, true],
                     //量能差
-                    sortBy: ['highlight_date'],
+                    sortBy: ['MA_last_cross_date'],
                     // sortBy: ['均價longlong_%'],
 
                     sortDesc: [true],
@@ -876,10 +876,10 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
 
-                                arr = [...baseFields,'flag_stat',
+                                arr = [...baseFields, 'flag_stat',
                                     'text_desc',
 
-                                    
+
                                     'MACD-SL', 'MACD', '成交股數', '成交金額平均', '成交金額',
                                     '開盤價', '最高價', '最低價', '收盤價',
 
@@ -900,12 +900,13 @@
                                     'highlight_收盤價',
                                     'highlight_%',
                                     //'highlight_enddate_1','highlight_stardate_1',
-                                    'MA_last_cross_date', 'MA_last_cross_%',
-                                    'highlight_date',
+
+                                    'MA_last_cross_%', 'MA_last_cross_date', 'highlight_date',
                                     'desctxt',
                                     //'量倍率',
 
-                                    '量能avg', '量能差',
+                                    //'量能avg',
+                                    '量能差',
                                     'LevelArea', 'type', '總價差',
                                     '均價longlong_%', '均價long_%', '均價_%', 'MA5_%', '當日漲跌'
                                 ]
@@ -1285,17 +1286,17 @@
                                 this.arrcount = this.arrcount - para_x
                                 this.headers = this.headers.slice(para_x, this.headers.length)
                                 //************
-                                dummydata.filter(x=>x.highlight_date=='0').map(x=>x.MA_last_cross_date=0)
-                                dummydata.filter(x=>x.highlight_date=='0').map(x=>x['MA_last_cross_%']=0)
-                                dummydata.filter(x=>x['MA_last_cross_%']<0).map(x=>x.MA_last_cross_date=0)
-                                dummydata.filter(x=>x['MA_last_cross_%']<0).map(x=>x['MA_last_cross_%']=0)
+                                dummydata.filter(x => x.highlight_date == '0').map(x => x.MA_last_cross_date = 0)
+                                dummydata.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
+                                dummydata.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
+                                dummydata.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
                                 //************
-                                
+
 
                                 this.jsonData = dummydata
                                 this.jsonData_ = dummydata
-                        
-                                
+
+
                             }
                             if (this.realtimedata.length > 0) {
                                 this.sync_data();
