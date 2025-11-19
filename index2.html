@@ -372,10 +372,9 @@
                         <td>
                             (max){{ parseFloat(item.量能max).toFixed(0) }}
                             <br />
-                            <span style="color:gray;">
-                                (now) {{ parseFloat(item.量能).toFixed(0) }}</span>
-                            <span style="color:green;">【{{ (parseFloat(item.量能) /parseFloat(item.量能avg)).toFixed(0)
-                                }}】</span>
+                            <span style="color:gray;"> (now) {{ parseFloat(item.量能).toFixed(0) }}</span>
+                            <span style="color:green;">【{{ (parseFloat(item.量能) /parseFloat(item.量能avg)).toFixed(0)}}】</span>
+
                             <br />
                             (min) {{ parseFloat(item.量能min).toFixed(0)}}
                         </td>
@@ -405,6 +404,8 @@
                                 (HL){{ parseFloat(item["MACD"]) }}
                                 <br />
                                 (SL){{parseFloat(item["MACD-SL"])}}
+                                <br />
+                                {{ (parseFloat(item["MACD"])-parseFloat(item["MACD-SL"])).toFixed(2) }}
                             </td>
                             <td></td>
                         </tr>
@@ -902,7 +903,7 @@
                                     'MA_last_cross_date', 'MA_last_cross_%',
                                     'highlight_date',
                                     'desctxt',
-                                    '量倍率',
+                                    //'量倍率',
 
                                     '量能avg', '量能差',
                                     'LevelArea', 'type', '總價差',
@@ -1003,10 +1004,11 @@
                                             item.MACD_minus = ((parseFloat(item['MACD']) - parseFloat(item['MACD-SL']))).toFixed(2)
 
                                         });
-
+                                        /*
                                         var add = item.datalist.filter(x => x._quote > 1).map(data => parseFloat((parseInt(data.量能) / parseInt(data.量能均)).toFixed(2)) % Infinity || 0).slice(0, 7).reduce((sum, val) => sum + val, 0)
                                         var minus = item.datalist.filter(x => x._quote < -1).map(data => parseFloat((parseInt(data.量能) / parseInt(data.量能均)).toFixed(2)) % Infinity || 0).slice(0, 7).reduce((sum, val) => sum + val, 0)
                                         dummydataItem.量倍率 = parseFloat(add - minus).toFixed(2)
+                                        */
 
                                         //二次處理明細  要先經過一次計算
                                         dummydataItem.datalist.forEach((item, index) => {
