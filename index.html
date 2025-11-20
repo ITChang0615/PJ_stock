@@ -160,7 +160,8 @@
                     appheaderscol: ['stock_number', '_quote', 'rt_price', 'rt_量', 'highlight_date', '遠交易量o'],
                     filters: {},
                     uniqueValues: {},
-                    sortBy: 'highlight_date',
+                    //sortBy: 'highlight_date',
+                    sortBy: 'MA_last_cross_date',
                     sortDesc: true,
                     dialog: false,
                     selectedItem: null,
@@ -381,16 +382,25 @@
                                 if (this.type) {
                                     this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type));
                                 }
+                                //**//
+                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
+                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x.MA_last_cross_date = 0)
+                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
+                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
+                                //**//
+
+
+
                                 this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
                                 Object.keys(this.uniqueValues).forEach(key => {
                                     this.uniqueValues[key] = this.uniqueValues[key].map(val => ({ text: val, value: val }));
                                     this.uniqueValues[key].sort((a, b) => a.text.localeCompare(b.text));
                                 });
                             }
-                            app.sortBy = ['總市值']
-                            app.sortDesc = [true]
-                             //app.sortBy = ['MA_last_cross_date']
+                            //app.sortBy = ['總市值']
                             //app.sortDesc = [true]
+                             app.sortBy = ['MA_last_cross_date','highlight_date']
+                            app.sortDesc = [true,true]
                             
                 
                             //app.jsonData=app.jsonData.filter(x => x["MACD"]<5 && x["價能"]>0 && x["MA5_%"]>0 && x["Volume_Oscillator"]>-30)
