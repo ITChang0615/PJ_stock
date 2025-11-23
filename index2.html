@@ -75,13 +75,6 @@
 
                     <template v-slot:[`item.${header.value}`]="{ item }" v-for="header in headers.slice(0,arrcount)"
                         :key="header.value">
-                        <!--
-                        hightlight_line_box: MACD 放量動能結構好 VPC_break
-                        hightlight_line_under : 進入強勢區間時間內
-                        Flag_三階段
-                        (data['VPC_break']=='True' ) ? 'hightlight_line_box' : '',  
-                        -->
-
                         <template v-for="(data, index) in item.datalist.filter(x => x.日期 === header.value)"
                             :key="index">
                             <div v-if="index==0" class="cell-flex" style="position: sticky; min-height: 100%;" :class="[
@@ -105,25 +98,7 @@
                                                     aria-hidden="false" color="orange"> mdi mdi-plus </v-icon>
                                                 <v-icon v-if="data['flag_stat']=='True'" aria-hidden="false"
                                                     color="orange"> mdi mdi-star </v-icon>
-                                                <!--
-                                            <span>
-                                                {{data.Typelevel.replace(data.Type1,'')}}
-                                            </span>
-                                            <br />
-                                            <span> {{data['Type0']}}</span> <span>{{data['MACD-SL']}}</span>
-                                            <br />量
-                                            <span style="color:green;">【{{ (parseFloat(data.量能) /parseFloat(data.量能avg)).toFixed(0) }}】</span>
-                                            -->
-                                                <!--
-                                            <mini-candle :row="item" :date="header.value" :width="cW" :height="cH"
-                                                :body="candleW" />
-                                                -->
-                                                <!--
-                                            <mini-candle-strip  v-if="jsonData[0].datalist.map(x=>x.日期)[0]== header.value"
-                                                :row="item" :date="header.value" :lookback="4"
-                                                :width="120" :height="60" :body="8" :gap="6" :show-line="true" />
 
-                                                -->
                                             </div>
                                         </template>
                                         <!-- TOOL TIP-->
@@ -232,21 +207,7 @@
                                         </div>
                                     </v-tooltip>
                                     <br />
-                                    <!--
-                                <span :style="{ color: 
-                                            parseInt(data.漲跌BYN天Diff) > 5  && parseInt(data.漲跌BYN天) > 1 && parseInt(data._quote) > 1 ? 'orange' :
-                                            parseInt(data.漲跌BYN天Diff) > 1  && parseInt(data.漲跌BYN天) > 1 && parseInt(data._quote) > 1? 'blue' :
-                                            'gray'  }">
-                                    漲跌BY{{n}}天 :{{parseInt(data.漲跌BYN天) }} / {{data.漲跌BYN天Diff }}
-                                </span>
-                                <br />
-                                <span :style="{ color: 
-                                            parseInt(data.增縮BYN天Diff) > 5 && parseInt(data.增縮BYN天) > 2 && parseInt(data._quote) > 1? 'orange' :
-                                            parseInt(data.增縮BYN天Diff) > 1 && parseInt(data.增縮BYN天) > 2 && parseInt(data._quote) > 1? 'blue' :
-                                            'gray'  }">
-                                    增縮BY{{n}}天 :{{parseInt(data.增縮BYN天) }}/ {{data.增縮BYN天Diff }}
-                                </span>
-                                -->
+
 
                                     <br />
                                     <span>
@@ -339,20 +300,20 @@
                                         :row="item" :date="header.value" :lookback="6" :width="120" :height="60"
                                         :body="8" :gap="6" :show-line="true" />
                                 </div>
-
-
-
-
-
                             </div>
                         </template>
+                    </template>
+
+                    <template v-slot:item.量增幅="{ item }">
+                        <span
+                            :style="{ color: item.當日漲跌 > 0 ? 'red' : item.當日漲跌 < 0 ? 'green' : 'rgb(124, 169, 173)' }">
+                            {{ item.量增幅 }}
+                        </span>
                     </template>
                     <template v-slot:item.rt_price="{ item }">
                         <span style="color: rgb(124, 169, 173);" v-show="sync">
                             {{item.price}} ({{item.rt_price}})
                         </span>
-
-
 
                     </template>
                     <template v-slot:item.rt_量="{ item }">
@@ -480,113 +441,8 @@
             </v-container>
         </v-app>
     </div>
-
     <script>
-        Vue.component('mini-candle', {
-            props: {
-                row: { type: Object, required: true },
-                date: { type: String, required: true },
-                width: { type: Number, default: 26 },
-                height: { type: Number, default: 42 },
-                body: { type: Number, default: 8 },
-                showTrend: { type: Boolean, default: true },  // 顯示趨勢箭頭（與前一日比）
-                showPivot: { type: Boolean, default: true }   // 顯示臨近轉折（局部高/低）
-            },
-            computed: {
-                // 抓到當日 OHLC
-                rec() {
-                    const list = Array.isArray(this.row?.datalist) ? this.row.datalist : [];
-                    const r = list.find(x => String(x.日期) === String(this.date));
-                    if (!r) return null;
-                    const o = parseFloat(r['開盤價']), h = parseFloat(r['最高價']),
-                        l = parseFloat(r['最低價']), c = parseFloat(r['收盤價']);
-                    if ([o, h, l, c].some(v => Number.isNaN(v))) return null;
-                    return { o, h, l, c };
-                },
-                // 排序後的 datalist，方便找臨近日期
-                sortedList() {
-                    const list = Array.isArray(this.row?.datalist) ? this.row.datalist.slice() : [];
-                    // 假設日期是 YYYY-MM-DD；若不是，改成 new Date 比對即可
-                    return list.sort((a, b) => String(a.日期) < String(b.日期) ? -1 : 1);
-                },
-                // 找到 index 與前後一日的收盤
-                neighbors() {
-                    if (!this.rec) return { prev: null, next: null, idx: -1 };
-                    const idx = this.sortedList.findIndex(x => String(x.日期) === String(this.date));
-                    if (idx < 0) return { prev: null, next: null, idx: -1 };
-                    const getClose = r => {
-                        const v = parseFloat(r?.['收盤價']);
-                        return Number.isFinite(v) ? v : null;
-                    };
-                    const prev = idx > 0 ? getClose(this.sortedList[idx - 1]) : null;
-                    const next = idx < this.sortedList.length - 1 ? getClose(this.sortedList[idx + 1]) : null;
-                    return { prev, next, idx };
-                },
-                // 與前一日比較的趨勢（↑/↓/→）
-                trend() {
-                    if (!this.rec) return 'none';
-                    const { prev } = this.neighbors;
-                    if (prev == null) return 'none';
-                    if (this.rec.c > prev) return 'up';
-                    if (this.rec.c < prev) return 'down';
-                    return 'flat';
-                },
-                // 局部高/低（需同時存在前後日）
-                pivot() {
-                    if (!this.rec) return 'none';
-                    const { prev, next } = this.neighbors;
-                    if (prev == null || next == null) return 'none';
-                    if (this.rec.c >= prev && this.rec.c >= next) return 'peak';   // 局部高
-                    if (this.rec.c <= prev && this.rec.c <= next) return 'trough'; // 局部低
-                    return 'none';
-                },
-                // 繪圖幾何
-                geom() {
-                    if (!this.rec) return null;
-                    const pad = 2, H = this.height, min = this.rec.l, max = this.rec.h;
-                    const y = (v) => pad + (1 - (v - min) / Math.max(1e-9, (max - min))) * (H - 2 * pad);
-                    const cx = Math.floor(this.width / 2);
-                    const yH = y(this.rec.h), yL = y(this.rec.l), yO = y(this.rec.o), yC = y(this.rec.c);
-                    const yTop = Math.min(yO, yC);
-                    const hBody = Math.max(2, Math.abs(yO - yC));
-                    const up = this.rec.c >= this.rec.o; // 紅漲綠跌交給 CSS
-                    return { cx, yH, yL, yTop, hBody, up };
-                }
-            },
-            template: `
-                        <div class="mini-candle-box">
-                            <svg v-if="geom" :width="width+20" :height="height">
-                            <!-- 上方：若是局部高，畫一個小三角 ▲；局部低則在下方 ▼ -->
-                            <template v-if="showPivot && pivot==='peak'">
-                                <text :x="geom.cx" y="8" font-size="9" text-anchor="middle" fill="#1976d2">▲</text>
-                            </template>
-                            <template v-if="showPivot && pivot==='trough'">
-                                <text :x="geom.cx" :y="height-2" font-size="9" text-anchor="middle" fill="#fb8c00">▼</text>
-                            </template>
-
-                            <!-- 影線 -->
-                            <line :x1="geom.cx" :x2="geom.cx" :y1="geom.yH" :y2="geom.yL"
-                                    class="candle-wick" :class="geom.up ? 'candle-wick-up':'candle-wick-down'"/>
-                            <!-- 本體 -->
-                            <rect :x="geom.cx - body/2" :y="geom.yTop" :width="body" :height="geom.hBody"
-                                    class="candle-body" :class="geom.up ? 'candle-up':'candle-down'"/>
-
-                            <!-- 右側趨勢箭頭（與前一日收盤比較） -->
-                            <template v-if="showTrend && trend!=='none'">
-                                <text :x="geom.cx + body/2 + 10" :y="geom.yTop + 10"
-                                    font-size="10" text-anchor="middle"
-                                    :fill="trend==='up' ? '#c62828' : (trend==='down' ? '#2e7d32' : '#666')">
-                                {{ trend==='up' ? '↑' : (trend==='down' ? '↓' : '→') }}
-                                </text>
-                            </template>
-                            </svg>
-
-                            <div v-else style="width:100%;height:100%;background:#eee;border-radius:3px;"></div>
-                        </div>`
-        });
-    </script>
-    <script>
-        Vue.component('mini-candle-strip', {
+        Vue.component('mini-candle-strip2', {
             props: {
                 row: { type: Object, required: true },  // 整列，含 datalist
                 date: { type: String, required: true },  // 目標日期（YYYY-MM-DD）
@@ -662,6 +518,127 @@
                 fill="none" stroke="#ffa000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
     </svg>
     <div v-else style="width:100%;height:100%;background:#eee;border-radius:3px;"></div>
+  </div>`
+        });
+    </script>
+
+
+
+
+
+    <script>
+        Vue.component('mini-candle-strip', {
+            props: {
+                row: { type: Object, required: true },  // 整列，含 datalist
+                date: { type: String, required: true },  // 目標日期（YYYY-MM-DD）
+                lookback: { type: Number, default: 4 },      // 往前 N 天 + 當天 => N+1 根
+                width: { type: Number, default: 120 },
+                height: { type: Number, default: 60 },
+                body: { type: Number, default: 8 },      // 蠟燭本體寬
+                gap: { type: Number, default: 6 },       // 蠟燭間距（可設小一點，重點在 Y 軸線）
+                showLine: { type: Boolean, default: true }   // 顯示收盤價折線
+            },
+            computed: {
+                // 排序後的整列資料
+                list() {
+                    const a = Array.isArray(this.row?.datalist) ? this.row.datalist.slice() : [];
+                    return a.sort((x, y) => String(x.日期) < String(y.日期) ? -1 : 1);
+                },
+                // 取出 [date - lookback, date] 的視窗，且「沒量」的 K 線直接排除
+                windowData() {
+                    if (!this.list.length) return [];
+                    const idx = this.list.findIndex(x => String(x.日期) === String(this.date));
+                    if (idx < 0) return [];
+                    const start = Math.max(0, idx - this.lookback);
+
+                    const raw = this.list.slice(start, idx + 1).map(r => {
+                        const o = parseFloat(r['開盤價']);
+                        const h = parseFloat(r['最高價']);
+                        const l = parseFloat(r['最低價']);
+                        const c = parseFloat(r['收盤價']);
+
+                        // 嘗試抓成交量欄位：先用「成交量」，沒有就用「成交股數」
+                        const volRaw = r['成交量'] != null ? r['成交量'] : r['成交股數'];
+                        const v = parseFloat(volRaw);
+
+                        return { d: String(r.日期), o, h, l, c, v };
+                    });
+
+                    // 價格要是數字，且「成交量要有且 > 0」，才視為有效 K
+                    return raw.filter(r =>
+                        [r.o, r.h, r.l, r.c].every(Number.isFinite) &&
+                        Number.isFinite(r.v) && r.v > 0
+                    );
+                },
+                // 是否有足夠的 K 數量（避免只剩一根怪怪的線）
+                hasEnoughBars() {
+                    return this.windowData.length >= 2;
+                },
+                // 畫布幾何 & 縮放
+                geom() {
+                    const pad = 2, H = this.height;
+                    const highs = this.windowData.map(r => r.h);
+                    const lows = this.windowData.map(r => r.l);
+                    if (!highs.length) return null;
+
+                    let max = Math.max(...highs), min = Math.min(...lows);
+                    if (max <= min) { max = min + 1; }
+
+                    const y = v => pad + (1 - (v - min) / (max - min)) * (H - 2 * pad);
+
+                    const stride = this.body + this.gap;
+                    const Wneed = this.windowData.length ? (this.windowData.length * stride - this.gap) : 0;
+                    const left = Math.max(0, (this.width - Wneed) / 2);  // 置中
+                    return { y, stride, left };
+                },
+                // 收盤價折線 points
+                closePoints() {
+                    if (!this.geom) return '';
+                    return this.windowData.map((r, i) => {
+                        const x = this.geom.left + i * this.geom.stride + this.body / 2;
+                        const y = this.geom.y(r.c);
+                        return `${x},${y}`;
+                    }).join(' ');
+                }
+            },
+            template: `
+  <div class="mini-candle-box" :style="{width: width + 'px', height: height + 'px'}">
+    <!-- 有幾根有效 K 線才畫圖，否則顯示 No Vol -->
+    <svg v-if="geom && windowData.length && hasEnoughBars"
+         :width="width" :height="height">
+      <g v-for="(r,i) in windowData" :key="r.d"
+         :transform="'translate(' + (geom.left + i * geom.stride) + ',0)'">
+        <!-- 影線 -->
+        <line :x1="body / 2" :x2="body / 2"
+              :y1="geom.y(r.h)" :y2="geom.y(r.l)"
+              class="candle-wick"
+              :class="r.c >= r.o ? 'candle-wick-up' : 'candle-wick-down'"/>
+        <!-- 本體（紅漲綠跌） -->
+        <rect :x="0"
+              :y="Math.min(geom.y(r.o), geom.y(r.c))"
+              :width="body"
+              :height="Math.max(2, Math.abs(geom.y(r.o) - geom.y(r.c)))"
+              class="candle-body"
+              :class="r.c >= r.o ? 'candle-up' : 'candle-down'"/>
+      </g>
+
+      <!-- 收盤折線：串起 Y 軸趨勢 -->
+      <polyline v-if="showLine"
+                :points="closePoints"
+                fill="none"
+                stroke="#ffa000"
+                stroke-width="2"
+                stroke-linejoin="round"
+                stroke-linecap="round"/>
+    </svg>
+
+    <!-- 沒有量 或 有效 K 太少時的佔位畫面 -->
+    <div v-else
+         style="width:100%;height:100%;background:#eee;border-radius:3px;
+                display:flex;align-items:center;justify-content:center;
+                font-size:10px;color:#999;">
+      No Vol
+    </div>
   </div>`
         });
     </script>
@@ -876,9 +853,7 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
 
-                                arr = [...baseFields, 'flag_stat',
-                                    'text_desc',
-
+                                arr = [...baseFields, 'flag_stat',  'text_desc',
 
                                     'MACD-SL', 'MACD', '成交股數', '成交金額平均', '成交金額',
                                     '開盤價', '最高價', '最低價', '收盤價',
@@ -891,7 +866,7 @@
                                     '%D', '%K',
                                     '當日漲跌', 'now_price', '分類標籤',
                                     'Volume_Oscillator', 'Volume_MA_short', 'Volume_MA_long', 'Volume_MA_long50',
-                                    'VPC_MA_%', '量能max',
+                                    'VPC_MA_%', 
                                     'highlight_enddate_2', 'highlight_stardate_2', 'highlight_enddate收盤價_2', 'highlight_stardate收盤價_2',
                                     'highlight_enddate_1', 'highlight_stardate_1', 'highlight_enddate收盤價_1', 'highlight_stardate收盤價_1',
                                     'macdpercent',
@@ -903,12 +878,12 @@
 
                                     'MA_last_cross_%', 'MA_last_cross_date', 'highlight_date',
                                     'desctxt',
-                                    //'量倍率',
 
-                                    //'量能avg',
-                                    '量能差',
+                                   
+                                    '量能差','量能max',
                                     'LevelArea', 'type', '總價差',
-                                    '均價longlong_%', '均價long_%', '均價_%', 'MA5_%', '當日漲跌'
+                                    '均價longlong_%', '均價long_%', '均價_%', 'MA5_%', '當日漲跌',
+                                    '量能avg','量增幅'
                                 ]
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -1004,33 +979,16 @@
                                             //
                                             item.MACD_minus = ((parseFloat(item['MACD']) - parseFloat(item['MACD-SL']))).toFixed(2)
 
+                                            item.量增幅 = ((parseFloat(item['Volume_Price_Change']) / parseFloat(item['Volume_MA_long']))).toFixed(2)
+
+
                                         });
-                                        /*
-                                        var add = item.datalist.filter(x => x._quote > 1).map(data => parseFloat((parseInt(data.量能) / parseInt(data.量能均)).toFixed(2)) % Infinity || 0).slice(0, 7).reduce((sum, val) => sum + val, 0)
-                                        var minus = item.datalist.filter(x => x._quote < -1).map(data => parseFloat((parseInt(data.量能) / parseInt(data.量能均)).toFixed(2)) % Infinity || 0).slice(0, 7).reduce((sum, val) => sum + val, 0)
-                                        dummydataItem.量倍率 = parseFloat(add - minus).toFixed(2)
-                                        */
+
 
                                         //二次處理明細  要先經過一次計算
                                         dummydataItem.datalist.forEach((item, index) => {
-                                            /*
-                                            if (index < dummydataItem.datalist.length - 1) {
-                                                //item.量能差 = parseInt(item.量能均 - dummydataItem.datalist[index + 1].量能均);
 
-                                            } else {
-                                                item.量能差 = 0; // 或者可以設定為 null/undefined 依據需求
-                                            }
-                                            */
                                             item.量能差 = parseInt(item.量能 - item.量能均);
-
-                                            //let dd1 = dummydataItem.datalist.filter(q => q.日期 <= item.日期);
-                                            // ###【Flag】------  
-                                            nDay = -5 // 抓往前推幾天
-                                            /*
-                                            let arrlist_dll6 = dd1.map(x => parseInt(x.Flag)).slice().reverse()
-                                            item.Flag = arrlist_dll6.slice(nDay).filter(x => x > 0).length
-                                            */
-                                            // ###【Flag】------    　end 
 
                                             let dl = dummydataItem.datalist.filter(q => q.日期 <= item.日期);
 
@@ -1162,18 +1120,7 @@
                                         dummydataItem['MA_last_cross_%'] = datalist_last_date['MA_last_cross_%']
                                         dummydataItem['highlight_收盤價'] = datalist_last_date['highlight_收盤價']
 
-
-                                        /*
-                                                            
-                                                            dummydataItem.area = datalist_last_date?.area;
-                                                            dummydataItem.type = datalist_last_date?.type;
-                                                            dummydataItem.subtype = datalist_last_date?.subtype;
-                                                            dummydataItem.item = datalist_last_date?.item;
-                                                            dummydataItem.title = datalist_last_date?.title;
-                                                            */
                                         dummydataItem.text_desc = datalist_last_date?.text_desc;
-
-
 
                                         dummydataItem.Volume_MA_short = datalist_last_date?.Volume_MA_short;
                                         dummydataItem.Volume_MA_long = datalist_last_date?.Volume_MA_long;
@@ -1213,6 +1160,9 @@
                                         dummydataItem['營業收入-上月比較增減(%)'] = parseFloat(datalist_last_date['營業收入-上月比較增減(%)']).toFixed(1)
                                         dummydataItem['營業收入-去年同月增減(%)'] = parseFloat(datalist_last_date['營業收入-去年同月增減(%)']).toFixed(1)
                                         dummydataItem['累計營業收入-前期比較增減(%)'] = parseFloat(datalist_last_date['累計營業收入-前期比較增減(%)']).toFixed(1)
+
+                                        dummydataItem.量增幅 = datalist_last_date?.量增幅;
+                                        dummydataItem.Volume_Price_Change = datalist_last_date?.Volume_Price_Change;
 
 
                                         /////////////////////////////////////////////////////////////////

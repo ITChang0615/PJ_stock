@@ -52,7 +52,7 @@
 
 
                 <div v-for="(type, index) in distinct_type" v-show="appmode">
-                    {{type.Typelevel }} {{parseFloat(type.Volume_Price_Change_sum).toFixed(0)}}
+                    {{type.Typelevel }} {{parseFloat(type.Volume_Price_Change).toFixed(0)}}
 
                     <br>
                     <v-data-table disable-pagination fixed-header hide-default-footer :headers="appheaderData"
@@ -84,7 +84,7 @@
 
                 <div v-for="(type, index) in distinct_type" v-show="!appmode"
                     style="max-height: 400px; overflow-x: auto;">
-                    {{ type.Typelevel }} {{parseFloat(type.Volume_Price_Change_sum).toFixed(0)}}
+                    {{ type.Typelevel }} {{parseFloat(type.Volume_Price_Change).toFixed(0)}}
                     <span>
                         {{filteredData(type.Typelevel).filter(x=>x._quote>5).length}} /
                         {{filteredData(type.Typelevel).length}}
@@ -246,14 +246,14 @@
                     this.jsonData.reduce(function (res, value) {
                         var key = value.Typelevel  // Typelevel //+value.Trend
                         if (!res[key]) {
-                            res[key] = { Typelevel: key, Volume_Price_Change_sum: 0 };
+                            res[key] = { Typelevel: key, Volume_Price_Change: 0 };
                             result.push(res[key])
                         }
-                        res[key].Volume_Price_Change_sum += Number(value.Volume_Price_Change_sum);
+                        res[key].Volume_Price_Change += Number(value.Volume_Price_Change);
                         return res;
                     }, {});
                     result.sort(function (a, b) {
-                        return -(a.Volume_Price_Change_sum - b.Volume_Price_Change_sum);
+                        return -(a.Volume_Price_Change - b.Volume_Price_Change);
                     });
                     return result
                 },
@@ -366,7 +366,7 @@
                         '均價long_%', '成交量', '盤後量', 'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong', 'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 'VPC_MA_%', 'VPC_break',
 
                         'highlight_enddate_1', 'highlight_stardate_1', 'highlight_enddate收盤價_1', 'highlight_stardate收盤價_1',
-                        'Volume_MA_short', 'Volume_MA_long', 'Volume_Oscillator', 'volume_threshold', 'Volume_Price_Change_sum', 'highlight_enddate', 'Type0', 'Type1', 'Type2', 'Full_Summary',
+                        'Volume_MA_short', 'Volume_MA_long', 'Volume_Oscillator', 'volume_threshold', 'Volume_Price_Change', 'highlight_enddate', 'Type0', 'Type1', 'Type2', 'Full_Summary',
                         'textdesc', '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', '淨值倍率', '殖利率', '每股營收(元)', '本益比', '營業毛利率', '營業利益率', '同業平均本益比', '總市值', '營收比重', 'Type',
                         'Typelevel', '每股淨值(元)', 'desc']
                     this.headers = arr.map(header => ({ text: header, value: header }));;
