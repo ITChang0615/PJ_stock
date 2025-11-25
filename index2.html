@@ -33,15 +33,24 @@
                             onclick="window.open(location.href + (location.href.includes('?') ? '&' : '?') + 'setdate=-2', '_blank', 'noopener'); return false;">-2</a>
                         【N:{{n}}】
                     </v-col>
-                    <v-col col="2">
+                    <v-col col="5">
                         <v-btn color="primary" @click="reset">reset</v-btn>
                         <v-btn color="primary" @click="reverse">reverse</v-btn>
                         <v-btn color="primary" @click="filter">Filter</v-btn>
                         <v-btn color="primary" @click="
                                             app.jsonData=app.jsonData.filter(x=> parseFloat(x['均價longlong_%']) >0 && parseFloat( x['總價差']) >0  && parseFloat( x['LevelArea']) <90);
                                             app.sortBy= ['總價差']">Filter1</v-btn>
+
+                    
                         <v-btn color="primary" @click="
-                                                        app.jsonData=app.jsonData_.filter(x=> parseFloat(x['均價long_%']) >0);
+                                                        
+                                                        app.jsonData=app.jsonData.filter(x=> x['Flag_macd']);
+                                                        app.jsonData=app.jsonData.filter(x=> parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) );
+
+                                                        app.sortBy = ['Type1','MA_last_cross_date','MA_last_cross_%'];
+                                                        app.sortDesc = [true,true,true]">均價long(寬鬆)</v-btn>
+                        <v-btn color="primary" @click=" app.jsonData=app.jsonData_.filter(x=> parseFloat(x['均價long_%']) >0);
+                                                        
                                                         app.jsonData=app.jsonData.filter(x=> x['Flag_macd']);
                                                         app.jsonData=app.jsonData.filter(x=> parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) );
 
@@ -53,10 +62,9 @@
 
 
                     </v-col>
+                
                     <v-col col="1">
                         <v-btn color="primary" @click="collapse=!collapse">Collapse</v-btn>
-                    </v-col>
-                    <v-col col="1">
                         <v-btn color="primary"
                             @click="localStorage.setItem('aalist', JSON.stringify(jsonData.map(x=>x.stock_number)))">set</v-btn>
                         <v-btn color="primary"
