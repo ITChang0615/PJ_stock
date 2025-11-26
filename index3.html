@@ -444,10 +444,12 @@
                                     x.Typelevel += x?.分類標籤.split("【")[1]?.split("】")[0]
                                 });
                                 //**//
+/*
                                 this.jsonData.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
                                 this.jsonData.filter(x => x.highlight_date == '0').map(x => x.MA_last_cross_date = 0)
                                 this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
                                 this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
+*/
                                 //**//
 
                                 this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
