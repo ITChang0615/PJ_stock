@@ -41,9 +41,7 @@
                                             app.jsonData=app.jsonData.filter(x=> parseFloat(x['均價longlong_%']) >0 && parseFloat( x['總價差']) >0  && parseFloat( x['LevelArea']) <90);
                                             app.sortBy= ['總價差']">Filter1</v-btn>
 
-                    
                         <v-btn color="primary" @click="
-                                                        
                                                         app.jsonData=app.jsonData.filter(x=> x['Flag_macd']);
                                                         app.jsonData=app.jsonData.filter(x=> parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) );
 
@@ -318,6 +316,13 @@
                             {{ item.量增幅 }}
                         </span>
                     </template>
+                    <template v-slot:item.MA_last_cross_date="{ item }">
+                         <span :class="{ 'del-italic': item.delitalic }">
+                            {{ item.MA_last_cross_date }}123
+                        </span>
+                    </template>
+
+                    
                     <template v-slot:item.rt_price="{ item }">
                         <span style="color: rgb(124, 169, 173);" v-show="sync">
                             {{item.price}} ({{item.rt_price}})
@@ -1249,7 +1254,9 @@
                                 dummydata.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
                                 dummydata.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
                                 dummydata.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
-*/
+                                */
+                                dummydata.filter(x => x.highlight_date == '0').map(x => x.delitalic = true)
+                                dummydata.filter(x => x['MA_last_cross_%'] < 0).map(x => x.delitalic = true)
                                 //************
 
 

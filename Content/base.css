@@ -140,3 +140,9 @@ body {
 .cell-flex {
   justify-content: space-between;
 }
+
+
+.del-italic {
+  text-decoration: line-through; /* 刪除線 */
+  font-style: italic;           /* 斜體 */
+}
