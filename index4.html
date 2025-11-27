@@ -4,41 +4,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excel 成長率與連續上升範例</title>
+  <title>Excel 成長率與連續上升 + 產業走勢圖</title>
+
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.10/dist/vuetify.min.css" rel="stylesheet">
+
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.10/dist/vuetify.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.4/dist/xlsx.full.min.js"></script>
+
+  <!-- Chart.js for charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      background: #222;
+      color: #ddd;
+    }
+
+    a {
+      color: #80cbc4;
+    }
+
+    .clickable-title {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
 <body>
   <div id="app">
     <v-app>
       <v-container style="max-width: 95%;">
-        <v-data-table disable-pagination fixed-header height="90vh" hide-default-footer :headers="headers"
-          :items="jsonData" :items-per-page="-1" style="white-space: nowrap;">
-          <!-- 自訂數值欄位，含成長率顯示 -->
+
+        <!-- ====================== 表格區 ====================== -->
+        <v-data-table
+          disable-pagination
+          fixed-header
+          height="90vh"
+          hide-default-footer
+          :headers="headers"
+          :items="jsonData"
+          :items-per-page="-1"
+          style="white-space: nowrap;"
+        >
+          <!-- 數值欄位 + 成長率 -->
           <template
-            v-for="header in headers.filter(h =>h.value !== '0'  && h.value !== dtext  && h.value !== 'desc' && h.value !== 'Flag_連3日正成長') "
-            v-slot:[`item.${header.value}`]="{ item }" :key="header.value">
-            <span :style="{ color: item[header.value] >= 0 ? 'red' : 'blue' }">
+            v-for="header in headers.filter(h =>
+              h.value !== '0' &&
+              h.value !== dtext &&
+              h.value !== 'desc' &&
+              h.value !== 'Flag_連3日正成長'
+            )"
+            v-slot:[`item.${header.value}`]="{ item }"
+            :key="header.value"
+          >
+            <span>
               {{ parseFloat(item[header.value]).toFixed(1) }}
-              <template v-if="item['成長率_' + header.value] !== null">
-                <small :style="{ color: item['成長率_' + header.value] >= 0 ? 'red' : 'blue' }">
-                  ({{ item['成長率_' + header.value] >= 0 ? '▲' : '▼' }}{{ Math.abs(item['成長率_' + header.value]).toFixed(1)
-                  }}%)
+              <template v-if="item['成長率_' + header.value] !== null && item['成長率_' + header.value] !== undefined">
+                <small :style="{ color: item['成長率_' + header.value] >= 0 ? 'red' : 'lightblue' }">
+                  ({{ item['成長率_' + header.value] >= 0 ? '▲' : '▼' }}
+                  {{ Math.abs(item['成長率_' + header.value]).toFixed(1) }}%)
                 </small>
               </template>
             </span>
           </template>
 
-          <!-- 顯示 Flag_連3日正成長 -->
+          <!-- Flag_連3日正成長 -->
           <template v-slot:item.Flag_連3日正成長="{ item }">
             <v-chip :color="item.Flag_連3日正成長 ? 'green' : 'grey'" small>
               {{ item.Flag_連3日正成長 ? '✓ 是' : '✗ 否' }}
             </v-chip>
           </template>
+
+          <!-- desc：三個連結 -->
           <template v-slot:item.desc="{ item }">
             太陽
             <a :href="computedHref(item)" target="_blank" rel="noopener">
@@ -47,40 +87,115 @@
             分類
             <a :href="computedHref2(item)" target="_blank" rel="noopener">
               {{ sanitizedTypelevel(item) }}
-            </a>//
-              <a :href="computedHref3(item)" target="_blank" rel="noopener">
+            </a>
+            //
+            <a :href="computedHref3(item)" target="_blank" rel="noopener">
               {{ sanitizedTypelevel(item) }}
             </a>
           </template>
-           <template v-slot:item.title="{ item }">
-            
+
+          <!-- ⭐ title 欄：點擊 title → 開 PopUp 折線圖 -->
+          <template v-slot:item.title="{ item }">
+            <span
+              class="clickable-title"
+              @click="openRowChart(item)"
+              :title="'查看『' + (item.title || '') + '』的走勢圖'"
+            >
+              {{ item.title }}
+            </span>
           </template>
-          <template v-slot:item.成長率2="{ item }">
-            {{parseFloat(item.成長率2).toFixed(1)}}
+         
+
+          <!-- 成長率2 / 成長率1 -->
+          <template v-slot:item.成長率2="{ item }" >
+            <span
+              class="clickable-title"
+              @click="openRowChart(item)"
+              :title="'查看『' + (item.title || '') + '』的走勢圖'"
+            >
+            {{ parseFloat(item.成長率2).toFixed(1) }}
+          </span>
           </template>
-             <template v-slot:item.成長率1="{ item }">
-            {{parseFloat(item.成長率1).toFixed(1)}}
+          <template v-slot:item.成長率1="{ item }">
+
+             <span
+              class="clickable-title"
+              @click="openRowChart(item)"
+              :title="'查看『' + (item.title || '') + '』的走勢圖'"
+            >
+            {{ parseFloat(item.成長率1).toFixed(1) }}
+          </span>
           </template>
-        
+
+          <!-- Footer：每欄總和 -->
           <template v-slot:body.append>
             <tr class="sticky-table-footer">
               <td></td>
               <td></td>
-
-              <td v-for="(header, index) in headers.filter(h => h.value !== 'Typelevel' && h.value !== '0')"
-                :key="header.value">
+              <td
+                v-for="header in headers.filter(h => h.value !== 'Typelevel' && h.value !== '0')"
+                :key="header.value"
+              >
                 <br />
                 {{
-                (
-                (jsonData || [])
-                .map(x => Number(x?.[header.value]) || 0) // 保證是數字
-                .reduce((acc, current) => acc + current, 0) // 總和
-                ).toFixed(1)
+                  (
+                    (jsonData || [])
+                      .map(x => Number(x?.[header.value]) || 0)
+                      .reduce((acc, current) => acc + current, 0)
+                  ).toFixed(1)
                 }}
               </td>
             </tr>
           </template>
         </v-data-table>
+
+        <!-- ====================== 產業大折線圖控制區 ====================== -->
+        <!--v-row class="mt-4">
+          <v-col cols="12" md="4">
+            <v-select
+              v-model="selectedType"
+              :items="typeOptions"
+              label="選擇產業（單一產業走勢）"
+              outlined
+              dense
+              @change="updateChart"
+            ></v-select>
+          </v-col>
+        </v-row-->
+
+        <!-- ====================== 產業大折線圖畫布 ====================== -->
+        <!--v-row>
+          <v-col cols="12">
+            <div style="background:#111; padding: 16px; border-radius: 8px; height: 320px;">
+              <canvas id="lineChart"></canvas>
+            </div>
+          </v-col>
+        </v-row-->
+
+        <!-- ====================== 點擊 title 後的 Dialog ====================== -->
+        <v-dialog v-model="dialog" max-width="650">
+          <v-card style="background:#1e1e1e; color:#fff;">
+            <v-card-title>
+              {{ dialogRow ? (dialogRow.title || '詳細資料') : '詳細資料' }}
+            </v-card-title>
+
+            <v-card-subtitle>
+              {{ dialogRow ? (dialogRow.Typelevel || '') : '' }}
+            </v-card-subtitle>
+
+            <v-card-text>
+              <div style="height:260px;">
+                <canvas id="dialogChart"></canvas>
+              </div>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="dialog=false">關閉</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
       </v-container>
     </v-app>
   </div>
@@ -89,68 +204,221 @@
     var app = new Vue({
       el: '#app',
       vuetify: new Vuetify(),
+
       data() {
         return {
           headers: [],
           jsonData: [],
-          d:0,
-          dtext:'Typelevel',
+          d: 0,
+          dtext: 'Typelevel',
+
+          // 產業大折線圖
+          chart: null,
+          selectedType: null,
+          typeOptions: [],
+
+          // 點 title 彈出 Dialog + 內層圖
+          dialog: false,
+          dialogRow: null,
+          dialogChart: null
         };
       },
+
       methods: {
+        // 類別名稱淨化
         sanitizedTypelevel(x) {
-          if(this.d==4)
-            return x.title.replace(/[\\/:*?"<>|]/g, "_")
-          return x.Typelevel?.replace('右上', '').replace('平', '').replace('右下', '').replace('上市', '').replace('上櫃', '');
+          if (this.d == 4)
+            return (x.title || '').replace(/[\\/:*?"<>|]/g, "_");
+          return (x.Typelevel || '')
+            .replace('右上', '')
+            .replace('平', '')
+            .replace('右下', '')
+            .replace('上市', '')
+            .replace('上櫃', '');
         },
+
         computedHref(x) {
-          const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
-          if(this.d==4)
+          const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
+          if (this.d == 4)
             return `${baseUrl}/index2.html?d=type2&type=${this.sanitizedTypelevel(x)}`;
-          
           return `${baseUrl}/index2.html?d=type&type=${this.sanitizedTypelevel(x)}`;
         },
+
         computedHref2(x) {
-          const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
-         
+          const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
           return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
         },
-        computedHref3(x) {
-          const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
 
+        computedHref3(x) {
+          const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
           return `${baseUrl}/index.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
         },
+
         isNumberField(field) {
           return field !== 'stock_number' && this.jsonData.some(item => {
             const val = item[field];
             return val != null && !isNaN(parseFloat(val)) && isFinite(val);
           });
+        },
+
+        // 作為時間序列使用的數值欄位
+        getValueHeaders() {
+          return this.headers
+            .map(h => h.value)
+            .filter(key =>
+              this.isNumberField(key) &&
+              !key.startsWith('成長率_') &&
+              key !== '成長率2' &&
+              key !== '成長率1' &&
+              key !== 'Flag_連3日正成長' &&
+              key !== 'desc' &&
+              key !== this.dtext &&
+              key !== '0'
+            );
+        },
+
+        // 產業大折線圖：單一產業，內含多條線
+        updateChart() {
+          if (!this.selectedType) return;
+
+          const valueHeaders = this.getValueHeaders();
+          if (!valueHeaders.length) return;
+
+          const rows = this.jsonData.filter(
+            row => this.sanitizedTypelevel(row) === this.selectedType
+          );
+          if (!rows.length) return;
+
+          const ctx = document.getElementById('lineChart').getContext('2d');
+
+          if (this.chart) {
+            this.chart.destroy();
+          }
+
+          const datasets = rows.map(row => ({
+            label: row.Typelevel || row.title || this.selectedType,
+            realTitle: row.title || '',
+            rawRow: row,
+            data: valueHeaders.map(field => Number(row[field]) || 0),
+            borderWidth: 2,
+            fill: false,
+            tension: 0.2
+          }));
+
+          this.chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: valueHeaders,
+              datasets
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: {
+                mode: 'index',
+                intersect: false
+              },
+              scales: {
+                x: {
+                  display: true,
+                  title: { display: true, text: '欄位（通常是日期或期別）' }
+                },
+                y: {
+                  display: true,
+                  title: { display: true, text: '數值' }
+                }
+              },
+              plugins: {
+                legend: {
+                  display: true,
+                  position: 'bottom'
+                },
+                tooltip: {
+                  callbacks: {
+                    title: (items) => {
+                      const ds = items[0].dataset;
+                      return ds.realTitle || ds.label || '';
+                    },
+                    label: (ctx) => {
+                      const value = ctx.parsed.y;
+                      const field = ctx.label;
+                      return ` ${field}：${value}`;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        },
+
+        // ⭐ 點 title 開單筆折線圖
+        openRowChart(row) {
+          this.dialogRow = row;
+          this.dialog = true;
+          this.$nextTick(() => {
+            this.drawDialogChartForRow(row);
+          });
+        },
+
+        // Dialog 裡的單筆折線圖（依該 row 繪圖）
+        drawDialogChartForRow(row) {
+          const ctx = document.getElementById("dialogChart").getContext("2d");
+
+          if (this.dialogChart) {
+            this.dialogChart.destroy();
+          }
+
+          const valueHeaders = this.getValueHeaders();
+          const dataArr = valueHeaders.map(field => Number(row[field]) || 0);
+
+          this.dialogChart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: valueHeaders,
+              datasets: [{
+                label: row.title || row.Typelevel || '走勢圖',
+                data: dataArr,
+                borderWidth: 2,
+                fill: false,
+                tension: 0.2
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false }
+              }
+            }
+          });
         }
       },
+
       async created() {
+        // 取得 URL 參數 d
         let urlParams = new URLSearchParams(window.location.search);
-        let file = ''; // 預設檔案
         const d = urlParams.get('d');
-        this.d=d;
-        if(this.d==4)
-          this.dtext='title'
-        
-        file = `./Result/analyze_${d}.xlsx`;
-        
+        this.d = d;
+
+        if (this.d == 4) this.dtext = 'title';
+
+        // 這裡如果路徑不同請自行修改
+        const file = `./Result/analyze_${d}.xlsx`;
+
         const response = await fetch(file);
         const data = await response.arrayBuffer();
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        
-        // 建 headers
+
+        // headers
         this.headers = json[0].map(h => ({ text: h, value: h }));
         this.headers.push({ text: 'Flag_連3日正成長', value: 'Flag_連3日正成長' });
         this.headers.push({ text: '成長率2', value: '成長率2' });
         this.headers.push({ text: '成長率1', value: '成長率1' });
-        this.headers.push({ text: 'desc', value: 'desc' })
+        this.headers.push({ text: 'desc', value: 'desc' });
 
-        // 轉換資料為物件陣列
+        // rows
         this.jsonData = json.slice(1).map(row => {
           const rowData = {};
           this.headers.forEach((header, i) => {
@@ -159,43 +427,47 @@
           return rowData;
         });
 
-
+        // 計算成長率_*
         this.jsonData.forEach(row => {
           this.headers.forEach((header, i) => {
             const key = header.value;
             const prevHeader = this.headers[i - 1]?.value;
-            if (i > 0 && this.isNumberField(key) && this.isNumberField(prevHeader)) {
+            if (
+              i > 0 &&
+              this.isNumberField(key) &&
+              this.isNumberField(prevHeader)
+            ) {
               const current = parseFloat(row[key]);
               const prev = parseFloat(row[prevHeader]);
-              row['成長率_' + key] = (isFinite(current) && isFinite(prev) && prev !== 0)
-                ? ((current - prev) / Math.abs(prev)) * 100
-                : null;
+              row['成長率_' + key] =
+                (isFinite(current) && isFinite(prev) && prev !== 0)
+                  ? ((current - prev) / Math.abs(prev)) * 100
+                  : null;
             }
           });
         });
 
-        // 計算 Flag_連3日正成長
-
-
+        // Flag_連3日正成長 + 成長率2/1
         this.jsonData.forEach(row => {
-          // 取得數值欄位（排除非數字與特別欄位）
           const valueHeaders = this.headers
             .map(h => h.value)
-            .filter(key => this.isNumberField(key) && !key.startsWith('成長率_') 
-            && !key.startsWith('成長率2') 
-            && !key.startsWith('成長率1') 
-            && key !== 'Flag_連3日正成長');
+            .filter(key =>
+              this.isNumberField(key) &&
+              !key.startsWith('成長率_') &&
+              key !== '成長率2' &&
+              key !== '成長率1' &&
+              key !== 'Flag_連3日正成長'
+            );
 
           const endIndex = 0;
           const countary = 3;
           let last3 = [];
-          // 取最後三欄
+
           if (endIndex == 0) {
             last3 = valueHeaders.slice(endIndex - countary);
           } else {
             last3 = valueHeaders.slice(endIndex - countary, endIndex);
           }
-
 
           const g1 = row['成長率_' + last3[0]];
           const g2 = row['成長率_' + last3[1]];
@@ -205,18 +477,33 @@
           const v2 = row[last3[1]];
           const v3 = row[last3[2]];
 
-
           if (
-            [g1, g2, g3].every(g => g !== null && g > 0) &&
-            [v1, v2, v3].every(v => v !== null && parseFloat(v) > 0)
+            [g1, g2, g3].every(g => g !== null && g !== undefined && g > 0) &&
+            [v1, v2, v3].every(v => v !== null && v !== undefined && parseFloat(v) > 0)
           ) {
             row['Flag_連3日正成長'] = true;
           } else {
             row['Flag_連3日正成長'] = false;
           }
-          row['成長率2']=g2
-          row['成長率1']=g3
+          row['成長率2'] = g2;
+          row['成長率1'] = g3;
         });
+
+        // 產業下拉選單
+        const typeSet = new Set();
+        this.jsonData.forEach(row => {
+          const t = this.sanitizedTypelevel(row);
+          if (t) typeSet.add(t);
+        });
+        this.typeOptions = Array.from(typeSet);
+
+        // 預設選第一個產業並畫大圖
+        if (this.typeOptions.length > 0) {
+          this.selectedType = this.typeOptions[0];
+          this.$nextTick(() => {
+            this.updateChart();
+          });
+        }
       }
     });
   </script>

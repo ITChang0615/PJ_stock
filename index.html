@@ -201,28 +201,7 @@
                 },
 
                 filteredData() {
-
                     return this.jsonData
-                    /*
-                      return this.jsonData.filter(item => {
-                          return Object.keys(this.filters).every(key => {
-                              const filterValues = this.filters[key];
-  
-                              if (!filterValues || filterValues.length === 0) return true;
-                              const value = item[key] ? item[key].toString() : '';
-                              const a = this.isNumberField(key);
-  
-                              if (Array.isArray(filterValues) && a) {
-                                  //if (Array.isArray(filterValues)) {
-                                  const [min, max] = filterValues;
-                                  const numericValue = parseFloat(value);
-                                  return !isNaN(numericValue) && numericValue >= min && numericValue <= max;
-                              } else {
-                                  return filterValues.includes(value);
-                              }
-                          });
-                      });
-                      */
                 }
             },
             methods: {
@@ -355,6 +334,36 @@
                                     this.sync_data()
                                 }
 
+                                arr = [
+                                    '分類標籤', 'stock_number', '_quote', '成交股數', 'rt_量', 'now_price', 
+                                
+
+                                    'rt_price', 'diff_quote', '量倍率','LevelArea',
+                                    'MA_last_cross_date', 'MA_last_cross_%','Type1',
+
+                                    'highlight_date',  'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1', 
+                                    'highlight_enddate收盤價_1', 'highlight_收盤價', 'highlight_stardate收盤價_2', 'highlight_enddate收盤價_2', 'highlight_%', 'highlight_%_1', 'highlight_%_2', 
+                                    '日期', '量能', '價能', 'cond_entry',
+                                    'text_desc', '盤後量', '成交量', 
+                                    '%K', '%D', 'MA5_%', '均價_%', '均價long_%', '均價longlong_%',
+                                    'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong', 
+                                    'MACD_%', 'MACD', 'MACD-SL', 'MACD-SL_max', 'MACDSL_%', 'MACD_last_cross_date', 
+                                    '成交金額平均', '成交金額', 'Volume_MA_short', 'Volume_MA_long', 'Volume_MA_long50', 
+                                    //'Volume_Oscillator', 'volume_threshold',
+
+                                    'VPC_MACD', 'Volume_Price_Change', 'highlight_enddate', 'MA_last_cross_date收盤價',
+                                     
+                                     'stock_name', 'Type0',  'Type2', '貝他值', 
+                                    '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', 'Full_Summary', 'textdesc',
+                                    '淨值倍率', '殖利率', '每股營收(元)', '本益比', '營業毛利率', '營業利益率', '同業平均本益比', '總市值', '營收比重', 
+                                    'Type', 'Typelevel',
+                                    // '開盤價', '最高價', '最低價', '收盤價', '每股淨值(元)', 
+                                    'desc', 'flag_stat'
+                                ]
+
+                                this.headers = arr.map(header => ({ text: header, value: header }));
+
+
                                 this.headers.forEach(header => {
                                     if (this.isNumberField(header.value)) {
                                         this.$set(this.filters, header.value, [
@@ -402,7 +411,7 @@
                             }
                             //app.sortBy = ['總市值']
                             //app.sortDesc = [true]
-                             app.sortBy = ['MA_last_cross_date','highlight_date']
+                             app.sortBy = ['MA_last_cross_date','Type1']
                             app.sortDesc = [true,true]
                             
                 
