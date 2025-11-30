@@ -146,3 +146,11 @@ body {
   text-decoration: line-through; /* 刪除線 */
   font-style: italic;           /* 斜體 */
 }
+
+.row-up {
+  background-color: lavender !important;
+}
+
+.row-down {
+  /*background-color: gray !important;*/
+}
