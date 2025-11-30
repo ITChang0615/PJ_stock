@@ -67,7 +67,7 @@
                             app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)> parseFloat(x.MA_longlonglong) &&x.uptrend_有量!=null)
                         -->                                                        
                         <v-btn color="primary" @click=" 
-                                                        app.jsonData=app.jsonData_.filter(x=>x.uptrend_有量!=null &&x.成交股數<1000)
+                                                        app.jsonData=app.jsonData_.filter(x=>x.uptrend_有量!=null &&x.量能max<15)
                                                         app.sortBy =   ['LevelArea','量增幅'];
                                                         app.sortDesc = [true,true]
                                                         ">D tag</v-btn>
@@ -1394,19 +1394,12 @@
 
                 memo() {
 
-                    //app.jsonData=app.jsonData.filter(x=>x['營業收入-去年同月增減(%)']>0 && x['營業收入-上月比較增減(%)']>0  && x['累計營業收入-前期比較增減(%)']>0  )
-
                     //app.jsonData=app.jsonData.filter(x =>  x.desc.includes('記憶體'))
-
-                    /*
                     
+                    /*                    
                     app.sync_realtime()
                     app.sync_data()
-
                     */
-
-                    // 量太低不要
-                    //app.jsonData=app.jsonData_.filter(x=>parseInt(x['量能avg'])>5)
 
                     // check
                     // app.jsonData_.filter(x=>parseInt(x['highlight_date'])=='0').map(x=>parseInt(x['總價差'])).sort(function(a, b) { return - a + b;})
@@ -1416,16 +1409,7 @@
                     var alist=
                     ["2059","2308","2345","2363","2368","2383","2476","2706","2727","2751","2755","2762","2947","3017","3167","3213","3260","3305","3413","4438","4770","4772","4953","5269","5284","5289","5312","6016","6199","6523","6596","6617","6640","6669","6739","6781","6805","6830","6881","6895","6913","6922","6951","6952","7708","7722","7734","7751","8021","8028","8059","8099","8431"]
                     app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
-                    //別人選的
-
-                    var alist= [
-                        "2344", "2634", "5371", "3529", "8358", "3703", "3563", "3704", "3441", "5309",
-                        "1608", "2454", "8033", "8028", "6223", "8046", "6182", "4966", "2481", "3443",
-                        "3211", "2208", "3305", "5341", "1717", "5536", "5439", "3059", "2231", "3711",
-                        "3149", "3260", "6143"
-                        ];
-
-                    app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
+ 
 
                     */
                     /*
@@ -1451,31 +1435,16 @@
                     */
 
 
-                    /*
-                    【d=c】
-                        下探低點，但有止穩現象 ==>  app.jsonData=app.jsonData_.filter(x=>x.madesc.includes('(80),(20),(50),(5),現價'))
-                        已發動過一次，目前回檔==>   
-                                                    -- (20),(50),(5),現價,(80)
-                                                    -- (20),現價,(5),(50),(80)
 
-                                    app.jsonData=app.jsonData_.filter(x=>x.madesc.includes('(80)<'))
-                                    app.sortBy = ['MACD_minus', ]
-                                    app.sortDesc = [false, ]
-
-                        app.jsonData=app.jsonData_.filter(x=>x['均價longlong_%']>0)
-                        
-                    【d=d】
-                                    app.sortBy = ['總價差', ]
-                                    app.sortDesc = [true, ]
-                    【d=e】
-                        找前幾名，有量支撐
-                          app.sortBy = ['當日漲跌', ]
-                          app.sortDesc = [true, ]
-
-                          app.sortBy = ['總價差', ]
-                          app.sortDesc = [true, ]
                     
+                    /*
+                    | 條件組合               | 市場意義           | 要找什麼            | 要注意什麼                     | 重點                         
+                    
+                    | 均價 < 0  +  MACD > 0  | 低檔轉強 / 潛力股  | 放量、站上 5MA      | 量弱假轉強、上影線              | 是否有「量帶價」啟動上漲      
+                    | 均價 > 0  +  MACD < 0  | 高檔轉弱 / 風險區  | 放量出貨、跌破均線   | 放量黑K、MACD 柱體放大         | 是否進入出貨 or 健康拉回     
                     */
+
+                    
                 }
             }
         });
