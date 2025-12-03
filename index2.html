@@ -883,7 +883,8 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
 
-                                arr = [...baseFields, 'flag_stat',
+                                arr = [...baseFields, 
+                                    //'flag_stat','cond_entry', 
 
                                     'text_desc',
                                     'MACD-SL', 'MACD', '成交股數', '成交金額平均', '成交金額',
@@ -894,12 +895,13 @@
                                     //'當日漲跌', 'now_price',
                                     //'Volume_Oscillator', 'Volume_MA_short', 'Volume_MA_long', 'Volume_MA_long50','VPC_MA_%',
 
-                                    //'highlight_enddate_2', 'highlight_stardate_2', 'highlight_enddate收盤價_2', 'highlight_stardate收盤價_2',
+                                    'highlight_enddate_2', 'highlight_stardate_2', 'highlight_enddate收盤價_2', 'highlight_stardate收盤價_2',
                                     'highlight_enddate_1', 'highlight_stardate_1', 'highlight_enddate收盤價_1', 'highlight_stardate收盤價_1',
                                     'macdpercent',
-                                    'cond_entry', 'MACD_minus',
+                                    
+                                    'MACD_minus',
 
-                                    //'highlight_%_2', 
+                                    'highlight_%_2', 
                                     'highlight_%_1', 'highlight_%', 'highlight_收盤價',
                                       
                                     'MACD_last_cross_date',
@@ -1464,4 +1466,7 @@
                 }
             }
         });
-    </
+    </script>
+</body>
+
+</html>

@@ -824,6 +824,12 @@
 					& parseFloat(x.量能max)>10)
 					app.sortBy = ['營業毛利率','均價longlong_%'];
                     app.sortDesc = [true,true]
+
+                    app.sortBy = ['highlight_date','量'];
+                    app.sortDesc = [true,true]
+
+                    //-----------------
+                    app.jsonData=app.jsonData_.filter(x=>x['highlight_stardate收盤價_2']< x['收盤價'])
                 }
             },
         });
