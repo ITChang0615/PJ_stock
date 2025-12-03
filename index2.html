@@ -65,6 +65,8 @@
                                                         ">C tag</v-btn>
                         <!--
                             app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)> parseFloat(x.MA_longlonglong) &&x.uptrend_有量!=null)
+                            app.sortBy =   ['uptrend_有量','量增幅'];
+                            app.sortDesc = [true,true]
                         -->                                                        
                         <v-btn color="primary" @click=" 
                                                         app.jsonData=app.jsonData_.filter(x=>x.uptrend_有量!=null &&x.量能max<15)
@@ -822,7 +824,7 @@
                     const setdate = urlParams.get('setdate');
 
                     if (d) {
-                        const allowedTypes = ['ss', 's', 'a', 'sbk', 'aabk', 'aa', 'b', 'c', 'd', 'e', 'f', 'h', 'v']; // 可擴充
+                        const allowedTypes = ['ss', 's', 'a', 'sbk', 'aabk', 'aa', 'b', 'c', 'd', 'e', 'f', 'h', 'v','x','y']; // 可擴充
                         if (allowedTypes.includes(d)) {
                             file = `./Result/checksun_${d}/${urlParams.get('date')}.xlsx`;
                             this.date_ = urlParams.get('date');
@@ -845,6 +847,7 @@
                     if (setdate) {
                         this.set_date = setdate
                     }
+                    console.log(file)
                     await fetch(file)
                         .then(response => response.arrayBuffer())
                         .then(data => {
@@ -867,7 +870,9 @@
 
                                 var dates = [...new Set(this.jsonData.map(x => x.日期))].sort()
 
-                                const baseFields = ['desc', '營業毛利率', '營業利益率', '淨值倍率', '殖利率', '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', '總市值', '成交量', 'Type1'];// 'stock_number'
+                                const baseFields = ['desc', '營業毛利率', '營業利益率', '淨值倍率', '殖利率', 
+                                                                //'營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', 
+                                                                '總市值', '成交量', 'Type1'];// 'stock_number'
                                 //(價)
                                 const trendFields = ['MACD_%', '均價long_%', '均價_%', 'MA5_%', 'highlight_date',];//'價_起始日期',
                                 const dateFields = ['量價差天',];
@@ -903,7 +908,7 @@
                                     'highlight_date',
                                     'desctxt',
 
-                                    '量能差', '量能max',
+                                    '量能差', '量能max','量',
                                     'type', '總價差',
                                     '分類標籤', 'LevelArea',
                                     '均價longlong_%', '均價long_%', '均價_%', 'MA5_%', '當日漲跌',
@@ -1154,7 +1159,7 @@
                                         dummydataItem['長均交叉日'] = datalist_last_date['MA_last_cross_date']
                                         dummydataItem['MA_last_cross_%'] = datalist_last_date['MA_last_cross_%']
                                         dummydataItem['highlight_收盤價'] = datalist_last_date['highlight_收盤價']
-
+                                        dummydataItem.收盤價 = datalist_last_date?.收盤價;
                                         dummydataItem.text_desc = datalist_last_date?.text_desc;
 
                                         dummydataItem.Volume_MA_short = datalist_last_date?.Volume_MA_short;
@@ -1199,9 +1204,13 @@
                                         dummydataItem['累計營業收入-前期比較增減(%)'] = parseFloat(datalist_last_date['累計營業收入-前期比較增減(%)']).toFixed(1)
                                         dummydataItem['累計營業收入-前期比較增減(%)'] = parseFloat(datalist_last_date['累計營業收入-前期比較增減(%)']).toFixed(1)
                                         dummydataItem.營業毛利率 = datalist_last_date?.營業毛利率.replace('%','');
+                                        dummydataItem.營業利益率 = datalist_last_date?.營業利益率.replace('%','');
 
                                         dummydataItem.量增幅 = datalist_last_date?.量增幅;
                                         dummydataItem.Volume_Price_Change = datalist_last_date?.Volume_Price_Change;
+                                        
+                                        
+                                        dummydataItem.量 = parseFloat(dummydataItem.Volume_MA_long/dummydataItem.成交金額平均).toFixed(1)
 
                                         /////////////////////////////////////////////////////////////////
 
@@ -1455,7 +1464,4 @@
                 }
             }
         });
-    </script>
-</body>
-
-</html>
+    </
