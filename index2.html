@@ -67,7 +67,7 @@
                             app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)> parseFloat(x.MA_longlonglong) &&x.uptrend_有量!=null)
                             app.sortBy =   ['uptrend_有量','量增幅'];
                             app.sortDesc = [true,true]
-                        -->                                                        
+                        -->
                         <v-btn color="primary" @click=" 
                                                         app.jsonData=app.jsonData_.filter(x=>x.uptrend_有量!=null &&x.量能max<15)
                                                         app.sortBy =   ['LevelArea','量增幅'];
@@ -92,8 +92,7 @@
 
                 <v-data-table disable-pagination fixed-header height="90vh" hide-default-footer :headers="headers"
                     :items="filteredData" :items-per-page="-1" item-key="id" :sort-by.sync="sortBy"
-                    :sort-desc.sync="sortDesc"  style="white-space: nowrap;  "
-                     :item-class="item => (  d=='c' &&  item['均價longlong_%'] > 0  && item['Flag_macd']? 'row-up' : 
+                    :sort-desc.sync="sortDesc" style="white-space: nowrap;  " :item-class="item => (  d=='c' &&  item['均價longlong_%'] > 0  && item['Flag_macd']? 'row-up' : 
 
                                             'row-down')">
 
@@ -400,6 +399,14 @@
                             {{ item.總價差 }}
                         </v-btn>
                     </template>
+                    <template v-slot:item.量="{ item }">
+
+                        {{ item.量 }}<br />
+                        
+                        {{ parseInt( item.Volume_MA_long )}}<br />
+                        {{ parseInt( item.成交金額平均)}}<br />
+                       
+                    </template>
                     <template v-slot:item.type="{ item }">
 
                         <v-btn text @click="openDialog(item)">
@@ -409,6 +416,8 @@
                                 {{item.Typelevel}}
                             </span>
                         </v-btn>
+
+
                         <br />
                         <v-btn text @click="openchart(item)">
                             chart
@@ -819,12 +828,12 @@
                     let urlParams = new URLSearchParams(window.location.search);
                     let file = ''; // 預設檔案
                     const d = urlParams.get('d');
-                    this.d=d
+                    this.d = d
                     const type = urlParams.get('type');
                     const setdate = urlParams.get('setdate');
 
                     if (d) {
-                        const allowedTypes = ['ss', 's', 'a', 'sbk', 'aabk', 'aa', 'b', 'c', 'd', 'e', 'f', 'h', 'v','x','y']; // 可擴充
+                        const allowedTypes = ['ss', 's', 'a', 'sbk', 'aabk', 'aa', 'b', 'c', 'd', 'e', 'f', 'h', 'v', 'x', 'y']; // 可擴充
                         if (allowedTypes.includes(d)) {
                             file = `./Result/checksun_${d}/${urlParams.get('date')}.xlsx`;
                             this.date_ = urlParams.get('date');
@@ -870,9 +879,9 @@
 
                                 var dates = [...new Set(this.jsonData.map(x => x.日期))].sort()
 
-                                const baseFields = ['desc', '營業毛利率', '營業利益率', '淨值倍率', '殖利率', 
-                                                                //'營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', 
-                                                                '總市值', '成交量', 'Type1'];// 'stock_number'
+                                const baseFields = ['desc', '營業毛利率', '營業利益率', '淨值倍率', '殖利率',
+                                    //'營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)', 
+                                    '總市值', '成交量', 'Type1'];// 'stock_number'
                                 //(價)
                                 const trendFields = ['MACD_%', '均價long_%', '均價_%', 'MA5_%', 'highlight_date',];//'價_起始日期',
                                 const dateFields = ['量價差天',];
@@ -883,7 +892,7 @@
 
                                 var arr = [...baseFields, ...trendFields, ...dateFields, ...miscFields, ...volumeFields, , 'Flag',];
 
-                                arr = [...baseFields, 
+                                arr = [...baseFields,
                                     //'flag_stat','cond_entry', 
 
                                     'text_desc',
@@ -898,19 +907,19 @@
                                     'highlight_enddate_2', 'highlight_stardate_2', 'highlight_enddate收盤價_2', 'highlight_stardate收盤價_2',
                                     'highlight_enddate_1', 'highlight_stardate_1', 'highlight_enddate收盤價_1', 'highlight_stardate收盤價_1',
                                     'macdpercent',
-                                    
+
                                     'MACD_minus',
 
-                                    'highlight_%_2', 
+                                    'highlight_%_2',
                                     'highlight_%_1', 'highlight_%', 'highlight_收盤價',
-                                      
+
                                     'MACD_last_cross_date',
                                     'MA_last_cross_%',
                                     '長均交叉日',//'MA_last_cross_date',
                                     'highlight_date',
                                     'desctxt',
 
-                                    '量能差', '量能max','量',
+                                    '量能差', '量能max', '量',
                                     'type', '總價差',
                                     '分類標籤', 'LevelArea',
                                     '均價longlong_%', '均價long_%', '均價_%', 'MA5_%', '當日漲跌',
@@ -927,7 +936,7 @@
 
 
                                 //'uptrend_d','uptrend_c','uptrend_b',
-                                arr.push('uptrend_'+this.d)
+                                arr.push('uptrend_' + this.d)
                                 //if (this.sync) {
                                 if (true) {
                                     arr.push('rt_量')
@@ -1085,8 +1094,8 @@
                                                 let cond18 = (day_0["分類標籤"] != 'e') && (day_0["分類標籤"] != day_1["分類標籤"])
                                                 let cond19 = (parseFloat(day_0.量能) / parseFloat(day_0.量能avg)).toFixed(0) > (parseFloat(day_1.量能) / parseFloat(day_1.量能avg)).toFixed(0)
 
-                                                let cond20 = day_2["MACD_minus"] <= day_1["MACD_minus"] 
-                                                    && day_1["MACD_minus"] <= day_0["MACD_minus"]  &&day_1["MACD_minus"] >= 0
+                                                let cond20 = day_2["MACD_minus"] <= day_1["MACD_minus"]
+                                                    && day_1["MACD_minus"] <= day_0["MACD_minus"] && day_1["MACD_minus"] >= 0
 
 
                                                 //'成交金額平均','成交金額',
@@ -1117,7 +1126,7 @@
                                                 ];
                                                 //for MACD 
                                                 let cond_20 = parseFloat(day_1["MACD_minus"]) < parseFloat(day_0["MACD_minus"])
-                                                    //&& parseFloat(day_1["MACD_minus"]) >= 0
+                                                //&& parseFloat(day_1["MACD_minus"]) >= 0
                                                 let condition2Groups = [
                                                     [cond_20]
 
@@ -1205,14 +1214,14 @@
                                         dummydataItem['營業收入-去年同月增減(%)'] = parseFloat(datalist_last_date['營業收入-去年同月增減(%)']).toFixed(1)
                                         dummydataItem['累計營業收入-前期比較增減(%)'] = parseFloat(datalist_last_date['累計營業收入-前期比較增減(%)']).toFixed(1)
                                         dummydataItem['累計營業收入-前期比較增減(%)'] = parseFloat(datalist_last_date['累計營業收入-前期比較增減(%)']).toFixed(1)
-                                        dummydataItem.營業毛利率 = datalist_last_date?.營業毛利率.replace('%','');
-                                        dummydataItem.營業利益率 = datalist_last_date?.營業利益率.replace('%','');
+                                        dummydataItem.營業毛利率 = datalist_last_date?.營業毛利率.replace('%', '');
+                                        dummydataItem.營業利益率 = datalist_last_date?.營業利益率.replace('%', '');
 
                                         dummydataItem.量增幅 = datalist_last_date?.量增幅;
                                         dummydataItem.Volume_Price_Change = datalist_last_date?.Volume_Price_Change;
-                                        
-                                        
-                                        dummydataItem.量 = parseFloat(dummydataItem.Volume_MA_long/dummydataItem.成交金額平均).toFixed(1)
+
+
+                                        dummydataItem.量 = parseFloat(dummydataItem.Volume_MA_long / dummydataItem.成交金額平均).toFixed(1)
 
                                         /////////////////////////////////////////////////////////////////
 
@@ -1413,7 +1422,7 @@
                 memo() {
 
                     //app.jsonData=app.jsonData.filter(x =>  x.desc.includes('記憶體'))
-                    
+
                     /*                    
                     app.sync_realtime()
                     app.sync_data()
@@ -1454,7 +1463,7 @@
 
 
 
-                    
+
                     /*
                     | 條件組合               | 市場意義           | 要找什麼            | 要注意什麼                     | 重點                         
                     
@@ -1462,7 +1471,7 @@
                     | 均價 > 0  +  MACD < 0  | 高檔轉弱 / 風險區  | 放量出貨、跌破均線   | 放量黑K、MACD 柱體放大         | 是否進入出貨 or 健康拉回     
                     */
 
-                    
+
                 }
             }
         });
