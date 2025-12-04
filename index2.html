@@ -1420,25 +1420,7 @@
                 },
 
                 memo() {
-
-                    //app.jsonData=app.jsonData.filter(x =>  x.desc.includes('記憶體'))
-
-                    /*                    
-                    app.sync_realtime()
-                    app.sync_data()
-                    */
-
-                    // check
-                    // app.jsonData_.filter(x=>parseInt(x['highlight_date'])=='0').map(x=>parseInt(x['總價差'])).sort(function(a, b) { return - a + b;})
-
-                    /*
-                    //營收創新
-                    var alist=
-                    ["2059","2308","2345","2363","2368","2383","2476","2706","2727","2751","2755","2762","2947","3017","3167","3213","3260","3305","3413","4438","4770","4772","4953","5269","5284","5289","5312","6016","6199","6523","6596","6617","6640","6669","6739","6781","6805","6830","6881","6895","6913","6922","6951","6952","7708","7722","7734","7751","8021","8028","8059","8099","8431"]
-                    app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
- 
-
-                    */
+                   
                     /*
                     app.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價longlong_%']<0).length)>1 && (x.datalist.filter(y=>y['均價longlong_%']>0).length)>1 && x['均價longlong_%']>0)
                         .map(x=>(
@@ -1460,17 +1442,6 @@
                     app.jsonData=app.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價longlong_%']<0).length)>1 && (x.datalist.filter(y=>y['均價longlong_%']>0).length)>1 && x['均價longlong_%']>0)
                          
                     */
-
-
-
-
-                    /*
-                    | 條件組合               | 市場意義           | 要找什麼            | 要注意什麼                     | 重點                         
-                    
-                    | 均價 < 0  +  MACD > 0  | 低檔轉強 / 潛力股  | 放量、站上 5MA      | 量弱假轉強、上影線              | 是否有「量帶價」啟動上漲      
-                    | 均價 > 0  +  MACD < 0  | 高檔轉弱 / 風險區  | 放量出貨、跌破均線   | 放量黑K、MACD 柱體放大         | 是否進入出貨 or 健康拉回     
-                    */
-
 
                 }
             }
