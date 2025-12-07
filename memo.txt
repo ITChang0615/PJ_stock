@@ -7,3 +7,5 @@
  # 股票圖很醜很雜
 
 
+# 各產業
+	https://ic.tpex.org.tw/
