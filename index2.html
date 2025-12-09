@@ -1288,7 +1288,15 @@
                                         dummydataItem.uptrend_d1 = datalist.filter(x => x.分類標籤 == 'd1').map(x => x.日期).sort()[0]
 
                                         //
-                                        dummydataItem.frist_uptrend = datalist.filter(x => x.Flag_三階段).map(x => x.日期).sort()[0]
+                                        //dummydataItem.frist_uptrend = datalist.filter(x => x.Flag_三階段).map(x => x.日期).sort()[0]
+                                        dummydataItem.frist_uptrend = datalist.filter(item=>true
+                                                            //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
+                                                            &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long']) *0.8
+                                                            &&  parseFloat( item['Volume_MA_long50'])> parseFloat(item['成交金額平均']) 
+                                                            &&  parseFloat( item['MACD'])> parseFloat(item['MACD-SL']) 
+                                                            &&  parseFloat(item['now_price'])> parseFloat(item['MA_longlong']*1.05) 
+                                                            &&  parseFloat( item['成交股數'])>1000 
+                                                                                     ).map(x => x.日期).sort()[0]
                                         dummydataItem.frist_uptrendcheck = datalist.filter(x => x.日期 > dummydataItem.frist_uptrend).map(x => parseInt(x._quote)).slice().reduce((acc, current) => acc + current, 0);
                                     }
                                     return dummydataItem;

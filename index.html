@@ -44,6 +44,8 @@
                                                       
                         <v-btn color="primary" @click="setCache()">set</v-btn>
                         <v-btn color="primary" @click="getCache()">get</v-btn>
+                        <v-btn color="primary" @click="setCache2()">set2</v-btn>
+                        <v-btn color="primary" @click="getCache2()">get2</v-btn>
                     </v-col>
                 </v-row>
 
@@ -335,15 +337,15 @@
                                 }
 
                                 arr = [
-                                    '分類標籤', 'stock_number', '_quote', '成交股數', 'rt_量', 'now_price', 
+                                    '分類標籤', 'stock_number', '_quote', '成交股數', 'rt_量', 'now_price', 'LevelArea', '量能',
                                 
 
-                                    'rt_price', 'diff_quote', '量倍率','LevelArea', 'MACD_last_cross_date', 
+                                    'rt_price', 'diff_quote', '量倍率','MACD_last_cross_date', 
                                     'MA_last_cross_date', 'MA_last_cross_%','Type1',
 
                                     'highlight_date',  'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1', 
                                     'highlight_enddate收盤價_1', 'highlight_收盤價', 'highlight_stardate收盤價_2', 'highlight_enddate收盤價_2', 'highlight_%', 'highlight_%_1', 'highlight_%_2', 
-                                    '日期', '量能', '價能', 'cond_entry',
+                                    '日期',  '價能', 'cond_entry',
                                     'text_desc', '盤後量', '成交量', 
                                     '%K', '%D', 'MA5_%', '均價_%', '均價long_%', '均價longlong_%',
                                     'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong', 
@@ -517,10 +519,41 @@
                     //app.jsonData = app.jsonData.filter(y => (cachenew.find(x => x.value == y.stock_number)?.key < cache.find(x => x.value == y.stock_number)?.key))
                     app.jsonData.map(y => y.分類標籤 = (-cachenew.find(x => x.value == y.stock_number)?.key + cache.find(x => x.value == y.stock_number)?.key))
 
-
-
+                },     
+                setCache2() {
+                     localStorage.setItem('cache2',JSON.stringify( 
+                            app.jsonData_.filter(item=>true
+                                        //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
+                                        &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long']) 
+                                        &&  parseFloat( item['Volume_MA_long50'])> parseFloat(item['成交金額平均']) *0.8
+                                        &&  parseFloat( item['MACD'])> parseFloat(item['MACD-SL']) 
+                                        &&  parseFloat(item['now_price'])> parseFloat(item['MA_longlong']*1.05) 
+                                        &&  parseFloat( item['成交股數'])>1000 
+                                        ).map(x=>x.stock_number)
+                                    ))
+                    app.jsonData=	app.jsonData_.filter(item=>true
+                                        //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
+                                        &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long']) 
+                                        &&  parseFloat( item['Volume_MA_long50'])> parseFloat(item['成交金額平均']) *0.8
+                                        &&  parseFloat( item['MACD'])> parseFloat(item['MACD-SL']) 
+                                        &&  parseFloat(item['now_price'])> parseFloat(item['MA_longlong']*1.05) 
+                                        &&  parseFloat( item['成交股數'])>1000 
+                                        )
 
                 },
+                getCache2() {
+                      var a = JSON.parse(localStorage.getItem('cache2') || '[]')
+                        var b =	app.jsonData_.filter(item=>true
+                                        //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
+                                        &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long']) 
+                                        &&  parseFloat( item['Volume_MA_long50'])> parseFloat(item['成交金額平均']) *0.8
+                                        &&  parseFloat( item['MACD'])> parseFloat(item['MACD-SL']) 
+                                        &&  parseFloat(item['now_price'])> parseFloat(item['MA_longlong']*1.05) 
+                                        &&  parseFloat( item['成交股數'])>1000 
+                                        ).map(x=>x.stock_number)
+                        app.jsonData=app.jsonData_.filter(x=> b.filter(item => a.includes(item)).includes(x.stock_number))
+
+                }, 
                 memo() {
                     // app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_1)&& parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_2)&&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_2) &&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_1)  &&x.highlight_stardate收盤價_1!=0 )
 
