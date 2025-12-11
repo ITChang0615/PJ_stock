@@ -45,12 +45,12 @@
                           <v-col col="4">
                             
 
-
+<!--'LevelArea',-->
                         <v-btn color="primary" @click="
-                            app.jsonData.map(item=>item.txt =(parseFloat( item['Volume_MA_long50'])/ parseFloat(item['成交金額平均'])).toFixed(2)  )    
-                            app.jsonData=app.jsonData.filter(item=>(parseFloat(item['diff_quote'])>3&&  parseFloat( item['成交股數'])>1000  ))
-                                         app.sortBy =   ['LevelArea','Type1','txt', ];
-                    app.sortDesc = [true,true,true]
+                                    app.jsonData.map(item=>item.txt =(parseFloat( item['Volume_MA_long50'])/ parseFloat(item['成交金額平均'])).toFixed(2)  )    
+                                    app.jsonData=app.jsonData.filter(item=>(parseFloat(item['diff_quote'])>3&&  parseFloat( item['成交股數'])>1000  ))
+                                    app.sortBy =   ['Type1','txt', ];
+                                    app.sortDesc = [true,true]
                         ">驗收</v-btn>
                         <v-btn color="primary" @click="filter()">預測</v-btn>
 
@@ -348,10 +348,10 @@
                                 }
 
                                 arr = [
-                                    'txt','分類標籤', 'stock_number', '_quote', '成交股數', 'rt_量', 'now_price', 'LevelArea', '量能',
+                                    'txt','分類標籤', 'stock_number', '_quote', '成交股數', 'rt_量', 'now_price',  'rt_price','LevelArea', '量能',
                                 
 
-                                    'rt_price', 'diff_quote', '量倍率','MACD_last_cross_date', 
+                                    'diff_quote', '量倍率','MACD_last_cross_date', 
                                     'MA_last_cross_date', 'MA_last_cross_%','Type1',
 
                                     'highlight_date',  'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1', 
