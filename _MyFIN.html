@@ -617,7 +617,7 @@
 					    { Desc: '購物/娛樂', value: null },
                         { Desc: '生活-LPP', value: 5000 },
                         { Desc: '運動', value: 5600 },
-                        { Desc: '生活', value: 909 },
+                        { Desc: '生活', value: 1057 },
 						{ Desc: '固-3C影音', value: 2855 },
                         { Desc: '固-車', value: null },
                         { Desc: '固-阿罵', value: null },
@@ -650,35 +650,38 @@
                 },
                 set_mydata() {
                     this.mydata = [
-                        { "Desc": "invest_input", "N_1":36240 ,"N_2": null },//買進  36240   36990
-                        { "Desc": "invest_output", "N_1": null, "N_2": null },//賣出
-                        { "Desc": "income_loss", "N_1": 561, "N_2": null },//損益   561
+                        { "Desc": "invest_input", "N_1":36540 ,"N_2": 67100 },//買進   36540
+                        { "Desc": "invest_output", "N_1": null, "N_2": 63350 },//賣出
+                        { "Desc": "income_loss", "N_1": null, "N_2": 1360 },//損益   
                         { "Desc": "股息", "N_1": null, "N_2": null },//股息
-                        { "Desc": "現金", "today": 1100 },
-                        { "Desc": "信用卡", "today": -33845},
+                        { "Desc": "現金", "today": 600 },
+                        { "Desc": "信用卡", "today": -33993},
                         { "Desc": "銀行", "today": 107474},
                         { "Desc": "預備金", "today": 340000 },
-                        { "Desc": "日幣", "today": 29883 },
-                        { "Desc": "投入", "today": 	3483154 },
-                        { "Desc": "可下單現金", "today": 718880 },
+                        { "Desc": "日幣", "today": 29683 }, // 149180    149209
+                        { "Desc": "投入", "today": 	3520024 },
+                        { "Desc": "可下單現金", "today": 682571 },
                         { "Desc": "Total", "today": null }
                     ]
                 },
                 set_stockdata() {
                     this.stockdata = [
-                        { "Type2": "上市", "name": null, "number": '0050', "hold": 1000, "now": 64.05, "buyin": 62.11, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
-                        { "Type2": "上市", "name": null, "number": '0052', "hold": 1000, "now": 37.02, "buyin": 37.2, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
-                        { "Type2": "上市", "name": null, "number": '006208', "hold": 0, "now": 146.50, "buyin": 142.55, "profit_stock": null, "profit": 2.07, "frequency": 2, "month": "1,7" },
-                        { "Type2": "上市", "name": null, "number": '0056', "hold": 0, "now": 36.59, "buyin": 36.04, "profit_stock": null, "profit": 0.866, "frequency": 4, "month": "1,4,7,10" },
-                        { "Type2": "上市", "name": null, "number": '00713', "hold": 0, "now": 50.4, "buyin": 50.4, "profit_stock": null, "profit": 0.78, "frequency": 4, "month": "3,6,9,12" },
-                        { "Type2": "上市", "name": null, "number": '00878', "hold": 0, "now": 21.25, "buyin": 20.87, "profit_stock": null, "profit": 0.4, "frequency": 4, "month": "2,5,8,11" },
-                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 48000, "now": 22.65, "buyin": 27.19, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
-                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 25.95, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
-                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 26000, "now": 21.05,  "buyin": 26.31, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
-						{ "Type2": "上市", "name": "興富發", "number": 2542, "hold": 13000, "now": 37.65, "buyin": 38.99, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
-                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 13.85, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
-                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 300, "now": 332, "buyin": 350.87, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
-                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 1000, "now": 191, "buyin": 206.29, "profit_stock": null, "profit": 4.9, "frequency": 1, "month": "" },
+                       // { "Type2": "上市", "name": null, "number": '0050', "hold": 1000, "now": 63.4, "buyin": 62.11, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+                        { "Type2": "上市", "name": null, "number": '0052', "hold": 2000, "now": 36.64, "buyin": 36.98, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+						{ "Type2": "上市", "name": "台泥", "number": 1101, "hold": 48000, "now": 22.35, "buyin": 27.19, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
+                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 25.7, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
+                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 26000, "now": 21.2,  "buyin": 26.31, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
+						{ "Type2": "上市", "name": "興富發", "number": 2542, "hold": 13000, "now": 37.35, "buyin": 38.99, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
+                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 13.75, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 500, "now": 337, "buyin": 345.5, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
+						
+                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 1000, "now": 187, "buyin": 206.29, "profit_stock": null, "profit": 4.9, "frequency": 1, "month": "" },
+						
+                        //{ "Type2": "上市", "name": null, "number": '006208', "hold": 0, "now": 145.25, "buyin": 142.55, "profit_stock": null, "profit": 2.07, "frequency": 2, "month": "1,7" },
+                        //{ "Type2": "上市", "name": null, "number": '0056', "hold": 0, "now": 36.49, "buyin": 36.04, "profit_stock": null, "profit": 0.866, "frequency": 4, "month": "1,4,7,10" },
+                        //{ "Type2": "上市", "name": null, "number": '00713', "hold": 0, "now": 50.9, "buyin": 50.4, "profit_stock": null, "profit": 0.78, "frequency": 4, "month": "3,6,9,12" },
+                        //{ "Type2": "上市", "name": null, "number": '00878', "hold": 0, "now": 21.24, "buyin": 20.87, "profit_stock": null, "profit": 0.4, "frequency": 4, "month": "2,5,8,11" },
+
                     ]
 
                     this.stock_headers_profit.push(...this.getYM().map(x => ({ text: x, value: x })));
