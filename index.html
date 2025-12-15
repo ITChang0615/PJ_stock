@@ -53,6 +53,7 @@
                                     && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
                                     && parseFloat(x['Volume_MA_long']) > parseFloat(x['Volume_MA_long50'])
                                     && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
+                                    && parseFloat(x['MACD_hist_diff']) > 0
                                     )     
                         ">近期</v-btn>
 
@@ -424,7 +425,14 @@ app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date=='2025/12/11'
 
                                     '量倍率', 'MACD_last_cross_date',
                                     'MA_last_cross_date', 'MA_last_cross_%', 'Type1',
+
+                                    //'MA_death_cross_d',  'MA_death_cross_d2', 'MA_death_cross_d收盤價','MA_death_cross_d2收盤價',
+
+                                    //'MACD_death_cross_d', 'MACD_death_cross_d2', 
+                                    'MACD_death_cross_d收盤價','MACD_death_cross_d2收盤價',
+                                      
                                     'MACD_hist_diff',
+
                                     'highlight_date', 'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1',
                                     'highlight_enddate收盤價_1', 'highlight_收盤價', 'highlight_stardate收盤價_2', 'highlight_enddate收盤價_2', 'highlight_%', 'highlight_%_1', 'highlight_%_2',
                                     '日期', '價能', 'cond_entry',
@@ -445,9 +453,10 @@ app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date=='2025/12/11'
                                     'desc', 'flag_stat',
 
 
-                                    'MA_last_cross_d2', 'MA_last_cross_d2收盤價', 'MA_death_cross',
-                                    'MA_death_cross_d', 'MA_death_cross_d收盤價', 'MA_death_cross_d2',
-                                    'MA_death_cross_d2收盤價',
+                                    'MA_last_cross_d2', 'MA_last_cross_d2收盤價', 
+                                    'MA_death_cross',
+                                    'MA_death_cross_d', 'MA_death_cross_d收盤價', 'MA_death_cross_d2','MA_death_cross_d2收盤價',
+                                    //'MACD_death_cross_d', 'MACD_death_cross_d收盤價','MACD_death_cross_d2', 'MACD_death_cross_d2收盤價',
                                 ]
 
                                 this.headers = arr.map(header => ({ text: header, value: header }));
