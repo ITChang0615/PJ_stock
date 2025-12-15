@@ -861,10 +861,9 @@
 
                 // Bose QC Ultra 
 
-                app.jsonData.filter(item =>  parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x=>x.MACD_last_cross_date='')
+                app.jsonData.filter(item => parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x=>x.MACD_last_cross_date='')
 
-                app.sortBy =[ '分類標籤','MACD_hist_diff','txt'];
-                app.sortDesc = [true,true,true]
+                
                 }
             },
         });
