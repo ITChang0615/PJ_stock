@@ -813,19 +813,7 @@
                     app.jsonData = app.jsonData.filter(item => parseFloat(item['diff_quote']) > 8)
                     //---
 
-                    app.jsonData = app.jsonData_
-                    app.jsonData.filter(item => parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x => x.MACD_last_cross_date = '')
-                    app.jsonData.filter(item => parseFloat(item['均價long_%']) < 0).map(x => x.MA_last_cross_date = '')
-                    app.jsonData = app.jsonData.filter(item => true
-                        && item['MACD_last_cross_date'] != ''
-                        && item['MA_last_cross_date'] != ''
-                        && parseFloat(item['成交股數']) > 1000
-                        && parseFloat(item['MACD_hist_diff']) > 0
-                        && parseFloat(item['now_price']) > parseFloat(item['MACD_death_cross_d收盤價'])
-                    )
 
-                    app.sortBy = ['MA_last_cross_date', 'MACD_last_cross_date', 'MA_last_cross_%'];
-                    app.sortDesc = [true, true, true]
 
                 }
             },

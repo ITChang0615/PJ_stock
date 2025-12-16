@@ -41,6 +41,23 @@
                     </v-col>
                     <v-col col="4">
 
+                        <v-btn color="primary" @click="
+                                app.jsonData = app.jsonData_
+
+                                app.jsonData = app.jsonData.filter(item => true
+                                    && item['MACD_last_cross_date'] != ''
+                                    && item['MA_last_cross_date'] != ''
+                                    && parseFloat(item['成交股數']) > 1000
+                                    && parseFloat(item['MACD_hist_diff']) > 0
+                                    && parseFloat(item['now_price']) > parseFloat(item['MACD_death_cross_d收盤價'])
+                                )
+
+                                app.sortBy = ['MA_last_cross_date', 'MACD_last_cross_date', 'MA_last_cross_%'];
+                                app.sortDesc = [true, true, true]
+
+
+
+                        ">check</v-btn>
 
                         <v-btn color="primary" @click="
                                 app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date>=app.paraDateMinus(5)
@@ -82,9 +99,12 @@
                                     )   
                         
                         -->
+                    <!--
+                        parseFloat(item['diff_quote'])>3 && 
+                    -->
                         <v-btn color="primary" @click="
                                     app.jsonData.map(item=>item.txt =(parseFloat( item['Volume_MA_long50'])/ parseFloat(item['成交金額平均'])).toFixed(2)  )    
-                                    app.jsonData=app.jsonData.filter(item=>(parseFloat(item['diff_quote'])>3&&  parseFloat( item['成交股數'])>1000  ))
+                                    app.jsonData=app.jsonData.filter(item=>( parseFloat( item['成交股數'])>1000  ))
                                     app.sortBy =   ['Type1','txt', ];
                                     app.sortDesc = [true,true]
                         ">驗收</v-btn>
@@ -477,20 +497,19 @@
                                 });
                                 this.jsonData.map(x => x.txt = '-')
                                 this.jsonData.map(item => item.txt = (parseFloat(item['Volume_MA_long50']) / parseFloat(item['成交金額平均'])).toFixed(2))
+                                this.jsonData.filter(item => parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x => x.MACD_last_cross_date = '')
+                                this.jsonData.filter(item => parseFloat(item['均價long_%']) < 0).map(x => x.MA_last_cross_date = '')
                                 if (this.type) {
                                     this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type));
                                 }
                                 //**//
                                 /*
-                                                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
-                                                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x.MA_last_cross_date = 0)
-                                                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
-                                                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
-                                                                */
-
+                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
+                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x.MA_last_cross_date = 0)
+                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
+                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
+                                */
                                 //**//
-
-
 
                                 this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
                                 Object.keys(this.uniqueValues).forEach(key => {
@@ -498,13 +517,12 @@
                                     this.uniqueValues[key].sort((a, b) => a.text.localeCompare(b.text));
                                 });
                             }
-                            //app.sortBy = ['總市值']
-                            //app.sortDesc = [true]
-                            app.sortBy = ['MA_last_cross_date', 'Type1']
-                            app.sortDesc = [true, true]
+                            
+                            app.sortBy = ['MACD_last_cross_date','MA_last_cross_date', 'txt']
+                            app.sortDesc = [true, true,true]
 
-
-                            //app.jsonData=app.jsonData.filter(x => x["MACD"]<5 && x["價能"]>0 && x["MA5_%"]>0 && x["Volume_Oscillator"]>-30)
+                            app.sortBy = ['MA_last_cross_date', 'txt']
+                            app.sortDesc = [true,true]
                         })
                         .catch(error => console.error('Error loading Excel file:', error));
                 },
