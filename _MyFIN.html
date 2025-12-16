@@ -359,24 +359,26 @@
                                     variant="outlined"></v-text-field>
                             </v-col>
                             <v-col>
-							預期賺
+                                預期賺
                                 <br />
                                 {{
-									parseInt(
-										(
-											( selectedItem_price-
-												(
-												parseInt((selectedItem?.hold * selectedItem?.buyin)+(selectedItem_add*selectedItem?.now))
-												/(parseInt(selectedItem_add)+parseInt(selectedItem?.hold))
-												).toFixed(2)
-											)
-											/
-											(
-												parseInt((selectedItem?.hold * selectedItem?.buyin)+(selectedItem_add*selectedItem?.now))
-												/(parseInt(selectedItem_add)+parseInt(selectedItem?.hold))
-											).toFixed(2)
-										)*(parseInt(selectedItem_add)+parseInt(selectedItem?.hold)) * selectedItem?.buyin
-							     	)
+                                parseInt(
+                                (
+                                ( selectedItem_price-
+                                (
+                                parseInt((selectedItem?.hold *
+                                selectedItem?.buyin)+(selectedItem_add*selectedItem?.now))
+                                /(parseInt(selectedItem_add)+parseInt(selectedItem?.hold))
+                                ).toFixed(2)
+                                )
+                                /
+                                (
+                                parseInt((selectedItem?.hold *
+                                selectedItem?.buyin)+(selectedItem_add*selectedItem?.now))
+                                /(parseInt(selectedItem_add)+parseInt(selectedItem?.hold))
+                                ).toFixed(2)
+                                )*(parseInt(selectedItem_add)+parseInt(selectedItem?.hold)) * selectedItem?.buyin
+                                )
                                 }}
                             </v-col>
                         </v-row>
@@ -487,15 +489,15 @@
                     return data;
                 },
                 getRemainMonthsOfYear_cash() {
-             
+
                     //本月起取到本年度最後一個月的所有月份 可存下的錢
                     var data = 0;
                     var lastYMCash = 0;
                     this.getRemainMonthsOfYear().forEach(x => {
                         data += parseInt(this.report.filter(x => x.Desc == '儲蓄')[0][x] || 0)
                     })
-                           debugger;
-                    if(data!=0)
+                    debugger;
+                    if (data != 0)
                         lastYMCash = this.report.filter(x => x.Desc == '現金')[0][this.getRemainMonthsOfYear().slice(-1)[0]]
                     return lastYMCash - data;
                 }
@@ -614,11 +616,11 @@
                     ]
                     //Now
                     var current = [
-					    { Desc: '購物/娛樂', value: null },
+                        { Desc: '購物/娛樂', value: null },
                         { Desc: '生活-LPP', value: 5000 },
                         { Desc: '運動', value: 5600 },
                         { Desc: '生活', value: 1179 },
-						{ Desc: '固-3C影音', value: 2855 },
+                        { Desc: '固-3C影音', value: 2855 },
                         { Desc: '固-車', value: null },
                         { Desc: '固-阿罵', value: null },
                         { Desc: '固-車稅/保養', value: null },
@@ -650,34 +652,36 @@
                 },
                 set_mydata() {
                     this.mydata = [
-                        { "Desc": "invest_input", "N_1":67100 ,"N_2": null },//買進   
-                        { "Desc": "invest_output", "N_1": 63350, "N_2": null },//賣出
-                        { "Desc": "income_loss", "N_1": 1360, "N_2": null },//損益   
+                        { "Desc": "invest_input", "N_1": 68660, "N_2": null },//買進   
+                        { "Desc": "invest_output", "N_1": null, "N_2": null },//賣出
+                        { "Desc": "income_loss", "N_1": null, "N_2": null },//損益   
                         { "Desc": "股息", "N_1": null, "N_2": null },//股息
                         { "Desc": "現金", "today": 5600 },
-                        { "Desc": "信用卡", "today": -34314},
-                        { "Desc": "銀行", "today": 102474},
+                        { "Desc": "信用卡", "today": -34618 },
+                        { "Desc": "銀行", "today": 102474 },
                         { "Desc": "預備金", "today": 340000 },
-                        { "Desc": "日幣", "today": 30051 }, 
-                        { "Desc": "投入", "today": 	3556616 },
-                        { "Desc": "可下單現金", "today": 645979 },
+                        { "Desc": "日幣", "today": 30051 },
+                        { "Desc": "投入", "today": 3561974 },
+                        { "Desc": "可下單現金", "today": 641981 },
                         { "Desc": "Total", "today": null }
                     ]
                 },
                 set_stockdata() {
                     this.stockdata = [
-                        
-                        { "Type2": "上市", "name": null, "number": '0052', "hold": 2000, "now": 36.05, "buyin": 36.98, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
-						{ "Type2": "上市", "name": "台泥", "number": 1101, "hold": 48000, "now": 22.85, "buyin": 27.19, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
-                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 25.8, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
-                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 26000, "now": 21.65,  "buyin": 26.31, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
-						{ "Type2": "上市", "name": "興富發", "number": 2542, "hold": 13000, "now": 37.1, "buyin": 38.99, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
-                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 13.85, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
-                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 500, "now": 335.5, "buyin": 345.5, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
-						
-                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 1000, "now": 187, "buyin": 206.29, "profit_stock": null, "profit": 4.9, "frequency": 1, "month": "" },
-						/*
-                        { "Type2": "上市", "name": null, "number": '0050', "hold": 0, "now": 63.4, "buyin": 62.11, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+
+                        { "Type2": "上市", "name": null, "number": '0052', "hold": 3000, "now": 35.65, "buyin": 36.57, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 48000, "now": 22.30, "buyin": 27.19, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
+                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 25.4, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
+                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 26000, "now": 21.55, "buyin": 26.31, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
+                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 13000, "now": 37.35, "buyin": 38.99, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
+                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 13.8, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 500, "now": 331.5, "buyin": 345.5, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
+                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 100, "now": 331.5, "buyin": 332.93, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
+
+                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 1000, "now": 181.5, "buyin": 206.29, "profit_stock": null, "profit": 4.9, "frequency": 1, "month": "" },
+
+                        { "Type2": "上市", "name": null, "number": '0050', "hold": 0, "now": 62.25, "buyin": 62.11, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+                        /*
                         { "Type2": "上市", "name": null, "number": '006208', "hold": 0, "now": 145.25, "buyin": 142.55, "profit_stock": null, "profit": 2.07, "frequency": 2, "month": "1,7" },
                         { "Type2": "上市", "name": null, "number": '0056', "hold": 0, "now": 36.49, "buyin": 36.04, "profit_stock": null, "profit": 0.866, "frequency": 4, "month": "1,4,7,10" },
                         { "Type2": "上市", "name": null, "number": '00713', "hold": 0, "now": 50.9, "buyin": 50.4, "profit_stock": null, "profit": 0.78, "frequency": 4, "month": "3,6,9,12" },
@@ -690,8 +694,8 @@
                     this.stockdata.forEach(item => {
                         //處理配息約一個月後入賬
                         var happenMonth = item.month.toString().split(',').map(m => (parseInt(m) + 1).toString().padStart(2, '0'))
-                        if(happenMonth.indexOf('13')>1){
-                            happenMonth=happenMonth.concat('01')
+                        if (happenMonth.indexOf('13') > 1) {
+                            happenMonth = happenMonth.concat('01')
                         }
                         this.getYM().forEach(YM => {
                             if (happenMonth.indexOf(YM.slice(-2)) != -1) {
@@ -704,169 +708,129 @@
                 },
                 memo_txt() {
                     //----------------------------------------------
-					// 福岡 Yonex
-					//
-					// 		 Alpen FUKUOKA  (博多運河城)
-					
-					// 熊本
- 					//         Hayakawa Sports Kamitori Honten
+                    // 福岡 Yonex
+                    //
+                    // 		 Alpen FUKUOKA  (博多運河城)
+
+                    // 熊本
+                    //         Hayakawa Sports Kamitori Honten
                     //---------------------------------------------
                     //*****
                     //[ Google IDE 工具] 藉由 Google Antigravity IDE 工具，來體驗 AI 直接實作個人網站
                     // gemini 3
                     //---------------------------------------------
-                    },
+                    
+                    
+                    //https://sol.auo.com/PLMORM/COTDMZ/COT/DataList
+                    //https://tw.tradingview.com/chart/flWtRF5S/?symbol=2441 
+
+                    // Bose QC Ultra 
+                },
                 memo() {
                     //---------------------------------------------
-					/*
+                    /*
                     【A tag】
                         app.jsonData=app.jsonData_.filter(x=> x.分類標籤.includes('** d1') )
                         app.jsonData=app.jsonData_.filter(x=>  x.stock_number!='2303'  &&   parseFloat(x['量'])>0.9   &&  x.分類標籤.includes('** d1') )
 
-					【B tag】
-					
-						//--遇前高 可觀察有沒有守住
-						app.jsonData=app.jsonData_.filter(x=>parseFloat(x['MACD']) > parseFloat(x['MACD-SL_max'])  && parseFloat(x['MACD-SL_max'])> parseFloat(x['MACD-SL'])  ) 
+                    【B tag】
+                	
+                        //--遇前高 可觀察有沒有守住
+                        app.jsonData=app.jsonData_.filter(x=>parseFloat(x['MACD']) > parseFloat(x['MACD-SL_max'])  && parseFloat(x['MACD-SL_max'])> parseFloat(x['MACD-SL'])  ) 
                         app.sortBy =   ['MACD_last_cross_date','MA5_%'];
-						app.sortDesc = [true,true]
-						
-						//!!!!!--  有料
-						app.jsonData=app.jsonData_.filter(x=> parseFloat(x['LevelArea'])==90  && parseFloat(x['量'])>0.3  )
-                     	app.sortBy = ['MACD_last_cross_date','長均交叉日'];
-						app.sortDesc = [true,true]
-						
-						//-- 待確認
-						app.jsonData=app.jsonData_.filter(x=> parseFloat(x['LevelArea'])<90 
-							 &&   parseFloat(x['量'])>=0.5 
-							 && parseFloat(x['均價_%'])>4 
-							 )
-					
-						app.sortBy = ['highlight_date','長均交叉日'];
-						app.sortBy = ['MACD_last_cross_date','長均交叉日'];
-						app.sortDesc = [true,true]
-						
+                        app.sortDesc = [true,true]
+                    	
+                        //!!!!!--  有料
+                        app.jsonData=app.jsonData_.filter(x=> parseFloat(x['LevelArea'])==90  && parseFloat(x['量'])>0.3  )
+                        app.sortBy = ['MACD_last_cross_date','長均交叉日'];
+                        app.sortDesc = [true,true]
+
+                        //-- 待確認
+                        app.jsonData=app.jsonData_.filter(x=> parseFloat(x['LevelArea'])<90 
+                             &&   parseFloat(x['量'])>=0.5 
+                             && parseFloat(x['均價_%'])>4 
+                             )
+                	
+                        app.sortBy = ['highlight_date','長均交叉日'];
+                        app.sortBy = ['MACD_last_cross_date','長均交叉日'];
+                        app.sortDesc = [true,true]
+                    	
 
                         app.sortBy =   ['MACD_last_cross_date','MA5_%'];
-						app.sortDesc = [true,true]
+                        app.sortDesc = [true,true]
                         //-- 待確認
                         app.jsonData=app.jsonData_.filter(x=> parseFloat(x['MA5_%'])>0)
 
-					【D tag】
-						app.jsonData=app.jsonData_.filter(x=>x.uptrend_有量!=null &&x.量能max>15)
-						app.jsonData=app.jsonData.filter(x=>
-													(x.datalist.map(x=>x.MA_longlonglong)[0] / x.datalist.map(x=>x.MA_longlonglong).slice(-2)[0] )>1.01 
-													)
-													
-						//**-----------------------
-						//!!!!
-						app.jsonData = app.jsonData_.filter(item=>( item['Flag_macd'])  )
-						app.jsonData = app.jsonData.filter(item=>  parseFloat(item['營業利益率'].replace('%',''))>0  
-							&& parseFloat(item['長量'])>1
-							&& parseFloat(item['短量'])>1
-							)
-						app.sortBy =   ['uptrend_有量','量'];
-						app.sortDesc = [true,true,true]
+                    【D tag】
+                        app.jsonData=app.jsonData_.filter(x=>x.uptrend_有量!=null &&x.量能max>15)
+                        app.jsonData=app.jsonData.filter(x=>
+                                                    (x.datalist.map(x=>x.MA_longlonglong)[0] / x.datalist.map(x=>x.MA_longlonglong).slice(-2)[0] )>1.01 
+                                                    )
+                                                	
+                        //**-----------------------
+                        //!!!!
+                        app.jsonData = app.jsonData_.filter(item=>( item['Flag_macd'])  )
+                        app.jsonData = app.jsonData.filter(item=>  parseFloat(item['營業利益率'].replace('%',''))>0  
+                            && parseFloat(item['長量'])>1
+                            && parseFloat(item['短量'])>1
+                            )
+                        app.sortBy =   ['uptrend_有量','量'];
+                        app.sortDesc = [true,true,true]
 
-						
+                    	
 
-						| 條件組合									 | 市場意義               | 要找什麼                   | 要注意什麼                            | 重點                         
-						|-----------------------------------------------------------------------------------------------------------------------------------------|
-						|【D tag】 均價 < 0  +  MACD > 0  | 低檔轉強 / 潛力股  | 放量、站上 5MA         | 量弱假轉強、上影線                | 是否有「量帶價」啟動上漲      
-						|【C tag】 均價 > 0  +  MACD < 0  | 高檔轉弱 / 風險區  | 放量出貨、跌破均線   | 放量黑K、MACD 柱體放大         | 是否進入出貨 or 健康拉回  
-					
-					【C tag】
-						app.jsonData = app.jsonData_.filter(item=>( item['Flag_macd'])  )
-						app.jsonData =  app.jsonData.filter(item=>( item['均價longlong_%'] > 0  )  )
-						
-						app.sortBy =   ['uptrend_d','MACD_minus','uptrend_b','均價long_%'];
-						app.sortDesc = [true,true,true,false]
-						
-					【E tag】
-						//XXXX 不要用 
-							app.jsonData = app.jsonData_.filter(item=>( item['Flag_macd']) &&  parseFloat(item['MA5_%']) > 0 && parseFloat(item['量']) > 0.3 && parseFloat(item['量能max']) > 10)
-							app.sortBy =   ['MA5_%','量'];
-							app.sortDesc = [true,true]
-						
-					*/
-				
-					
-					
-                //---------
+                        | 條件組合									 | 市場意義               | 要找什麼                   | 要注意什麼                            | 重點                         
+                        |-----------------------------------------------------------------------------------------------------------------------------------------|
+                        |【D tag】 均價 < 0  +  MACD > 0  | 低檔轉強 / 潛力股  | 放量、站上 5MA         | 量弱假轉強、上影線                | 是否有「量帶價」啟動上漲      
+                        |【C tag】 均價 > 0  +  MACD < 0  | 高檔轉弱 / 風險區  | 放量出貨、跌破均線   | 放量黑K、MACD 柱體放大         | 是否進入出貨 or 健康拉回  
+                	
+                    【C tag】
+                        app.jsonData = app.jsonData_.filter(item=>( item['Flag_macd'])  )
+                        app.jsonData =  app.jsonData.filter(item=>( item['均價longlong_%'] > 0  )  )
+                    	
+                        app.sortBy =   ['uptrend_d','MACD_minus','uptrend_b','均價long_%'];
+                        app.sortDesc = [true,true,true,false]
+                    		
+                    */
+
+
+                    //---------
                     // [2025/12/07]
-                    alist=['5351','8086','2303','6669','6120']
-                    app.jsonData=app.jsonData_.filter(x=>alist.includes(x.stock_number))
-					
-                    app.jsonData=app.jsonData_.filter(x=>x.分類標籤.includes('b1'))
-
-                    app.jsonData.map(item=>item.分類標籤 =(parseFloat( item['Volume_MA_long50'])/ parseFloat(item['成交金額平均'])).toFixed(2)  ) 
+                    alist = ['5351', '8086', '2303', '6669', '6120']
+                    app.jsonData = app.jsonData_.filter(x => alist.includes(x.stock_number))
                     
-                    app.jsonData=app.jsonData.filter(item =>  item.rt_量>0.6 && (parseFloat( item['Volume_MA_long50'])/ parseFloat(item['成交金額平均'])).toFixed(2) < 4)
-                    
+                    //---------------------------------------------
+                    app.sync_realtime()
+                    app.sync = true
 
-                    //https://it-chang.github.io/PJ_stock/index.html?d=C&date=2025-12-04                    
-					//app.jsonData=app.jsonData_.filter(item=>(     item['MA_last_cross_date']>'2025/04/01' &&  parseFloat(item['MA_last_cross_%'])>5 ))
+                    app.sync_data()              
 
+                    //------------------------------------------
+                    //--
+                    app.sortBy = ['diff_quote'];
+                    app.sortDesc = [true]
+                    //---
+                    app.jsonData = app.jsonData.filter(item => parseFloat(item['diff_quote']) > 8)
+                    //---
 
-	            //---------------------------------------------
-					app.sync_realtime()
-					app.sync=true
-					
-					app.sync_data()
+                    app.jsonData = app.jsonData_
+                    app.jsonData.filter(item => parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x => x.MACD_last_cross_date = '')
+                    app.jsonData.filter(item => parseFloat(item['均價long_%']) < 0).map(x => x.MA_last_cross_date = '')
+                    app.jsonData = app.jsonData.filter(item => true
+                        && item['MACD_last_cross_date'] != ''
+                        && item['MA_last_cross_date'] != ''
+                        && parseFloat(item['成交股數']) > 1000
+                        && parseFloat(item['MACD_hist_diff']) > 0
+                        && parseFloat(item['now_price']) > parseFloat(item['MACD_death_cross_d收盤價'])
+                    )
 
-                //------------------------------------------
-                //【index.html】 每天量能
-         
-                //-【Dev】--
-                app.jsonData.map(item=>item.成交股數 =(parseFloat( app.realtimedata.filter(x=>x.c==item.stock_number)[0]?.v)).toFixed(2))  
-               
-                //------------------------------------------
+                    app.sortBy = ['MA_last_cross_date', 'MACD_last_cross_date', 'MA_last_cross_%'];
+                    app.sortDesc = [true, true, true]
 
-                /*
-                【set】
-                        localStorage.setItem('cache2',JSON.stringify( 
-                                    app.jsonData_.filter(item=>true
-                                                //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
-                                                &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long']) 
-                                                &&  parseFloat( item['Volume_MA_long50'])> parseFloat(item['成交金額平均']) *0.8
-                                                &&  parseFloat( item['MACD'])> parseFloat(item['MACD-SL']) 
-                                                &&  parseFloat(item['now_price'])> parseFloat(item['MA_longlong']*1.05) 
-                                                &&  parseFloat( item['成交股數'])>1000 
-                                                ).map(x=>x.stock_number)
-                                            ))
-                        app.jsonData=	app.jsonData_.filter(item=>true
-                                                //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
-                                                &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long']) 
-                                                &&  parseFloat( item['Volume_MA_long50'])> parseFloat(item['成交金額平均']) *0.8
-                                                &&  parseFloat( item['MACD'])> parseFloat(item['MACD-SL']) 
-                                                &&  parseFloat(item['now_price'])> parseFloat(item['MA_longlong']*1.05) 
-                                                &&  parseFloat( item['成交股數'])>1000 
-                                                )
-                【get】
-                        var a = JSON.parse(localStorage.getItem('cache2') || '[]')
-                        var b =	app.jsonData_.filter(item=>true
-                                        //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
-                                        &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long']) 
-                                        &&  parseFloat( item['Volume_MA_long50'])> parseFloat(item['成交金額平均']) *0.8
-                                        &&  parseFloat( item['MACD'])> parseFloat(item['MACD-SL']) 
-                                        &&  parseFloat(item['now_price'])> parseFloat(item['MA_longlong']*1.05) 
-                                        &&  parseFloat( item['成交股數'])>1000 
-                                        ).map(x=>x.stock_number)
-                        app.jsonData=app.jsonData_.filter(x=> b.filter(item => a.includes(item)).includes(x.stock_number))
-
-                */
-
-
-                //https://sol.auo.com/PLMORM/COTDMZ/COT/DataList
-                //https://tw.tradingview.com/chart/flWtRF5S/?symbol=2441 
-
-                // Bose QC Ultra 
-
-                app.jsonData.filter(item => parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x=>x.MACD_last_cross_date='')
-
-                
                 }
             },
         });
     </script>
 </body>
+
 </html>

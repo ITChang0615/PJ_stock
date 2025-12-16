@@ -40,11 +40,6 @@
                         <v-btn color="primary" @click="getCache2()">get2</v-btn>
                     </v-col>
                     <v-col col="4">
-                          <v-btn color="primary" @click="
-                            app.jsonData=app.jsonData_.filter(x=>x['分類標籤'].includes('d1') )
-                            app.sortBy =   ['LevelArea', 'MA_last_cross_date','diff_quote'];
-                            app.sortDesc = [true,true,true]
-                        ">d1</v-btn>
 
 
                         <v-btn color="primary" @click="
@@ -59,40 +54,32 @@
                                 app.sortDesc = [true,true,true]
                         ">近期</v-btn>
 
-
                         <!--
+                            app.jsonData=app.jsonData_.filter(x=>x.LevelArea==40
+                                    //&& parseFloat(x['now_price']) < parseFloat(x['MA_death_cross_d收盤價'])
+                                    //&& parseFloat(x['MA_death_cross_d收盤價']) > parseFloat(x['MA_death_cross_d2收盤價'])
+                                    && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
+                                    && parseFloat(x['MACD-SL']) >=0) 
+                            app.sortBy =[ 'MACD_last_cross_date','MA_last_cross_date'];
+                            app.sortDesc = [true,true]
+
+                                                        
+
+                            app.jsonData=app.jsonData_.filter(x=>!(true
+                                    // && parseFloat(x['now_price'])> parseFloat(x['MA_longlonglong'])*1.1
+                                    // && parseFloat(x['now_price'])< parseFloat(x['MA_longlong'])*1.1
+                                    && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
+                                    && parseFloat(x['MACD-SL']) >=0)) 
 
 
-app.jsonData=app.jsonData_.filter(x=>x.LevelArea==40
-        //&& parseFloat(x['now_price']) < parseFloat(x['MA_death_cross_d收盤價'])
-        //&& parseFloat(x['MA_death_cross_d收盤價']) > parseFloat(x['MA_death_cross_d2收盤價'])
-        && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
-        && parseFloat(x['MACD-SL']) >=0) 
-app.sortBy =[ 'MACD_last_cross_date','MA_last_cross_date'];
-app.sortDesc = [true,true]
-
-                            
-
-app.jsonData=app.jsonData_.filter(x=>!(true
-        // && parseFloat(x['now_price'])> parseFloat(x['MA_longlonglong'])*1.1
-        // && parseFloat(x['now_price'])< parseFloat(x['MA_longlong'])*1.1
-        && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
-        && parseFloat(x['MACD-SL']) >=0)) 
+                                // 'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
+                                //  Volume_MA_short Volume_MA_long Volume_MA_long50 成交金額平均
 
 
-    // 'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
-    //  Volume_MA_short Volume_MA_long Volume_MA_long50 成交金額平均
-
-
-
-
-
-app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date=='2025/12/11'
-    && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
-    && parseFloat(x['Volume_MA_long']) > parseFloat(x['Volume_MA_long50'])
-        )   
-
-
+                            app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date=='2025/12/11'
+                                && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
+                                && parseFloat(x['Volume_MA_long']) > parseFloat(x['Volume_MA_long50'])
+                                    )   
                         
                         -->
                         <v-btn color="primary" @click="
