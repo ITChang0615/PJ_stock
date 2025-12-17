@@ -669,6 +669,7 @@
                         && parseFloat(item['MACD']) > parseFloat(item['MACD-SL']) - 0.03
                         && parseFloat(item['now_price']) > parseFloat(item['MA_longlong'] * 1.04)
                         && parseFloat(item['成交股數']) > 1000
+                        && parseFloat(item['量能']) > 10
                         //&&  item.stock_number=='8039'
                     )
 
@@ -690,7 +691,7 @@
                         && parseFloat(item['MACD']) > parseFloat(item['MACD-SL']) - 0.03
                         && parseFloat(item['now_price']) > parseFloat(item['MA_longlong'] * 1)
                         //&&  parseFloat( item['成交股數'])>1000 
-
+                        &&  parseFloat( item['LevelArea']) >-90
                         //&&  item.stock_number=='4916'
                     )
                     app.sortBy = ['MA_last_cross_date', 'txt', 'LevelArea', 'rt_量',];
