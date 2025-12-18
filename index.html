@@ -49,7 +49,7 @@
                                     && item['MA_last_cross_date'] != ''
                                     && parseFloat(item['成交股數']) > 1000
                                     && parseFloat(item['MACD_hist_diff']) > 0
-                                    && parseFloat(item['now_price']) > parseFloat(item['MACD_death_cross_d收盤價'])
+                                   // && parseFloat(item['now_price']) > parseFloat(item['MACD_death_cross_d收盤價'])
                                 )
 
                                 app.sortBy = ['MA_last_cross_date', 'MACD_last_cross_date', 'MA_last_cross_%'];
@@ -60,7 +60,7 @@
                         ">check</v-btn>
 
                         <v-btn color="primary" @click="
-                                app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date>=app.paraDateMinus(5)
+                                app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date>=app.paraDateMinus(8)
                                     && x.MACD_last_cross_date<=app.paraDate_str
                                     && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
                                     && parseFloat(x['Volume_MA_long']) > parseFloat(x['Volume_MA_long50'])
