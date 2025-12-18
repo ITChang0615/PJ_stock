@@ -620,13 +620,14 @@
 						{ Desc: '運動', value: 5600 },
                         { Desc: '生活-LPP', value: 5000 },
 						{ Desc: '固-3C影音', value: 2855 },
-                        { Desc: '生活', value: 1217 },
+                        { Desc: '生活', value: 1237 },
                         { Desc: '固-車', value: 768 },
                         { Desc: '固-阿罵', value: null },
                         { Desc: '固-車稅/保養', value: null },
                         { Desc: '固-稅', value: null },
 						{ Desc: '購物/娛樂', value: null },
                         { Desc: '旅', value: null },
+                         
                     ]
                     this.currentym = '202512'
 
@@ -652,18 +653,20 @@
                 },
                 set_mydata() {
                     this.mydata = [
-                        { "Desc": "invest_input", "N_1": 68660, "N_2": null },//買進   
+                    
+                        { "Desc": "invest_input", "N_1": null, "N_2": null },//買進   
                         { "Desc": "invest_output", "N_1": null, "N_2": null },//賣出
                         { "Desc": "income_loss", "N_1": null, "N_2": null },//損益   
                         { "Desc": "股息", "N_1": null, "N_2": null },//股息
                         { "Desc": "現金", "today": 5600 },
-                        { "Desc": "信用卡", "today": -35424 },
+                        { "Desc": "信用卡", "today": -35672 },
                         { "Desc": "銀行", "today": 102474 },
                         { "Desc": "預備金", "today": 340000 },
                         { "Desc": "日幣", "today": 30204 },
-                        { "Desc": "投入", "today": 3561974 },
-                        { "Desc": "可下單現金", "today": 641981 },
+                        { "Desc": "投入", "today": 3630731 },
+                        { "Desc": "可下單現金", "today": 573224 },
                         { "Desc": "Total", "today": null }
+                         
                     ]
                 },
                 set_stockdata() {
@@ -793,8 +796,8 @@
 
 
                     //---------
-                    // [2025/12/07]
-                    alist = ['5351', '8086', '2303', '6669', '6120']
+                    
+                    alist = ['']
                     app.jsonData = app.jsonData_.filter(x => alist.includes(x.stock_number))
                     
                 }
