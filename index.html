@@ -52,6 +52,8 @@
                                     && parseFloat(x['MACD_hist_diff']) > 0
                                     //&& x.highlight_date==app.paraDate_str().replaceAll('/','-')
                                )
+                               app.sortBy = ['voc_cross_d', 'LevelArea']// ,'diff_quote'
+                               app.sortDesc = [true, true]
                         ">CHRCK</v-btn>
 
                          <v-btn color="primary" @click="
@@ -671,6 +673,9 @@
 
 
                     //Volume_MA_short  成交金額平均
+
+                      app.sortBy = ['voc_cross_d', 'diff_quote']
+                      app.sortDesc = [true, true]
                 }
             }
         });
