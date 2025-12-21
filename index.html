@@ -40,80 +40,81 @@
                         <v-btn color="primary" @click="getCache2()">get2</v-btn>
                     </v-col>
                     <v-col col="4">
-
-                        <v-btn color="primary" @click="
-                                app.jsonData = app.jsonData_
-
-                                app.jsonData = app.jsonData.filter(item => true
-                                    && item['MACD_last_cross_date'] != ''
-                                    && item['MA_last_cross_date'] != ''
-                                    && parseFloat(item['成交股數']) > 1000
-                                    && parseFloat(item['MACD_hist_diff']) > 0
-                                   // && parseFloat(item['now_price']) > parseFloat(item['MACD_death_cross_d收盤價'])
-                                )
-
-                                app.sortBy = ['MA_last_cross_date', 'MACD_last_cross_date', 'MA_last_cross_%'];
-                                app.sortDesc = [true, true, true]
-
-
-
-                        ">check</v-btn>
-
-                        <v-btn color="primary" @click="
-                                app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date>=app.paraDateMinus(8)
-                                    && x.MACD_last_cross_date<=app.paraDate_str
-                                    && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
-                                    && parseFloat(x['Volume_MA_long']) > parseFloat(x['Volume_MA_long50'])
-                                    && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
-                                    && parseFloat(x['MACD_hist_diff']) > 0
-                                    )     
-                                app.sortBy =[ '分類標籤','MACD_hist_diff','txt'];
-                                app.sortDesc = [true,true,true]
-                        ">近期</v-btn>
-
-                        <!--
-                            app.jsonData=app.jsonData_.filter(x=>x.LevelArea==40
-                                    //&& parseFloat(x['now_price']) < parseFloat(x['MA_death_cross_d收盤價'])
-                                    //&& parseFloat(x['MA_death_cross_d收盤價']) > parseFloat(x['MA_death_cross_d2收盤價'])
-                                    && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
-                                    && parseFloat(x['MACD-SL']) >=0) 
-                            app.sortBy =[ 'MACD_last_cross_date','MA_last_cross_date'];
-                            app.sortDesc = [true,true]
-
-                                                        
-
-                            app.jsonData=app.jsonData_.filter(x=>!(true
-                                    // && parseFloat(x['now_price'])> parseFloat(x['MA_longlonglong'])*1.1
-                                    // && parseFloat(x['now_price'])< parseFloat(x['MA_longlong'])*1.1
-                                    && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
-                                    && parseFloat(x['MACD-SL']) >=0)) 
-
-
-                                // 'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
-                                //  Volume_MA_short Volume_MA_long Volume_MA_long50 成交金額平均
-
-
-                            app.jsonData=app.jsonData_.filter(x=>x.MACD_last_cross_date=='2025/12/11'
-                                && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
-                                && parseFloat(x['Volume_MA_long']) > parseFloat(x['Volume_MA_long50'])
-                                    )   
-                        
-                        -->
-                    <!--
-                        parseFloat(item['diff_quote'])>3 && 
-                    -->
-                        <v-btn color="primary" @click="
-                                    app.jsonData.map(item=>item.txt =(parseFloat( item['Volume_MA_long50'])/ parseFloat(item['成交金額平均'])).toFixed(2)  )    
+                        <!--v-btn color="primary" @click="
                                     app.jsonData=app.jsonData.filter(item=>( parseFloat( item['成交股數'])>1000  ))
                                     app.sortBy =   ['Type1','txt', ];
                                     app.sortDesc = [true,true]
-                        ">驗收</v-btn>
-                        <v-btn color="primary" @click="filter()">預測(當沖)</v-btn>
-                        <v-btn color="primary" @click="filter2()">預測(趨勢)</v-btn>
+                        ">成交股數>1000</v-btn-->
+                        <v-btn color="primary" @click="
+                               app.jsonData = app.jsonData_.filter(x => true
+                                    && x.txt>0.5 
+                                    && x.txts>1.8 
+                                    && parseFloat(x['MACD_hist_diff']) > 0
+                                    //&& x.highlight_date==app.paraDate_str().replaceAll('/','-')
+                               )
+                        ">CHRCK</v-btn>
+
+                         <v-btn color="primary" @click="
+                                app.jsonData=app.jsonData_.filter(x=> true
+                                    && x.MACD_last_cross_date>=app.paraDateMinus(30)
+                                    && x.MACD_last_cross_date<=app.paraDate_str
+                                    && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
+                                    // && parseFloat(x['Volume_MA_long']) > parseFloat(x['Volume_MA_long50'])
+                                    && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])
+                                    && parseFloat(x['MACD_hist_diff']) > 0
+                                    && parseFloat(x['成交股數']) > 100
+                                    )     
+                                app.sortBy =[ '分類標籤','MACD_hist_diff','txt'];
+                                app.sortDesc = [true,true,true]
+                        ">近期觀察</v-btn>
+
+                        <v-btn color="primary" @click="
+                                app.jsonData = app.jsonData_.filter(item => true
+                                    && item['MACD_last_cross_date'] != ''
+                                    && item['MA_last_cross_date'] != ''
+                                    && parseFloat(item['成交股數']) > 800
+                                    && parseFloat(item['MACD_hist_diff']) > 0
+                                   // && parseFloat(item['now_price']) > parseFloat(item['MACD_death_cross_d收盤價'])
+                                )
+                                app.sortBy = ['MA_last_cross_date', 'MACD_last_cross_date', 'MA_last_cross_%'];
+                                app.sortDesc = [true, true, true]
+                        ">完全轉好</v-btn>
+
+                        <v-btn color="primary" @click="  
+                                    app.jsonData = app.jsonData_.filter(item => true
+                                        // XXX &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
+                                        && parseFloat(item['Volume_MA_short']) > parseFloat(item['Volume_MA_long']) * 0.9
+                                        && parseFloat(item['Volume_MA_long50']) > parseFloat(item['成交金額平均']) * 0.8
+                                        && parseFloat(item['MACD']) > parseFloat(item['MACD-SL']) - 0.03
+                                        && parseFloat(item['now_price']) > parseFloat(item['MA_longlong'] * 1.04)
+                                        && parseFloat(item['成交股數']) > 1000
+                                        && parseFloat(item['量能']) > 10
+                                        //&&  item.stock_number=='8039'
+                                    )
+                                    app.sortBy = ['LevelArea', 'txt', 'rt_量',];
+                                    app.sortDesc = [true, true, true]
+
+                                    app.jsonData = app.jsonData.filter(item => (parseFloat(item['txt']) > 0.7))                
+                        ">預測(當沖)</v-btn>
+                        <!--// 回檔 抓放量攻擊-->
+                        <v-btn color="primary" @click="     
+                                    app.jsonData = app.jsonData_.filter(item => true
+                                        && item['分類標籤'].includes('d1')
+                                        && parseFloat(item['Volume_MA_short']) > parseFloat(item['Volume_MA_long']) * 0.5
+                                        && parseFloat(item['Volume_MA_long50']) > parseFloat(item['成交金額平均']) * 0.4
+                                        && parseFloat(item['MACD']) > parseFloat(item['MACD-SL']) - 0.03
+                                        && parseFloat(item['now_price']) > parseFloat(item['MA_longlong'] * 1)
+                                        //&&  parseFloat( item['成交股數'])>1000 
+                                        &&  parseFloat( item['LevelArea']) >-90
+                                        //&&  item.stock_number=='4916'
+                                    )
+                                    app.sortBy = ['MA_last_cross_date', 'txt', 'LevelArea', 'rt_量',];
+                                    app.sortDesc = [true, true, true, true]
+                        
+                        ">預測(趨勢)</v-btn>
 
                     </v-col>
                 </v-row>
-
                 <!-- Vuetify DataTable  -->
                 <v-data-table disable-pagination fixed-header height="90vh" hide-default-footer :headers="appheaderData"
                     v-show="appmode" :items="appfilteredData" :items-per-page="-1" item-key="id" :sort-by.sync="sortBy"
@@ -261,7 +262,6 @@
                 this.init();
             },
             computed: {
-                 
                 appheaderData() {
                     return this.headers.filter(x => this.appheaderscol.includes(x.text))
                 },
@@ -282,20 +282,18 @@
             methods: {
                 paraDate_str() {
                     const d = new Date(this.paraDate);
-                    
-
                     return `${d.getFullYear()}/` +
-                        `${String(d.getMonth() + 1).padStart(2,'0')}/` +
-                        `${String(d.getDate()).padStart(2,'0')}`;
+                        `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+                        `${String(d.getDate()).padStart(2, '0')}`;
                 },
-                
-                 paraDateMinus(x) {
+
+                paraDateMinus(x) {
                     const d = new Date(this.paraDate);
                     d.setDate(d.getDate() - x);
 
                     return `${d.getFullYear()}/` +
-                        `${String(d.getMonth() + 1).padStart(2,'0')}/` +
-                        `${String(d.getDate()).padStart(2,'0')}`;
+                        `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+                        `${String(d.getDate()).padStart(2, '0')}`;
                 },
 
                 getHeaderStyle(headerText) {
@@ -344,8 +342,6 @@
                     vm.jsonData = vm.jsonData_
                     //vm.sortBy = ['highlight_date']
                 },
-
-
                 isNumberField(field) {
                     return field !== 'stock_number' && this.jsonData.some(item => {
                         const value = item[field];
@@ -382,8 +378,6 @@
                         if (urlParams.get('d') == 'checkGreat') {
                             file = './Result/checkGreat.xlsx'
                         }
-
-
                         /**********************/
                         if (urlParams.get('d') == 'C') {
                             file = './Result/checkall/' + urlParams.get('date') + '.xlsx'
@@ -402,9 +396,6 @@
                             this.paraDate = new Date(urlParams.get('date'))
                         }
                     }
-
-
-
                     await fetch(file)
                         .then(response => response.arrayBuffer())
                         .then(data => {
@@ -428,18 +419,21 @@
                                 }
 
                                 arr = [
-                                    'txt', '分類標籤', 'stock_number', '_quote', '成交股數', 'rt_量', 'now_price', 'rt_price', 'LevelArea',
+                                    'txt', 'txts','分類標籤', 'stock_number', '_quote', '成交股數', 'rt_量', 'now_price', 'rt_price', 'LevelArea',
+                                    'MACD-SL',
 
                                     'diff_quote', '量能',
 
                                     '量倍率', 'MACD_last_cross_date',
                                     'MA_last_cross_date', 'MA_last_cross_%', 'Type1',
+                                    'voc_cross_d',
 
                                     //'MA_death_cross_d',  'MA_death_cross_d2', 'MA_death_cross_d收盤價','MA_death_cross_d2收盤價',
 
                                     //'MACD_death_cross_d', 'MACD_death_cross_d2', 
-                                    'MACD_death_cross_d收盤價','MACD_death_cross_d2收盤價',
-                                      
+                                    'MACD_death_cross_d收盤價', 
+                                    //'MACD_death_cross_d2收盤價',
+
                                     'MACD_hist_diff',
 
                                     'highlight_date', 'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1',
@@ -448,7 +442,8 @@
                                     'text_desc', '盤後量', '成交量',
                                     '%K', '%D', 'MA5_%', '均價_%', '均價long_%', '均價longlong_%',
                                     'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
-                                    'MACD_%', 'MACD', 'MACD-SL', 'MACD-SL_max', 'MACDSL_%',
+                                    'MACD_%', 'MACD',  
+                                    'MACD-SL_max', 'MACDSL_%',
                                     '成交金額平均', '成交金額', 'Volume_MA_short', 'Volume_MA_long', 'Volume_MA_long50',
                                     //'Volume_Oscillator', 'volume_threshold',
 
@@ -462,10 +457,11 @@
                                     'desc', 'flag_stat',
 
 
-                                    'MA_last_cross_d2', 'MA_last_cross_d2收盤價', 
+                                    'MA_last_cross_d2', 'MA_last_cross_d2收盤價',
                                     'MA_death_cross',
-                                    'MA_death_cross_d', 'MA_death_cross_d收盤價', 'MA_death_cross_d2','MA_death_cross_d2收盤價',
-                                    //'MACD_death_cross_d', 'MACD_death_cross_d收盤價','MACD_death_cross_d2', 'MACD_death_cross_d2收盤價',
+                                    'MA_death_cross_d', 'MA_death_cross_d收盤價', 'MA_death_cross_d2', 'MA_death_cross_d2收盤價',
+                                    //'MACD_death_cross_d', 'MACD_death_cross_d收盤價','MACD_death_cross_d2',
+                                     'MACD_death_cross_d2收盤價',
                                 ]
 
                                 this.headers = arr.map(header => ({ text: header, value: header }));
@@ -496,20 +492,20 @@
                                     });
                                 });
                                 this.jsonData.map(x => x.txt = '-')
+                                this.jsonData.map(x => x.txts = '-')
                                 this.jsonData.map(item => item.txt = (parseFloat(item['Volume_MA_long50']) / parseFloat(item['成交金額平均'])).toFixed(2))
+                                this.jsonData.map(item => item.txts = (parseFloat(item['成交金額']) / parseFloat(item['Volume_MA_short'])).toFixed(2))
+                                this.jsonData.filter(item => item['MACD_last_cross_date'] >this.paraDate_str()).map(x => x.MACD_last_cross_date = '')
+                                this.jsonData.filter(item => item['MA_last_cross_date'] >this.paraDate_str()).map(x => x.MA_last_cross_date = '')
+                                this.jsonData.filter(item => item['voc_cross_d'] >this.paraDate_str().replaceAll('/','-')).map(x => x.voc_cross_d = '')
+
+                                //# -- 
                                 this.jsonData.filter(item => parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x => x.MACD_last_cross_date = '')
                                 this.jsonData.filter(item => parseFloat(item['均價long_%']) < 0).map(x => x.MA_last_cross_date = '')
+
                                 if (this.type) {
                                     this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type));
                                 }
-                                //**//
-                                /*
-                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
-                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x.MA_last_cross_date = 0)
-                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
-                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
-                                */
-                                //**//
 
                                 this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
                                 Object.keys(this.uniqueValues).forEach(key => {
@@ -517,12 +513,12 @@
                                     this.uniqueValues[key].sort((a, b) => a.text.localeCompare(b.text));
                                 });
                             }
-                            
-                            app.sortBy = ['MACD_last_cross_date','MA_last_cross_date', 'txt']
-                            app.sortDesc = [true, true,true]
+
+                            app.sortBy = ['MACD_last_cross_date', 'MA_last_cross_date', 'txt']
+                            app.sortDesc = [true, true, true]
 
                             app.sortBy = ['MA_last_cross_date', 'txt']
-                            app.sortDesc = [true,true]
+                            app.sortDesc = [true, true]
                         })
                         .catch(error => console.error('Error loading Excel file:', error));
                 },
@@ -532,7 +528,6 @@
                     vm.jsonData = vm.jsonData_.filter(i => !vm.jsonData.map(x => x.stock_number).includes(i.stock_number))
                 },
                 dataCache() {
-
                     //app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_1)&& parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_2)&&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_2) &&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_1)  &&x.highlight_stardate收盤價_1!=0 &&x.Type2!='上櫃' && x.highlight_date!='0')
                     app.sortBy = 'highlight_%'
                     return app.jsonData.sort(function (a, b) { return b['highlight_%'] - a['highlight_%']; })
@@ -635,76 +630,10 @@
                             .filter(x => x.Check && x.Ongoing && x.u_gain > 1 && x.u_gaind > 10)
                             .map(x => x.stock_number)
 
-                    // app.jsonData.filter(x=>alist.includes(x.stock_number)).map(x=>x.分類標籤="TT"+x.分類標籤)	
-                    app.jsonData = app.jsonData_.filter(x => alist.includes(x.stock_number))
-
-                    //----
-                    app.jsonData = app.jsonData.filter(x => parseFloat(x['MA_short']) > parseFloat(x['MA_long']) &&
-                        parseFloat(x['MA_long']) > parseFloat(x['MA_longlong']) &&
-                        parseFloat(x['MA_longlong']) > parseFloat(x['MA_longlonglong']))
-
-                    // app.jsonData.map(x=>x.分類標籤= x['均價longlong_%'])
-
-                    app.jsonData.map(x => x.分類標籤 = x['Type1'])
-
-                    //app.jsonData=app.jsonData.filter(x=> parseFloat(x['成交金額']) > parseFloat( x['成交金額平均']))
-                    //app.jsonData.map(x=> x.分類標籤= (parseFloat(x['Volume_MA_short']) / parseFloat( x['Volume_MA_long'])).toFixed(1))
-
-
-
-                    vm.sortBy = ['分類標籤', 'MACD_%']
-                    vm.sortDesc = [true, true]
-
-
-                    //----
-                    //app.jsonData=app.jsonData_.filter(x=>x.highlight_date!='0')
-
                 },
-                filter() {
-
-                    app.jsonData = app.jsonData_.filter(item => true
-                        // XXX &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
-                        && parseFloat(item['Volume_MA_short']) > parseFloat(item['Volume_MA_long']) * 0.9
-                        && parseFloat(item['Volume_MA_long50']) > parseFloat(item['成交金額平均']) * 0.8
-                        && parseFloat(item['MACD']) > parseFloat(item['MACD-SL']) - 0.03
-                        && parseFloat(item['now_price']) > parseFloat(item['MA_longlong'] * 1.04)
-                        && parseFloat(item['成交股數']) > 1000
-                        && parseFloat(item['量能']) > 10
-                        //&&  item.stock_number=='8039'
-                    )
-
-                    app.jsonData_.map(item => item.txt = (parseFloat(item['Volume_MA_long50']) / parseFloat(item['成交金額平均'])).toFixed(2))
-
-                    app.sortBy = ['LevelArea', 'txt', 'rt_量',];
-                    app.sortDesc = [true, true, true]
-
-                    app.jsonData = app.jsonData.filter(item => (parseFloat(item['txt']) > 0.7))
-                    //app.jsonData=app.jsonData.filter(item=>(parseFloat(item['diff_quote'])>3&&  parseFloat( item['成交股數'])>1000  ))
-
-                },
-                filter2() {
-                    // 回檔 抓放量攻擊
-                    app.jsonData = app.jsonData_.filter(item => true
-                        && item['分類標籤'].includes('d1')
-                        && parseFloat(item['Volume_MA_short']) > parseFloat(item['Volume_MA_long']) * 0.5
-                        && parseFloat(item['Volume_MA_long50']) > parseFloat(item['成交金額平均']) * 0.4
-                        && parseFloat(item['MACD']) > parseFloat(item['MACD-SL']) - 0.03
-                        && parseFloat(item['now_price']) > parseFloat(item['MA_longlong'] * 1)
-                        //&&  parseFloat( item['成交股數'])>1000 
-                        &&  parseFloat( item['LevelArea']) >-90
-                        //&&  item.stock_number=='4916'
-                    )
-                    app.sortBy = ['MA_last_cross_date', 'txt', 'LevelArea', 'rt_量',];
-                    app.sortDesc = [true, true, true, true]
-
-                },
-
                 memo() {
                     // app.jsonData=app.jsonData_.filter(x=>parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_1)&& parseFloat(x.now_price)>parseFloat(x.highlight_enddate收盤價_2)&&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_2) &&parseFloat(x.now_price)>parseFloat(x.highlight_stardate收盤價_1)  &&x.highlight_stardate收盤價_1!=0 )
 
-
-                    // app.jsonData=app.jsonData.filter(x=>parseInt(x['累計營業收入-前期比較增減(%)'])>0 &&x.Type1!='生技醫療業' )
-                    // app.jsonData=app.jsonData.filter(x=>x.LevelArea<90  && x.LevelArea>-50 && x.diff_quote>2)
 
                     var cache = JSON.parse(localStorage.getItem('cache') || '[]')
                     var cachenew = JSON.parse(localStorage.getItem('cachenew') || '[]')
@@ -721,10 +650,27 @@
                     //  排序 MACD_last_cross_date 搭大量 ==> 走短線(txt>2)
                     //  排序 MA_last_cross_date  幾天後出量 ==> 看長線(txt 約 0.5) ， MA 5/10 /20/50  翻多 80不一定
 
+                    app.jsonData = app.jsonData_.filter(x => true
+                                            && x.LevelArea <= -50 
+                                            && x.now_price> x.MACD_death_cross_d收盤價    
+                                            && x['MACD_last_cross_date'] != ''
+                                            //&& x['MA_last_cross_date'] != ''
+                                            )
+                    
+
+                    app.jsonData = app.jsonData_.filter(x => true
+                                            && x.LevelArea > -50 && x.LevelArea < 90 
+                                            && x.now_price> x.MACD_death_cross_d收盤價    
+                                            && x['MACD_last_cross_date'] != ''
+                                            //&& x['MA_last_cross_date'] != ''
+                                            )
+
+                    app.jsonData = app.jsonData_.filter(x => x.diff_quote>10)
+                    app.jsonData = app.jsonData_.filter(x => x.成交股數<250)
 
 
 
-
+                    //Volume_MA_short  成交金額平均
                 }
             }
         });
