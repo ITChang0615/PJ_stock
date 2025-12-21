@@ -676,6 +676,9 @@
 
                       app.sortBy = ['voc_cross_d', 'diff_quote']
                       app.sortDesc = [true, true]
+
+                      alist=['2520','2201','3211','3707','2329','3211','3260']
+                      app.jsonData = app.jsonData_.filter(x => alist.includes(x.stock_number))
                 }
             }
         });
