@@ -845,9 +845,11 @@
                    //
 
                    
-
-                    // app.jsonData.map(x=>x.tt=(parseFloat(x.txt-x.txts)).toFixed(2))
-
+                    app.jsonData = app.jsonData_.filter(x => ( x['分類標籤'].includes('d1') ))
+                    app.sortBy = ['tt']
+                    app.sortDesc = [true]
+                    
+                    
                     app.sortBy = ['分類標籤','LevelArea','tt','MACD_last_cross_date',]
                     app.sortDesc = [true,true,true,true]
                 }
