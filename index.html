@@ -701,8 +701,13 @@
 
                     //
                      app.jsonData = app.jsonData_.filter(x => 0.4<= x.txt && x.txt<0.5 )
-                      app.sortBy = ['分類標籤', 'MACD-SL']
+                    app.sortBy = ['分類標籤', 'MACD-SL']
                       app.sortDesc = [false, true]
+
+
+                      //MACD_last_cross_date
+                      app.sortBy = ['MACD_last_cross_date', 'highlight_date']
+                      app.sortDesc = [true, true]
                 }
             }
         });
