@@ -508,11 +508,17 @@
                                 });
                                 this.jsonData.map(x => x.txt = '-')
                                 this.jsonData.map(x => x.txts = '-')
+                                this.jsonData.map(x => x.tt = '-')
                                 this.jsonData.map(item => item.txt = (parseFloat(item['Volume_MA_long50']) / parseFloat(item['成交金額平均'])).toFixed(2))
                                 this.jsonData.map(item => item.txts = (parseFloat(item['成交金額']) / parseFloat(item['Volume_MA_short'])).toFixed(2))
-                                this.jsonData.filter(item => item['MACD_last_cross_date'] >this.paraDate_str()).map(x => x.MACD_last_cross_date = '')
-                                this.jsonData.filter(item => item['MA_last_cross_date'] >this.paraDate_str()).map(x => x.MA_last_cross_date = '')
-                                this.jsonData.filter(item => item['voc_cross_d'] >this.paraDate_str().replaceAll('/','-')).map(x => x.voc_cross_d = '')
+                                this.jsonData.map(x=>x.tt=(parseFloat(x.txt-x.txts)).toFixed(2))
+                                if(!!this.paraDate){
+                                    this.jsonData.filter(item => item['MACD_last_cross_date'] >this.paraDate_str()).map(x => x.MACD_last_cross_date = '')
+                                    this.jsonData.filter(item => item['MA_last_cross_date'] >this.paraDate_str()).map(x => x.MA_last_cross_date = '')
+                                    this.jsonData.filter(item => item['voc_cross_d'] >this.paraDate_str().replaceAll('/','-')).map(x => x.voc_cross_d = '')
+
+                                }
+                                
 
                                 //# -- 
                                 this.jsonData.filter(item => parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x => x.MACD_last_cross_date = '')
@@ -692,6 +698,11 @@
 
                       alist=['2520','2201','3211','3707','2329','3211','3260']
                       app.jsonData = app.jsonData_.filter(x => alist.includes(x.stock_number))
+
+                    //
+                     app.jsonData = app.jsonData_.filter(x => 0.4<= x.txt && x.txt<0.5 )
+                      app.sortBy = ['分類標籤', 'MACD-SL']
+                      app.sortDesc = [false, true]
                 }
             }
         });
