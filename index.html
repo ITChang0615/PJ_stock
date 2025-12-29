@@ -46,11 +46,10 @@
                                     app.sortDesc = [true,true]
                         ">成交股數>1000</v-btn-->
                         <v-btn color="primary" @click=" 
-                        app.jsonData = app.jsonData_.filter(x => true
-                                    &&( x.MACD_last_cross_date>=app.paraDateMinus(10)
-                                    //|| x.highlight_date==app.paraDate_str().replaceAll('/','-')
-                                    
-                                    //|| x.MA_last_cross_date==app.paraDate_str()
+                                    app.jsonData = app.jsonData_.filter(x => true 
+                                        &&( x.MACD_last_cross_date>=app.paraDateMinus(10)
+                                        || x.highlight_date==app.paraDate_str().replaceAll('/','-')
+                                        || x.MA_last_cross_date==app.paraDate_str()
                                      ))
 
                          app.sortBy = ['diff_quote', 'LevelArea']// ,'diff_quote'
