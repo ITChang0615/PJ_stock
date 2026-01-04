@@ -510,7 +510,7 @@
                                 this.jsonData.map(x => x.tt = '-')
                                 this.jsonData.map(item => item.txt = (parseFloat(item['Volume_MA_long50']) / parseFloat(item['成交金額平均'])).toFixed(2))
                                 this.jsonData.map(item => item.txts = (parseFloat(item['成交金額']) / parseFloat(item['Volume_MA_short'])).toFixed(2))
-                                this.jsonData.map(x=>x.tt=(parseInt(x.txt-x.txts)).toFixed(2))
+                                this.jsonData.map(x=>x.tt=(parseFloat(x.txt-x.txts)).toFixed(1))
                                 if(!!this.paraDate){
                                     this.jsonData.filter(item => item['MACD_last_cross_date'] >this.paraDate_str()).map(x => x.MACD_last_cross_date = '')
                                     this.jsonData.filter(item => item['MA_last_cross_date'] >this.paraDate_str()).map(x => x.MA_last_cross_date = '')
@@ -719,7 +719,16 @@
                             && parseFloat(x['累計營業收入-前期比較增減(%)'] )>0
                             && ( x['分類標籤'].includes('d') ||  x['分類標籤'].includes('b'))
                             //&& parseFloat( x['成交股數']) >1000
+
+                            && parseFloat(x['均價long_%']) < 0
+                            && x['分類標籤'].includes('d1')
+                            // && ( x['分類標籤'].includes('d2') &&  parseFloat(x['tt'] )>=1.5)
+                  
                     )
+                    app.jsonData = app.jsonData_.filter(x =>  x['分類標籤'].includes('e') )
+                    
+                    app.sortBy = ['tt','txts']
+                    app.sortDesc = [true,true]     
 
                     app.sortBy = ['MA_last_cross_date','voc_cross_d','MACD-SL','營業利益率','tt']
                     app.sortDesc = [true,true,true]     
@@ -731,4 +740,4 @@
     </script>
 </body>
 
-</html>  
+</html>
