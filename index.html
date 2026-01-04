@@ -725,13 +725,31 @@
                             // && ( x['分類標籤'].includes('d2') &&  parseFloat(x['tt'] )>=1.5)
                   
                     )
-                    app.jsonData = app.jsonData_.filter(x =>  x['分類標籤'].includes('e') )
+                    app.jsonData = app.jsonData_.filter(x =>  true
+                            && x.LevelArea >= -50 
+                            && x['分類標籤'].includes('e')
+                            && parseFloat(x['營業利益率'] )>0
+                            && parseFloat(x['累計營業收入-前期比較增減(%)'] )>0
+                    )
                     
                     app.sortBy = ['tt','txts']
                     app.sortDesc = [true,true]     
 
                     app.sortBy = ['MA_last_cross_date','voc_cross_d','MACD-SL','營業利益率','tt']
                     app.sortDesc = [true,true,true]     
+
+                    app.jsonData = app.jsonData_.filter(x =>  true   && parseFloat(x['量能'] )>20
+                            && x.LevelArea >= -50 
+                            && x['分類標籤'].includes('1')
+                            && parseFloat(x['營業利益率'] )>0
+                            && parseFloat(x['累計營業收入-前期比較增減(%)'] )>0
+                    )
+                    app.jsonData = app.jsonData_.filter(x =>  true   
+                           
+                            && x['分類標籤'].includes('c')
+                            && parseFloat(x['營業利益率'] )>0
+                            && parseFloat(x['累計營業收入-前期比較增減(%)'] )>0
+                    )
 
 
                 }
