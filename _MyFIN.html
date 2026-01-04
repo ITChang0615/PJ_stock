@@ -417,18 +417,18 @@
                     report: [],
                     headers: [
                         { text: 'Desc', value: 'Desc', align: 'left', sortable: true },
-                        { text: '202501', value: '202501', align: 'left', sortable: true },
-                        { text: '202502', value: '202502', align: 'left', sortable: true },
-                        { text: '202503', value: '202503', align: 'left', sortable: true },
-                        { text: '202504', value: '202504', align: 'left', sortable: true },
-                        { text: '202505', value: '202505', align: 'left', sortable: true },
-                        { text: '202506', value: '202506', align: 'left', sortable: true },
-                        { text: '202507', value: '202507', align: 'left', sortable: true },
-                        { text: '202508', value: '202508', align: 'left', sortable: true },
-                        { text: '202509', value: '202509', align: 'left', sortable: true },
-                        { text: '202510', value: '202510', align: 'left', sortable: true },
-                        { text: '202511', value: '202511', align: 'left', sortable: true },
-                        { text: '202512', value: '202512', align: 'left', sortable: true },
+                        { text: '202601', value: '202601', align: 'left', sortable: true },
+                        { text: '202602', value: '202602', align: 'left', sortable: true },
+                        { text: '202603', value: '202603', align: 'left', sortable: true },
+                        { text: '202604', value: '202604', align: 'left', sortable: true },
+                        { text: '202605', value: '202605', align: 'left', sortable: true },
+                        { text: '202606', value: '202606', align: 'left', sortable: true },
+                        { text: '202607', value: '202607', align: 'left', sortable: true },
+                        { text: '202608', value: '202608', align: 'left', sortable: true },
+                        { text: '202609', value: '202609', align: 'left', sortable: true },
+                        { text: '202610', value: '202610', align: 'left', sortable: true },
+                        { text: '202611', value: '202611', align: 'left', sortable: true },
+                        { text: '202612', value: '202612', align: 'left', sortable: true },
                         { text: 'calculate', value: 'calculate', align: 'left' },
                         { text: 'byMonth', value: 'bymonth', align: 'left' },
                     ],
@@ -563,7 +563,7 @@
                     return months;
                 },
                 getYM() {
-                    const year = 2025;
+                    const year = 2026;
                     const months = Array.from({ length: 12 }, (v, i) =>
                         `${year}${String(i + 1).padStart(2, '0')}`
                     );
@@ -592,44 +592,46 @@
                 set_maindata() {
                     // 【INPUT】
                     this.maindata_input = [
-                        { "Desc": "預設", "202501": "85000", "202502": null, "202503": null, "202504": null, "202505": null, "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": null },
-                        { "Desc": "薪", "202501": "67300", "202502": "67300", "202503": "67300", "202504": "67300", "202505": "69679", "202506": "64480", "202507": "69679", "202508": "66064", "202509": "69679", "202510": "69679", "202511": "69679", "202512": "69679" },
-                        { "Desc": "獎金", "202501": "70300", "202502": null, "202503": null, "202504": null, "202505": "36150", "202506": null, "202507": null, "202508": null, "202509": null, "202510": "36150", "202511": null, "202512": "" },
-                        { "Desc": "獎金2", "202501": "40000", "202502": null, "202503": null, "202504": null, "202505": null, "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": "" },
-                        { "Desc": "Other", "202501": 26704, "202502": null, "202503": null, "202504": null, "202505": null, "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": "" },
-                        //  19088
+                        //{ "Desc": "預設", "202601": "0", "202602": null, "202603": null, "202604": null, "202605": null, "202606": null, "202607": null, "202608": null, "202609": null, "202610": null, "202611": null, "202612": null },
+                        { "Desc": "薪", "202601": "67300", "202602": "67300", "202603": "67300", "202604": "60000", "202605": "0", "202606": "0", "202607": "0", "202608": "0", "202609": "0", "202610": "0", "202611": "0", "202612": "0" },
+                        { "Desc": "獎金", "202601": "0", "202602": 70300, "202603": null, "202604": null, "202605": "0", "202606": null, "202607": null, "202608": null, "202609": null, "202610": "0", "202611": null, "202612": "" },
+                        { "Desc": "獎金2", "202601": "0", "202602": 40000, "202603": null, "202604": null, "202605": null, "202606": null, "202607": null, "202608": null, "202609": null, "202610": null, "202611": null, "202612": "" },
+                        { "Desc": "Other", "202601": 0, "202602": null, "202603": null, "202604": null, "202605": null, "202606": null, "202607": null, "202608": null, "202609": null, "202610": null, "202611": null, "202612": "" },
+
                     ]
                     this.maindata_input = this.sumdata("sum收入", this.maindata_input);
                     this.report.push(this.maindata_input.filter(x => x.Desc == "sum收入")[0])
                     // 【OUTPUT】
                     this.maindata_output = [
-                        { "Desc": "生活-LPP", "202501": "8000", "202502": "5000", "202503": "7000", "202504": "7000", "202505": "8500", "202506": "8000", "202507": "8000", "202508": "6000", "202509": "7000", "202510": "12000", "202511": "7000", "202512": "8000" },
-                        { "Desc": "生活", "202501": "4213", "202502": "1527", "202503": "1129", "202504": "3467", "202505": "2894", "202506": "4521", "202507": "2206", "202508": "5001", "202509": "2296", "202510": "6871", "202511": "4601", "202512": "4000" },
-                        { "Desc": "固-3C影音", "202501": "943", "202502": "943", "202503": "3594", "202504": "1700", "202505": "3594", "202506": "1606", "202507": "3604", "202508": "1606", "202509": "3904", "202510": "2639", "202511": "2857", "202512": "2857" },
-                        { "Desc": "固-阿罵", "202501": "61500", "202502": "9000", "202503": "1800", "202504": "1000", "202505": null, "202506": null, "202507": null, "202508": null, "202509": 3339, "202510": null, "202511": null, "202512": "2500" },
-                        { "Desc": "固-車", "202501": "3325", "202502": "776", "202503": "3481", "202504": "1680", "202505": "3500", "202506": "2263", "202507": "2352", "202508": "1937", "202509": "5910", "202510": "2495", "202511": "1474", "202512": "2500" },
-                        { "Desc": "固-車稅/保養", "202501": null, "202502": null, "202503": null, "202504": "4320", "202505": null, "202506": "17358", "202507": "17314", "202508": null, "202509": null, "202510": null, "202511": null, "202512": "12000" },
-                        { "Desc": "固-稅", "202501": null, "202502": null, "202503": null, "202504": null, "202505": "7168", "202506": null, "202507": null, "202508": null, "202509": null, "202510": null, "202511": null, "202512": null },
-                        { "Desc": "運動", "202501": "2400", "202502": "7400", "202503": null, "202504": null, "202505": null, "202506": null, "202507": "5400", "202508": "5000", "202509": "7333", "202510": "12600", "202511": "8400", "202512": "8400" },
-                        { "Desc": "購物/娛樂", "202501": "13195", "202502": "7002", "202503": "5880", "202504": "13000", "202505": "10000", "202506": "4750", "202507": "5340", "202508": "4010", "202509": "0", "202510": "5140", "202511": "41053", "202512": "5000" },
-                        { "Desc": "旅", "202501": null, "202502": null, "202503": "5380", "202504": null, "202505": "6595", "202506": null, "202507": "3000", "202508": null, "202509": "60474", "202510": null, "202511": null, "202512": "3000" },
+                        { "Desc": "生活-LPP", "202601": "8000", "202602": "5000", "202603": "7000", "202604": "7000", "202605": "8500", "202606": "8000", "202607": "8000", "202608": "6000", "202609": "7000", "202610": "12000", "202611": "7000", "202612": "8000" },
+                        { "Desc": "生活", "202601": "4213", "202602": "1527", "202603": "1129", "202604": "3467", "202605": "2894", "202606": "4521", "202607": "2206", "202608": "5001", "202609": "2296", "202610": "6871", "202611": "4601", "202612": "4000" },
+                        { "Desc": "固-3C影音", "202601": "943", "202602": "943", "202603": "3594", "202604": "1700", "202605": "3594", "202606": "1606", "202607": "3604", "202608": "1606", "202609": "3904", "202610": "2639", "202611": "2857", "202612": "2857" },
+                        { "Desc": "固-阿罵", "202601": "61500", "202602": "9000", "202603": "1800", "202604": "1000", "202605": null, "202606": null, "202607": null, "202608": null, "202609": 3339, "202610": null, "202611": null, "202612": "2500" },
+                        { "Desc": "固-車", "202601": "3325", "202602": "776", "202603": "3481", "202604": "1680", "202605": "3500", "202606": "2263", "202607": "2352", "202608": "1937", "202609": "5910", "202610": "2495", "202611": "1474", "202612": "2500" },
+                        { "Desc": "固-車稅/保養", "202601": null, "202602": null, "202603": null, "202604": "4320", "202605": null, "202606": "17358", "202607": "17314", "202608": null, "202609": null, "202610": null, "202611": null, "202612": "12000" },
+                        { "Desc": "固-稅", "202601": null, "202602": null, "202603": null, "202604": null, "202605": "7168", "202606": null, "202607": null, "202608": null, "202609": null, "202610": null, "202611": null, "202612": null },
+                        { "Desc": "3C產品", "202601": null, "202602": null, "202603": null, "202604": null, "202605": null, "202606": null, "202607": null, "202608": null, "202609": null, "202610": null, "202611": null, "202612": null },
+                        { "Desc": "運動", "202601": "2400", "202602": "7400", "202603": null, "202604": null, "202605": null, "202606": null, "202607": "5400", "202608": "5000", "202609": "7333", "202610": "12600", "202611": "8400", "202612": "8400" },
+                        { "Desc": "購物/娛樂", "202601": "13195", "202602": "7002", "202603": "5880", "202604": "13000", "202605": "10000", "202606": "4750", "202607": "5340", "202608": "4010", "202609": "0", "202610": "5140", "202611": "41053", "202612": "5000" },
+                        { "Desc": "旅", "202601": null, "202602": null, "202603": "5380", "202604": null, "202605": "6595", "202606": null, "202607": "3000", "202608": null, "202609": "60474", "202610": null, "202611": null, "202612": "3000" },
                     ]
                     //Now
                     var current = [
-                        { Desc: '運動', value: 9800 },
-                        { Desc: '固-車', value: 8693 },
-                        { Desc: '生活-LPP', value: 8000 },
-                        { Desc: '生活', value: 6064 },
-                        { Desc: '購物/娛樂', value: 4900 },
-                        { Desc: '固-阿罵', value: 3015 },
-						{ Desc: '固-3C影音', value: 2192 },
-                        
+                        { Desc: '運動', value: 0 },
+                        { Desc: '3C產品', value: 8280 },
+                        { Desc: '固-3C影音', value: 1188 },
+                        { Desc: '固-車', value: 694 },
+                        { Desc: '生活-LPP', value: 0 },
+                        { Desc: '生活', value: 0 },
+                        { Desc: '購物/娛樂', value: 746 },
+                        { Desc: '固-阿罵', value: 0 },
+						
                         { Desc: '固-車稅/保養', value: null },
                         { Desc: '固-稅', value: null },
                         { Desc: '旅', value: null },
                          
                     ]
-                    this.currentym = '202512'
+                    this.currentym = '202601'
 
                     current.forEach(current => {
                         this.maindata_output.find(x => x.Desc == current.Desc)[this.currentym] = current.value
@@ -640,7 +642,7 @@
 
                     this.report = this.minus("月餘", this.report);
                     //【Savings】
-                    this.maindata_savings = { "Desc": "儲蓄", "202502": "-200000", "202504": "-50000", "202505": "-50000", "202506": "-50000", "202508": "-50000", "202509": null, "202510": "-50000", "202511": null, "202512": "-50000" }
+                    this.maindata_savings = { "Desc": "儲蓄", "202604": "-0", }
                     this.report.push(this.maindata_savings)
                     this.maindata_cash = { "Desc": "現金", }
                     var sum = 0
@@ -653,38 +655,36 @@
                 },
                 set_mydata() {
                     this.mydata = [
-                        { "Desc": "invest_input", "N_1": 104710, "N_2": null },//買進   
-                        { "Desc": "invest_output", "N_1": null, "N_2": null },//賣出
+                        { "Desc": "invest_input", "N_1": null, "N_2": null },//買進   
+                        { "Desc": "invest_output", "N_1": null, "N_2": null },//賣出 
                         { "Desc": "income_loss", "N_1": null, "N_2": null },//損益   
                         { "Desc": "股息", "N_1": null, "N_2": null },//股息
                         { "Desc": "現金", "today": 2000 },
-                        { "Desc": "信用卡", "today": -16116 },
-                        { "Desc": "銀行", "today": 29000 },
+                        { "Desc": "信用卡", "today": -26629 },
+                        { "Desc": "銀行", "today": 92179 },
                         { "Desc": "預備金", "today": 320014 },
-                        { "Desc": "日幣", "today": 29969 },
-                        { "Desc": "投入", "today": 3630731 },
-                        { "Desc": "可下單現金", "today": 623248 },
+                        { "Desc": "日幣", "today": 29854 },
+                        { "Desc": "投入", "today": 3447530 },
+                        { "Desc": "可下單現金", "today": 813734 },
                         { "Desc": "Total", "today": null }
                     ]
                 },
                 set_stockdata() {
                     this.stockdata = [
-                        { "Type2": "上市", "name": null, "number": '0052', "hold": 4000, "now": 37.45, "buyin": 36.76, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
-                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 48000, "now": 23.6, "buyin": 27.19, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
-                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 30.35, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
-                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 26000, "now": 20.6, "buyin": 26.31, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
-                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 13000, "now": 40.2, "buyin": 38.99, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
-                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 13.85, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
-                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 800, "now": 336, "buyin": 342.52, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
-                        
-                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 1000, "now": 195, "buyin": 206.29, "profit_stock": null, "profit": 4.9, "frequency": 1, "month": "" },
-                        /*
+                        { "Type2": "上市", "name": null, "number": '0052', "hold": 4000, "now": 38.76, "buyin": 36.76, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 48000, "now": 23, "buyin": 27.19, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
+                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 29.95, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
+                        { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 26000, "now": 20.7, "buyin": 26.31, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
+                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 3000, "now": 39.25, "buyin": 38.57, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
+                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 13.75, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 1100, "now": 339, "buyin": 341.69, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
+                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 1000, "now": 201, "buyin": 206.29, "profit_stock": null, "profit": 4.9, "frequency": 1, "month": "" },
+                        /*                        
                         { "Type2": "上市", "name": null, "number": '0050', "hold": 0, "now": 65.15, "buyin": 62.11, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
                         { "Type2": "上市", "name": null, "number": '006208', "hold": 0, "now": 149.15, "buyin": 142.55, "profit_stock": null, "profit": 2.07, "frequency": 2, "month": "1,7" },
                         { "Type2": "上市", "name": null, "number": '0056', "hold": 0, "now": 36.69, "buyin": 36.04, "profit_stock": null, "profit": 0.866, "frequency": 4, "month": "1,4,7,10" },
                         { "Type2": "上市", "name": null, "number": '00713', "hold": 0, "now": 50.85, "buyin": 50.4, "profit_stock": null, "profit": 0.78, "frequency": 4, "month": "3,6,9,12" },
                         { "Type2": "上市", "name": null, "number": '00878', "hold": 0, "now": 21.7, "buyin": 20.87, "profit_stock": null, "profit": 0.4, "frequency": 4, "month": "2,5,8,11" },
-                         
                         */
                     ]
                     this.stock_headers_profit.push(...this.getYM().map(x => ({ text: x, value: x })));
