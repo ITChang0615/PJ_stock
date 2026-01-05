@@ -696,14 +696,16 @@
                     'diff_quote', '量能',
                     'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
                     */
-                    app.jsonData = app.jsonData_.filter(x =>true
+                
+                   app.jsonData = app.jsonData_.filter(x =>true
                                 //&& parseFloat(x['均價long_%']) <0 && parseFloat(x['均價longlong_%']) >0
                                 // && parseFloat(x['MA_longlong']) > parseFloat(x['MA_short']) // 拉回長線
                                 // && parseFloat(x['MA_longlong']) > parseFloat(x['MA_long']) 
                                 && parseFloat(x['MA_short']) > parseFloat(x['MA_longlonglong']) 
                                    && x['MACD_last_cross_date'] != ''
                                 )
-
+                    app.sortBy = ['voc_cross_d','t_t']
+                    app.sortDesc = [true,false]    
                     app.sortBy = ['MA_last_cross_date','MACD_last_cross_date']
                     app.sortDesc = [true,true]     
               
