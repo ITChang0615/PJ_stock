@@ -698,9 +698,12 @@
                     */
                     app.jsonData = app.jsonData_.filter(x =>true
                                 //&& parseFloat(x['均價long_%']) <0 && parseFloat(x['均價longlong_%']) >0
-                                && parseFloat(x['MA_longlong']) > parseFloat(x['MA_long']) 
+                                // && parseFloat(x['MA_longlong']) > parseFloat(x['MA_short']) // 拉回長線
+                                // && parseFloat(x['MA_longlong']) > parseFloat(x['MA_long']) 
                                 && parseFloat(x['MA_short']) > parseFloat(x['MA_longlonglong']) 
+                                   && x['MACD_last_cross_date'] != ''
                                 )
+
                     app.sortBy = ['MA_last_cross_date','MACD_last_cross_date']
                     app.sortDesc = [true,true]     
               
@@ -708,7 +711,7 @@
 
                     app.jsonData = app.jsonData_.filter(x => x.成交股數<250)
 
-                    alist=['2520','2201','3211','3707','2329','3211','3260']
+                    alist=['3257','3661']
                     app.jsonData = app.jsonData_.filter(x => alist.includes(x.stock_number))
 
                     //----
