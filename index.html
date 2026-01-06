@@ -430,7 +430,8 @@
                                 arr = [
                                     'tt', 't_t', 'txt', 'txts', '分類標籤', 'stock_number', '_quote', '成交股數', 'rt_量', 'now_price', 'rt_price', 'LevelArea',
                                     'MACD-SL',
-                                    '營業毛利率', '營業利益率', '均價long_%', '均價longlong_%',
+                                    '營業毛利率', '營業利益率',
+                                    '%K', '%D', 'MA5_%','均價long_%', '均價longlong_%',
                                     'diff_quote', '量能',
                                     //'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
                                     'MACD_last_cross_date',
@@ -782,7 +783,7 @@
                         && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
                         //---
                         && parseFloat(x['MACD-SL']) > 0  
-                        && parseFloat(x['MACD']) > parseFloat(x['MACD-SL'])  
+                        && parseFloat(x['MACD']) >= parseFloat(x['MACD-SL'])  *0.8
                         && parseFloat(x['LevelArea']) > -50
                         && parseFloat(x['均價long_%']) > 0
                         && parseFloat(x['成交股數']) > 50
@@ -790,7 +791,9 @@
                        // && parseFloat(x['txt']) <0.5 
 
                     )
-                    app.jsonData.map(x => x['每股營收(元)'] = parseFloat(x['每股營收(元)'].replace(',', '')))
+                    app.sortBy = ['MACD_last_cross_date','tt']
+                    app.sortDesc = [true,true]
+
                     app.jsonData.map(x => x['Full_Summary'] = x.Type1)
                     app.sortBy = ['Type1','每股營收(元)']
                     app.sortDesc = [true,true]
@@ -799,7 +802,7 @@
                    app.sortDesc = [true,true]
                     
                     // GREAT
-                    app.jsonData.map(x => x['每股營收(元)'] = parseFloat(x['每股營收(元)'].replace(',', '')))
+                    
                     app.jsonData.map(x => x['Full_Summary'] = x.Type1)
                     app.sortBy = ['Type1','每股營收(元)']
                     app.sortDesc = [true,true]
