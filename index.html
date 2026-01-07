@@ -41,7 +41,9 @@
                     </v-col>
                     <v-col col="4">
                         <v-btn color="primary" @click="
+                            
                             const output = app.checklist
+                            localStorage.setItem('checklist', JSON.stringify(output));
                             const blob = new Blob(
                                 [JSON.stringify(output, null, 2)],
                                 { type: 'application/json' }
@@ -51,7 +53,7 @@
                             link.href = URL.createObjectURL(blob)
                             link.download = `export_${Date.now()}.json`
                             link.click()
-                            ">下載</v-btn>
+                            ">下 載</v-btn>
                         <v-btn color="primary" @click=" 
                            app.jsonData = app.jsonData_.filter( x =>true
                             && !(['化學工業','航運業','生技醫療業','塑膠工業','金融保險', '鋼鐵工業','居家生活'].includes(x.Type1))
@@ -283,6 +285,7 @@
                 }
 
                 this.init();
+                this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
             },
             computed: {
                 appheaderData() {
