@@ -226,7 +226,8 @@
                                 target="_blank"> TradingView </a>
                             <a v-if="selectedItem?.Type2!='上市'"
                                 :href="`https://tw.tradingview.com/chart/?symbol=TPEX%3A${selectedItem?.stock_number}`"
-                                target="_blank"> TradingView </a>
+                                target="_blank"> TradingView </a>&nap;
+                            <a  :href="`https://statementdog.com/analysis/${selectedItem?.stock_number}`" target="_blank"> 本益比河流 </a>
                             <!-- 在這裡添加iframe -->
                             <iframe v-if="selectedItem"
                                 :src="`${url}[${selectedItem.stock_number}]${selectedItem.Type.replace('*', '')}.html`"
@@ -456,24 +457,23 @@
                                 }
 
                                 arr = [
-                                    'stock_number', 'tt', 't_t', 'txt', 'txts', '分類標籤', '_quote', '成交股數', 'rt_量', 'now_price', 'rt_price', 'LevelArea',
-                                    'MACD-SL',
+                                    'stock_number',
+                                    'tt', 't_t', 'txt', 'txts', '分類標籤',
+                                    '_quote', '成交股數', 'rt_量', 'now_price', 'rt_price', 'LevelArea','量能','MACD-SL',
+                                    
                                     '營業毛利率', '營業利益率',
                                     '%K', '%D', 'MA5_%', '均價long_%', '均價longlong_%',
-                                    'diff_quote', '量能',
+                                    'diff_quote', 
                                     //'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
                                     'MA_last_cross_date', 'MA_last_cross_date收盤價', 'MA_last_cross_%',
                                     'Type1',
                                     'MACD_last_cross_date',
                                     'voc_cross_d',
                                     'highlight_date',
-                                    //'MA_death_cross_d',  'MA_death_cross_d2', 'MA_death_cross_d收盤價','MA_death_cross_d2收盤價',
-
-                                    //'MACD_death_cross_d', 'MACD_death_cross_d2', 
-                                    'MACD_death_cross_d收盤價',
-                                    //'MACD_death_cross_d2收盤價',
-
+                                
                                     'MACD_hist_diff',
+                                    
+                                    'MACD_death_cross_d收盤價',
 
                                     'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1',
                                     'highlight_enddate收盤價_1', 'highlight_收盤價', 'highlight_stardate收盤價_2', 'highlight_enddate收盤價_2', 'highlight_%', 'highlight_%_1', 'highlight_%_2',
@@ -495,16 +495,13 @@
                                     // '開盤價', '最高價', '最低價', '收盤價', '每股淨值(元)', 
                                     'desc', 'flag_stat',
 
-
                                     'MA_last_cross_d2', 'MA_last_cross_d2收盤價',
-                                    'MA_death_cross',
-                                    'MA_death_cross_d', 'MA_death_cross_d收盤價', 'MA_death_cross_d2', 'MA_death_cross_d2收盤價',
+                                    'MA_death_cross','MA_death_cross_d', 'MA_death_cross_d收盤價', 'MA_death_cross_d2', 'MA_death_cross_d2收盤價',
                                     //'MACD_death_cross_d', 'MACD_death_cross_d收盤價','MACD_death_cross_d2',
                                     'MACD_death_cross_d2收盤價',
                                 ]
 
                                 this.headers = arr.map(header => ({ text: header, value: header }));
-
 
                                 this.headers.forEach(header => {
                                     if (this.isNumberField(header.value)) {
@@ -702,34 +699,26 @@
                     //  排序 MA_last_cross_date  幾天後出量 ==> 看長線(txt 約 0.5) ， MA 5/10 /20/50  翻多 80不一定
 
                     app.jsonData = app.jsonData_.filter(x => true
-                        && x.LevelArea <= -50
-                        && x.now_price > x.MACD_death_cross_d收盤價
-                        && x['MACD_last_cross_date'] != ''
-                        //&& x['MA_last_cross_date'] != ''
-                    )
-
-
-                    app.jsonData = app.jsonData_.filter(x => true
                         && x.LevelArea > -50 && x.LevelArea < 90
                         && x.now_price > x.MACD_death_cross_d收盤價
                         && x['MACD_last_cross_date'] != ''
                         //&& x['MA_last_cross_date'] != ''
                     )
-                    app.jsonData = app.jsonData_.filter(x => true
+
+                    app.jsonData = app.jsonData.filter(x => true
                         //&&  x.diff_quote>8 &&  x.diff_quote<16
                         && x.LevelArea > -80
                         && parseFloat(x['MA_last_cross_%']) < 10
                         && parseFloat(x['MA_last_cross_%']) > 0
                     )
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && parseFloat(x['均價longlong_%']) < 0
-                        && parseFloat(x['MA_short']) < parseFloat(x['MA_longlonglong'])
-                    )
+
+
                     /* !!!!!!!!!!!!!!!!!!!!!!!!!
                     '均價long_%', '均價longlong_%',
                     'diff_quote', '量能',
                     'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
                     */
+
 
                     app.jsonData = app.jsonData_.filter(x => true
                         //&& parseFloat(x['均價long_%']) <0 && parseFloat(x['均價longlong_%']) >0
@@ -740,11 +729,7 @@
                     )
                     app.sortBy = ['voc_cross_d', 't_t']
                     app.sortDesc = [true, false]
-                    app.sortBy = ['MA_last_cross_date', 'MACD_last_cross_date']
-                    app.sortDesc = [true, true]
-
-                    app.jsonData = app.jsonData_.filter(x => x.成交股數 < 250)
-
+                    
                     //----
                     //Volume_MA_short  成交金額平均
                     //'營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)',
@@ -772,8 +757,6 @@
                     app.sortBy = ['tt', 'txts']
                     app.sortDesc = [true, true]
 
-                    app.sortBy = ['MA_last_cross_date', 'voc_cross_d', 'MACD-SL', '營業利益率', 'tt']
-                    app.sortDesc = [true, true, true]
 
                     app.jsonData = app.jsonData_.filter(x => true
                         && parseFloat(x['量能']) > 20
@@ -782,11 +765,8 @@
                         && parseFloat(x['營業利益率']) > 0
                         && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
                     )
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && x['分類標籤'].includes('c')
-                        && parseFloat(x['營業利益率']) > 0
-                        && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
-                    )
+
+
 
                     //-------------------------------
                     app.jsonData = app.jsonData_.filter(x => x.量能 > 10
@@ -875,6 +855,31 @@
                     app.jsonData.map(x => x['Full_Summary'] = x.Type1)
                     app.sortBy = ['Type1', '每股營收(元)']
                     app.sortDesc = [true, true]
+
+
+                    ///-------------------------------
+                    app.jsonData=app.jsonData_.filter(x => true   
+						
+						////&&  !(['半導體業', '電子零組件業', '其他電子業', '通信網路業', '航運業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
+
+						////&&( x.MACD_last_cross_date>=app.paraDateMinus(1) )
+
+						&&  !(['化學工業', '航運業', '生技醫療業', '塑膠工業', '金融保險', '鋼鐵工業', '居家生活','觀光事業','運動休閒'].includes(x.Type1))
+						//&&   (x['分類標籤'].includes('e'))
+
+						//&& parseFloat(x['均價longlong_%']) >  parseFloat(x['均價long_%'])
+
+						&&   (x['Full_Summary'].includes('爆量上攻')|| x['Full_Summary'].includes('低檔翻揚') )
+						&& parseFloat(x['成交股數']) > 50 
+						&& parseFloat(x['LevelArea']) > -50
+                    )
+                    
+                    app.sortBy = [ 'diff_quote','%K']
+                    app.sortDesc = [true, true]
+					
+
+
+
                 }
             }
         });

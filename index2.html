@@ -429,6 +429,8 @@
                             
                             <a v-if="selectedItem?.Type2=='上市'" :href="`https://tw.tradingview.com/chart/?symbol=TWSE%3A${selectedItem?.stock_number}`" target="_blank"> TradingView </a>
                             <a v-if="selectedItem?.Type2!='上市'" :href="`https://tw.tradingview.com/chart/?symbol=TPEX%3A${selectedItem?.stock_number}`" target="_blank"> TradingView </a>
+                            <a  :href="`https://statementdog.com/analysis/${selectedItem?.stock_number}`" target="_blank"> 本益比河流 </a>
+
                             <iframe v-if="selectedItem"
                                 :src="`${url}[${selectedItem.stock_number}]${selectedItem.Type.replace('*', '')}.html`"
                                 width="80%" frameborder="0" style="padding: 0; height:80vh;">
