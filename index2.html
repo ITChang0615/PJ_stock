@@ -391,6 +391,8 @@
 
                     <template v-slot:item.type="{ item }">
                         <v-btn text @click="openDialog(item)">
+   <v-icon v-if=" checklist.filter(x => x == item.stock_number).length > 0  " aria-hidden="false"
+                            color="orange">mdi-star</v-icon>
                             <span style="    text-align: justify;">
                                 {{ item.stock_number }}<br />
                                 {{ item.Type0 }}<br />
