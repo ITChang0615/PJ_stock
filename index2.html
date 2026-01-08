@@ -391,8 +391,8 @@
 
                     <template v-slot:item.type="{ item }">
                         <v-btn text @click="openDialog(item)">
-   <v-icon v-if=" checklist.filter(x => x == item.stock_number).length > 0  " aria-hidden="false"
-                            color="orange">mdi-star</v-icon>
+                            <v-icon v-if=" checklist.filter(x => x == item.stock_number).length > 0  "
+                                aria-hidden="false" color="orange">mdi-star</v-icon>
                             <span style="    text-align: justify;">
                                 {{ item.stock_number }}<br />
                                 {{ item.Type0 }}<br />
@@ -427,13 +427,19 @@
                 <v-dialog v-model="dialog" max-width="90vw">
                     <v-card>
                         <v-card-title class="headline">{{ selectedItem?.stock_number }}
-                            <v-checkbox v-model="checked"  @click="checkboxUpdated(selectedItem?.stock_number)"></v-checkbox>
+                            <v-checkbox v-model="checked"
+                                @click="checkboxUpdated(selectedItem?.stock_number)"></v-checkbox>
                         </v-card-title>
                         <v-card-text style="padding: 0; height:90vh;">
-                            
-                            <a v-if="selectedItem?.Type2=='上市'" :href="`https://tw.tradingview.com/chart/?symbol=TWSE%3A${selectedItem?.stock_number}`" target="_blank"> TradingView </a>
-                            <a v-if="selectedItem?.Type2!='上市'" :href="`https://tw.tradingview.com/chart/?symbol=TPEX%3A${selectedItem?.stock_number}`" target="_blank"> TradingView </a>
-                            <a  :href="`https://statementdog.com/analysis/${selectedItem?.stock_number}`" target="_blank"> 本益比河流 </a>
+
+                            <a v-if="selectedItem?.Type2=='上市'"
+                                :href="`https://tw.tradingview.com/chart/?symbol=TWSE%3A${selectedItem?.stock_number}`"
+                                target="_blank"> TradingView </a>
+                            <a v-if="selectedItem?.Type2!='上市'"
+                                :href="`https://tw.tradingview.com/chart/?symbol=TPEX%3A${selectedItem?.stock_number}`"
+                                target="_blank"> TradingView </a>
+                            <a :href="`https://statementdog.com/analysis/${selectedItem?.stock_number}`"
+                                target="_blank"> 本益比河流 </a>
 
                             <iframe v-if="selectedItem"
                                 :src="`${url}[${selectedItem.stock_number}]${selectedItem.Type.replace('*', '')}.html`"
@@ -672,7 +678,7 @@
             vuetify: new Vuetify(),
             data() {
                 return {
-                     checked: false,
+                    checked: false,
                     checklist: [],
                     collapse: false,
                     sync: false,
@@ -691,10 +697,10 @@
                     //sortBy: ['長均交叉日'], highlight_date
                     //sortBy: ['uptrend_b', 'uptrend_有量'],
                     //sortBy: ['highlight_date', '量'],
-                   // sortBy:['frist_uptrend','量'],
+                    // sortBy:['frist_uptrend','量'],
                     //sortBy:['LevelArea','量'],
-                    sortBy:['frist_uptrend','uptrend_b1'],
-                    
+                    sortBy: ['frist_uptrend', 'uptrend_b1'],
+
                     sortDesc: [true, true],
                     //////////////
                     dialog: false,
@@ -728,7 +734,7 @@
                 this.url = this.url.replace('PJ_stock/Html', 'PJ_Stock2')
 
                 this.init();
-                this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
+                this.checklist = JSON.parse(localStorage.getItem('checklist') || '[]')
                 window.scrollTo({ left: document.body.scrollWidth, behavior: 'smooth' });
             },
             computed: {
@@ -802,7 +808,7 @@
                     this.dialog = true;
                 },
                 checkboxUpdated(newValue) {
-                    this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
+                    this.checklist = JSON.parse(localStorage.getItem('checklist') || '[]')
                     if (newValue) {
                         if (this.checked) {
                             this.checklist.push(newValue)
@@ -863,7 +869,7 @@
                     const setdate = urlParams.get('setdate');
 
                     if (d) {
-                        const allowedTypes = ['ss', 's', 'a', 'sbk', 'aabk', 'aa', 'b1', 'b2',  'c', 'd1','d2', 'e', 'f', 'h', 'v', 'x', 'y']; // 可擴充
+                        const allowedTypes = ['ss', 's', 'a', 'sbk', 'aabk', 'aa', 'b1', 'b2', 'c', 'd1', 'd2', 'e', 'f', 'h', 'v', 'x', 'y']; // 可擴充
                         if (allowedTypes.includes(d)) {
                             file = `./Result/checksun_${d}/${urlParams.get('date')}.xlsx`;
                             this.date_ = urlParams.get('date');
@@ -955,7 +961,7 @@
                                     '均價longlong_%', '均價long_%', '均價_%', 'MA5_%', '當日漲跌',
                                     '量能avg', '短量', '長量', '量增幅',
 
-                                    'uptrend_有量','frist_uptrendcheck' ,'frist_uptrend'
+                                    'uptrend_有量', 'frist_uptrendcheck', 'frist_uptrend'
                                 ]
                                 //
                                 //【參數】  利用過去Data確認計算這些邏輯是否有用 
@@ -1108,7 +1114,7 @@
                                                 let cond21 = parseInt(day_0["成交金額平均"]) < parseInt(day_0["成交金額"])
 
                                                 let cond22 = day_0["均價longlong_%"] > 0 && day_1["均價longlong_%"] < 0
-                                                let cond23 = day_0["MA5_%"] > 0 && day_1["MA5_%"] < 0 && parseFloat(day_0.Volume_MA_long / day_0.成交金額平均).toFixed(1)>0.7
+                                                let cond23 = day_0["MA5_%"] > 0 && day_1["MA5_%"] < 0 && parseFloat(day_0.Volume_MA_long / day_0.成交金額平均).toFixed(1) > 0.7
 
                                                 // 將多組邏輯條件包進陣列，每組是一種邏輯成立條件
                                                 let conditionGroups = [
@@ -1203,7 +1209,7 @@
                                         dummydataItem.VPC_break = datalist_last_date?.VPC_break;
                                         dummydataItem.Flag_macd = datalist_last_date?.Flag_macd;
                                         dummydataItem.frist_uptrend = datalist_last_date?.frist_uptrend;
-                                        
+
 
                                         dummydataItem.now_price = datalist_last_date?.now_price;
                                         dummydataItem.MA_short = datalist_last_date?.MA_short;
@@ -1314,14 +1320,14 @@
 
                                         //
                                         //dummydataItem.frist_uptrend = datalist.filter(x => x.Flag_三階段).map(x => x.日期).sort()[0]
-                                        dummydataItem.frist_uptrend = datalist.filter(item=>true
-                                                            //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
-                                                            &&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long']) *0.8
-                                                            &&  parseFloat( item['Volume_MA_long50'])> parseFloat(item['成交金額平均']) 
-                                                            &&  parseFloat( item['MACD'])> parseFloat(item['MACD-SL']) 
-                                                            &&  parseFloat(item['now_price'])> parseFloat(item['MA_longlong']*1.05) 
-                                                            &&  parseFloat( item['成交股數'])>1000 
-                                                                                     ).map(x => x.日期).sort()[0]
+                                        dummydataItem.frist_uptrend = datalist.filter(item => true
+                                            //&&  parseFloat( item['Volume_MA_short'])> parseFloat(item['Volume_MA_long50']*1.05) 
+                                            && parseFloat(item['Volume_MA_short']) > parseFloat(item['Volume_MA_long']) * 0.8
+                                            && parseFloat(item['Volume_MA_long50']) > parseFloat(item['成交金額平均'])
+                                            && parseFloat(item['MACD']) > parseFloat(item['MACD-SL'])
+                                            && parseFloat(item['now_price']) > parseFloat(item['MA_longlong'] * 1.05)
+                                            && parseFloat(item['成交股數']) > 1000
+                                        ).map(x => x.日期).sort()[0]
                                         dummydataItem.frist_uptrendcheck = datalist.filter(x => x.日期 > dummydataItem.frist_uptrend).map(x => parseInt(x._quote)).slice().reduce((acc, current) => acc + current, 0);
                                     }
                                     return dummydataItem;
