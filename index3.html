@@ -121,6 +121,8 @@
                         </template>
                         <template v-slot:item.stock_number="{ item }">
                             <v-btn text @click="openDialog(item)">
+                                 <v-icon v-if=" checklist.filter(x => x == item.stock_number).length > 0  " aria-hidden="false"
+                            color="orange">mdi-star</v-icon>
                                 {{ item.stock_number }} {{ item.Type0 }}
                             </v-btn>
                         </template>
@@ -176,7 +178,10 @@
                 <!-- 弹出窗口 -->
                 <v-dialog v-model="dialog" max-width="90vw">
                     <v-card>
-                        <v-card-title class="headline">{{ selectedItem?.stock_number }}</v-card-title>
+                        <v-card-title class="headline">{{ selectedItem?.stock_number }}
+                               <v-checkbox v-model="checked"
+                                @click="checkboxUpdated(selectedItem?.stock_number)"></v-checkbox>
+                        </v-card-title>
                         <v-card-text style="padding: 0; height:90vh;">
                             <!-- 在這裡添加iframe -->
                             <iframe v-if="selectedItem"
@@ -201,6 +206,8 @@
             vuetify: new Vuetify(),
             data() {
                 return {
+                    checked: false,
+                    checklist: [],
                     appmode: false,
                     sync: false,
                     para_type: null,
@@ -239,6 +246,7 @@
                     this.sync = urlParams.get('sync') == 'Y';
                 }
                 this.init();
+                this.checklist = JSON.parse(localStorage.getItem('checklist') || '[]')
             },
             computed: {
                 distinct_type() {
@@ -313,7 +321,20 @@
                 },
                 openDialog(item) {
                     this.selectedItem = item;
+                    this.checked = this.checklist.filter(x => x == item.stock_number).length > 0
                     this.dialog = true;
+                },
+                checkboxUpdated(newValue) {
+                    this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
+                    if (newValue) {
+                        if (this.checked) {
+                            this.checklist.push(newValue)
+                        } else {
+                            this.checklist = this.checklist.filter(x => x != newValue)
+                        }
+                        console.log(this.checklist)
+                    }
+                    localStorage.setItem('checklist', JSON.stringify(this.checklist));
                 },
                 openNextPage(i) {
                     let urlParams = new URLSearchParams(window.location.search);
@@ -362,8 +383,14 @@
                         'macdpercent', 'desctxt', 'highlight_date', 'cond_entry', '分類標籤', '量能max', '量能avg', '量能差', 'type',
                     ]
                     //
-                    arr = ['分類標籤', '日期', 'stock_number', '_quote', '成交股數', 'rt_量', '量能', 'now_price', 'rt_price', 'highlight_date', 'MA_last_cross_date', 'MA_last_cross_%', '量倍率', 'MACD_last_cross_date', 'highlight_%', 'highlight_%_1', 'cond_entry', 'LevelArea',
-                        '均價long_%', '成交量', '盤後量', 'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong', 'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 'VPC_MA_%', 'VPC_break',
+                    arr = [
+                        '分類標籤', '日期', 'stock_number', '_quote', '成交股數', 'rt_量', '量能', 'now_price', 'rt_price',     'diff_quote',
+                        'MACD_last_cross_date','MACD_hist_diff', 'MACD_%', 'MACD-SL', '%K', '%D','highlight_date',
+                         
+                        'MA_last_cross_date', 'MA_last_cross_%', '量倍率',  'highlight_%', 'highlight_%_1', 'cond_entry', 'LevelArea',
+                        '均價long_%', '成交量', '盤後量', 'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong',
+                         //'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 
+                         'VPC_MA_%', 'VPC_break',
 
                         'highlight_enddate_1', 'highlight_stardate_1', 'highlight_enddate收盤價_1', 'highlight_stardate收盤價_1',
                         'Volume_MA_short', 'Volume_MA_long', 'Volume_Oscillator', 'volume_threshold', 'Volume_Price_Change', 'highlight_enddate', 'Type0', 'Type1', 'Type2', 'Full_Summary',

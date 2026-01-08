@@ -246,12 +246,14 @@
 
         computedHref2(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
-          return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
+          //return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
+          return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.x}`;
         },
 
         computedHref3(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
-          return `${baseUrl}/index.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
+          //return `${baseUrl}/index.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
+          return `${baseUrl}/index.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${x}`;
         },
 
         isNumberField(field) {

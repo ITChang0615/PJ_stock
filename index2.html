@@ -424,7 +424,9 @@
                 </v-data-table>
                 <v-dialog v-model="dialog" max-width="90vw">
                     <v-card>
-                        <v-card-title class="headline">{{ selectedItem?.stock_number }}</v-card-title>
+                        <v-card-title class="headline">{{ selectedItem?.stock_number }}
+                            <v-checkbox v-model="checked"  @click="checkboxUpdated(selectedItem?.stock_number)"></v-checkbox>
+                        </v-card-title>
                         <v-card-text style="padding: 0; height:90vh;">
                             
                             <a v-if="selectedItem?.Type2=='上市'" :href="`https://tw.tradingview.com/chart/?symbol=TWSE%3A${selectedItem?.stock_number}`" target="_blank"> TradingView </a>
@@ -668,6 +670,8 @@
             vuetify: new Vuetify(),
             data() {
                 return {
+                     checked: false,
+                    checklist: [],
                     collapse: false,
                     sync: false,
                     d: '',
@@ -722,6 +726,7 @@
                 this.url = this.url.replace('PJ_stock/Html', 'PJ_Stock2')
 
                 this.init();
+                this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
                 window.scrollTo({ left: document.body.scrollWidth, behavior: 'smooth' });
             },
             computed: {
@@ -790,9 +795,21 @@
                     console.log('done');  // 確保這個訊息在主流程完成後顯示
                 },
                 openDialog(item) {
-
                     this.selectedItem = item;
+                    this.checked = this.checklist.filter(x => x == item.stock_number).length > 0
                     this.dialog = true;
+                },
+                checkboxUpdated(newValue) {
+                    this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
+                    if (newValue) {
+                        if (this.checked) {
+                            this.checklist.push(newValue)
+                        } else {
+                            this.checklist = this.checklist.filter(x => x != newValue)
+                        }
+                        console.log(this.checklist)
+                    }
+                    localStorage.setItem('checklist', JSON.stringify(this.checklist));
                 },
                 openchart(item) {
 

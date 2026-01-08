@@ -161,9 +161,8 @@
                     :sort-desc.sync="sortDesc" style="white-space: nowrap;">
                     <!-- 自訂第一個欄位為超連結 -->
                     <template v-slot:item.stock_number="{ item }">
-                            <v-icon v-if=" checklist.filter(x => x == item.stock_number).length > 0  "
-
-                                aria-hidden="false" color="orange">mdi-star</v-icon>
+                        <v-icon v-if=" checklist.filter(x => x == item.stock_number).length > 0  " aria-hidden="false"
+                            color="orange">mdi-star</v-icon>
                         <v-btn text @click="openDialog(item)">
                             {{ item.stock_number }} {{ item.Type0 }} {{item['Volume_%']}}
                         </v-btn>
@@ -227,7 +226,8 @@
                             <a v-if="selectedItem?.Type2!='上市'"
                                 :href="`https://tw.tradingview.com/chart/?symbol=TPEX%3A${selectedItem?.stock_number}`"
                                 target="_blank"> TradingView </a>&nap;
-                            <a  :href="`https://statementdog.com/analysis/${selectedItem?.stock_number}`" target="_blank"> 本益比河流 </a>
+                            <a :href="`https://statementdog.com/analysis/${selectedItem?.stock_number}`"
+                                target="_blank"> 本益比河流 </a>
                             <!-- 在這裡添加iframe -->
                             <iframe v-if="selectedItem"
                                 :src="`${url}[${selectedItem.stock_number}]${selectedItem.Type.replace('*', '')}.html`"
@@ -286,7 +286,7 @@
                 }
 
                 this.init();
-                this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
+                this.checklist = JSON.parse(localStorage.getItem('checklist') || '[]')
             },
             computed: {
                 appheaderData() {
@@ -307,6 +307,18 @@
                 }
             },
             methods: {
+                // 類別名稱淨化
+                sanitizedTypelevel(x) {
+                    if (this.d == 4)
+                        return (x.title || '').replace(/[\\/:*?"<>|]/g, "_");
+                    return (x.Typelevel || '')
+                        .replace('右上', '')
+                        .replace('平', '')
+                        .replace('右下', '')
+                        .replace('上市', '')
+                        .replace('上櫃', '');
+                },
+
                 paraDate_str() {
                     const d = new Date(this.paraDate);
                     return `${d.getFullYear()}/` +
@@ -356,7 +368,8 @@
                     this.checked = this.checklist.filter(x => x == item.stock_number).length > 0
                     this.dialog = true;
                 },
-                checkboxUpdated(newValue) {
+               checkboxUpdated(newValue) {
+                    this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
                     if (newValue) {
                         if (this.checked) {
                             this.checklist.push(newValue)
@@ -365,6 +378,7 @@
                         }
                         console.log(this.checklist)
                     }
+                    localStorage.setItem('checklist', JSON.stringify(this.checklist));
                 },
                 openNextPage(i) {
                     let urlParams = new URLSearchParams(window.location.search);
@@ -459,20 +473,20 @@
                                 arr = [
                                     'stock_number',
                                     'tt', 't_t', 'txt', 'txts', '分類標籤',
-                                    '_quote', '成交股數', 'rt_量', 'now_price', 'rt_price', 'LevelArea','量能','MACD-SL',
-                                    
+                                    '_quote', '成交股數', 'rt_量', 'now_price', 'rt_price', 'LevelArea', '量能', 'MACD-SL',
+
                                     '營業毛利率', '營業利益率',
                                     '%K', '%D', 'MA5_%', '均價long_%', '均價longlong_%',
-                                    'diff_quote', 
+                                    'diff_quote',
                                     //'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
                                     'MA_last_cross_date', 'MA_last_cross_date收盤價', 'MA_last_cross_%',
                                     'Type1',
                                     'MACD_last_cross_date',
                                     'voc_cross_d',
                                     'highlight_date',
-                                
+
                                     'MACD_hist_diff',
-                                    
+
                                     'MACD_death_cross_d收盤價',
 
                                     'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1',
@@ -496,7 +510,7 @@
                                     'desc', 'flag_stat',
 
                                     'MA_last_cross_d2', 'MA_last_cross_d2收盤價',
-                                    'MA_death_cross','MA_death_cross_d', 'MA_death_cross_d收盤價', 'MA_death_cross_d2', 'MA_death_cross_d2收盤價',
+                                    'MA_death_cross', 'MA_death_cross_d', 'MA_death_cross_d收盤價', 'MA_death_cross_d2', 'MA_death_cross_d2收盤價',
                                     //'MACD_death_cross_d', 'MACD_death_cross_d收盤價','MACD_death_cross_d2',
                                     'MACD_death_cross_d2收盤價',
                                 ]
@@ -553,12 +567,18 @@
                                 //# -- 
                                 this.jsonData.filter(item => parseFloat(item['MACD']) < parseFloat(item['MACD-SL'])).map(x => x.MACD_last_cross_date = '')
                                 this.jsonData.filter(item => parseFloat(item['均價long_%']) < 0).map(x => x.MA_last_cross_date = '')
-
+                                this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
                                 if (this.type) {
-                                    this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type));
+
+                                    this.jsonData = this.jsonData_.filter(x => x.Typelevel.includes(this.type));
+
+                                    debugger;
+                                    if (this.jsonData.length == 0) {
+                                        this.jsonData = this.jsonData_.filter(x =>  x.desc.includes(this.type));
+                                    }
                                 }
 
-                                this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
+
                                 Object.keys(this.uniqueValues).forEach(key => {
                                     this.uniqueValues[key] = this.uniqueValues[key].map(val => ({ text: val, value: val }));
                                     this.uniqueValues[key].sort((a, b) => a.text.localeCompare(b.text));
@@ -729,7 +749,7 @@
                     )
                     app.sortBy = ['voc_cross_d', 't_t']
                     app.sortDesc = [true, false]
-                    
+
                     //----
                     //Volume_MA_short  成交金額平均
                     //'營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)',
@@ -858,25 +878,25 @@
 
 
                     ///-------------------------------
-                    app.jsonData=app.jsonData_.filter(x => true   
-						
-						////&&  !(['半導體業', '電子零組件業', '其他電子業', '通信網路業', '航運業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
+                    app.jsonData = app.jsonData_.filter(x => true
 
-						////&&( x.MACD_last_cross_date>=app.paraDateMinus(1) )
+                        ////&&  !(['半導體業', '電子零組件業', '其他電子業', '通信網路業', '航運業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
 
-						&&  !(['化學工業', '航運業', '生技醫療業', '塑膠工業', '金融保險', '鋼鐵工業', '居家生活','觀光事業','運動休閒'].includes(x.Type1))
-						//&&   (x['分類標籤'].includes('e'))
+                        ////&&( x.MACD_last_cross_date>=app.paraDateMinus(1) )
 
-						//&& parseFloat(x['均價longlong_%']) >  parseFloat(x['均價long_%'])
+                        && !(['化學工業', '航運業', '生技醫療業', '塑膠工業', '金融保險', '鋼鐵工業', '居家生活', '觀光事業', '運動休閒'].includes(x.Type1))
+                        //&&   (x['分類標籤'].includes('e'))
 
-						&&   (x['Full_Summary'].includes('爆量上攻')|| x['Full_Summary'].includes('低檔翻揚') )
-						&& parseFloat(x['成交股數']) > 50 
-						&& parseFloat(x['LevelArea']) > -50
+                        //&& parseFloat(x['均價longlong_%']) >  parseFloat(x['均價long_%'])
+
+                        && (x['Full_Summary'].includes('爆量上攻') || x['Full_Summary'].includes('低檔翻揚'))
+                        && parseFloat(x['成交股數']) > 50
+                        && parseFloat(x['LevelArea']) > -50
                     )
-                    
-                    app.sortBy = [ 'diff_quote','%K']
+
+                    app.sortBy = ['diff_quote', '%K']
                     app.sortDesc = [true, true]
-					
+
 
 
 
