@@ -431,7 +431,6 @@
                                 @click="checkboxUpdated(selectedItem?.stock_number)"></v-checkbox>
                         </v-card-title>
                         <v-card-text style="padding: 0; height:90vh;">
-
                             <a v-if="selectedItem?.Type2=='上市'"
                                 :href="`https://tw.tradingview.com/chart/?symbol=TWSE%3A${selectedItem?.stock_number}`"
                                 target="_blank"> TradingView </a>
@@ -443,7 +442,7 @@
 
                             <iframe v-if="selectedItem"
                                 :src="`${url}[${selectedItem.stock_number}]${selectedItem.Type.replace('*', '')}.html`"
-                                width="80%" frameborder="0" style="padding: 0; height:80vh;">
+                                width="80%" frameborder="0" style="padding: 0; height:70vh;    width: 160vh; ">
                             </iframe>
                         </v-card-text>
                         <v-card-actions>
@@ -452,11 +451,11 @@
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
-                <v-dialog v-model="dialogchart" max-width="80vw">
+                <v-dialog v-model="dialogchart" max-width="100vw">
                     <v-card>
                         <v-card-title class="headline">{{ selectedItem?.stock_number }}</v-card-title>
                         <v-card-text style="padding: 0; height:90vh;">
-                            <iframe v-if="selectedItem" :src="`${charturl}?_[${selectedItem.stock_number}]`" width="80%"
+                            <iframe v-if="selectedItem" :src="`${charturl}?_[${selectedItem.stock_number}]`" width="100%"
                                 frameborder="0" style="padding: 0; height:80vh;">
                             </iframe>
                         </v-card-text>

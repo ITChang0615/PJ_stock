@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +19,6 @@
         }
     </style>
 </head>
-
 <body>
     <div id="app">
         <v-app>
@@ -623,7 +621,7 @@
                         { Desc: '固-3C影音', value: 1188 },
                         { Desc: '購物/娛樂', value: 746 },
                         { Desc: '固-車', value: 694 },
-                        { Desc: '生活', value: 115 },
+                        { Desc: '生活', value: 589 },
                         { Desc: '生活-LPP', value: 0 },
                         { Desc: '固-阿罵', value: 0 },
                         { Desc: '固-車稅/保養', value: null },
@@ -655,31 +653,33 @@
                 },
                 set_mydata() {
                     this.mydata = [
-                        { "Desc": "invest_input", "N_1": 76270, "N_2": 63000 },//買進   
-                        { "Desc": "invest_output", "N_1": null, "N_2": null },//賣出 
-                        { "Desc": "income_loss", "N_1": null, "N_2": null },//損益   
+                        { "Desc": "invest_input", "N_1": 63087, "N_2": 155650 },//買進   
+                        { "Desc": "invest_output", "N_1": null, "N_2": 510750 },//賣出 
+                        { "Desc": "income_loss", "N_1": null, "N_2": 15025 },//損益   
                         { "Desc": "股息", "N_1": null, "N_2": null },//股息
-                        { "Desc": "現金", "today": 2000 },
-                        { "Desc": "信用卡", "today": -25925 },
+                        { "Desc": "現金", "today": 1700 },
+                        { "Desc": "信用卡", "today": -26024 },
                         { "Desc": "銀行", "today": 87278 },
                         { "Desc": "預備金", "today": 320014 },
-                        { "Desc": "日幣", "today": 30036 },
-                        { "Desc": "投入", "today": 3495222 },
-                        { "Desc": "可下單現金", "today": 766042 },
+                        { "Desc": "日幣", "today": 30047 },
+                        { "Desc": "投入", "today": 3570979 },
+                        { "Desc": "可下單現金", "today": 690285 },
                         { "Desc": "Total", "today": null }
                     ]
                 },
                 set_stockdata() {
                     this.stockdata = [
-                        { "Type2": "上市", "name": null, "number": '0052', "hold": 5000, "now": 40.84, "buyin": 37.61, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
-                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 48000, "now": 23.45, "buyin": 27.19, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
-                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 4000, "now": 28.1, "buyin": 31.59, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
+                        //{ "Type2": "上市", "name": null, "number": '0052', "hold": 5000, "now": 40.04, "buyin": 37.61, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+                        { "Type2": "上市", "name": null, "number": '0052', "hold": 0, "now": 40.66, "buyin": 37.61, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
+                        { "Type2": "上市", "name": "台泥", "number": 1101, "hold": 48000, "now": 23.65, "buyin": 27.19, "profit_stock": null, "profit": 1, "frequency": 1, "month": 6 },
+                        { "Type2": "上櫃", "name": "宏佳騰", "number": 1599, "hold": 6000, "now": 28.25, "buyin": 30.65, "profit_stock": null, "profit": 0.5, "frequency": 1, "month": 9 },
                         { "Type2": "上市", "name": "橋椿", "number": 2062, "hold": 29000, "now": 20.85, "buyin": 25.78, "profit_stock": null, "profit": 1.8, "frequency": 1, "month": 8 },
-                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 3000, "now": 39.35, "buyin": 38.57, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
-                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 25000, "now": 13.75, "buyin": 21.14, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
-                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 1200, "now": 341.5, "buyin": 342.97, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
+                        { "Type2": "上市", "name": "興富發", "number": 2542, "hold": 3000, "now": 39.9, "buyin": 38.57, "profit_stock": 0.5, "profit": 2, "frequency": 1, "month": 9 },
+                        { "Type2": "上櫃", "name": "李洲", "number": 3066, "hold": 29000, "now": 13.6, "buyin": 20.02, "profit_stock": null, "profit": null, "frequency": 0, "month": "" },
+                        { "Type2": "上市", "name": "辛耘", "number": 3583, "hold": 300, "now": 344, "buyin": 345.34, "profit_stock": null, "profit": 4.5, "frequency": 1, "month": "" },
                         
-                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 1250, "now": 173.5, "buyin": 203.36, "profit_stock": null, "profit": 4.9, "frequency": 1, "month": "" },
+                        { "Type2": "上櫃", "name": "元太", "number": 8069, "hold": 1500, "now": 170.5, "buyin": 198.47, "profit_stock": null, "profit": 4.9, "frequency": 1, "month": "" },
+                           
                         
                         /*                
                         { "Type2": "上市", "name": null, "number": '0050', "hold": 0, "now": 65.15, "buyin": 62.11, "profit_stock": null, "profit": 1, "frequency": 2, "month": "1,7" },
@@ -829,27 +829,6 @@
                     // 
                     // 高檔後回落帶量
                     app.jsonData = app.jsonData_.filter(x => x['MACD_last_cross_date']!=0    && x.成交股數 > 1000 && x.LevelArea > -35 && x.txt > 1 && x.txts >= 0.5 && x['分類標籤'].includes('d1'))
-
-                   //--------------------------------------------------
-                   //
-                   app.jsonData = app.jsonData_.filter(x => 
-                        (
-                            ( x['分類標籤'].includes('c')  && x.成交股數 > 1000 && x.LevelArea > -65  && x.量倍率 > 0.7) ||
-                            ( x['分類標籤'].includes('b')  && x.成交股數 > 900  ) ||
-                            ( x['分類標籤'].includes('d2') && x.成交股數 > 900  && x.LevelArea > 0  ) ||
-                            ( x['分類標籤'].includes('d1') && x.成交股數 > 1000 && x.LevelArea > -65  ) 
-                        ) && x.LevelArea > -65 && x.成交股數 > 1000
-                        ) 
-                   //
-
-                   
-                    app.jsonData = app.jsonData_.filter(x => ( x['分類標籤'].includes('d1') ))
-                    app.sortBy = ['tt']
-                    app.sortDesc = [true]
-                    
-                    
-                    app.sortBy = ['分類標籤','LevelArea','tt','MACD_last_cross_date',]
-                    app.sortDesc = [true,true,true,true]
                 }
             },
         });

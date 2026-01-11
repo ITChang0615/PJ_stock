@@ -465,7 +465,8 @@
                                 });
 
                                 if (this.type) {
-                                    this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type));
+                                          debugger;
+                                      this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type) ||x.desc.includes(this.type)|x.text_desc.includes(this.type)  );
                                 }
                                 this.jsonData.forEach(x => {
                                     x.Typelevel += x?.分類標籤.split("【")[1]?.split("】")[0]

@@ -85,13 +85,11 @@
               {{ sanitizedTypelevel(item) }}
             </a>
             分類
-            <a :href="computedHref2(item)" target="_blank" rel="noopener">
-              {{ sanitizedTypelevel(item) }}
-            </a>
+            <a v-if="d == 4" :href="computedHref2(item.title)" target="_blank" rel="noopener"> {{ sanitizedTypelevel(item) }} </a>
+            <a v-else  :href="computedHref2(item.Typelevel)" target="_blank" rel="noopener"> {{ sanitizedTypelevel(item) }} </a>
             //
-            <a :href="computedHref3(item)" target="_blank" rel="noopener">
-              {{ sanitizedTypelevel(item) }}
-            </a>
+            <a v-if="d == 4" :href="computedHref3(item.title)" target="_blank" rel="noopener">{{ sanitizedTypelevel(item) }}</a>
+            <a v-else :href="computedHref3(item.Typelevel)" target="_blank" rel="noopener">{{ sanitizedTypelevel(item) }}</a>
           </template>
 
           <!-- ⭐ title 欄：點擊 title → 開 PopUp 折線圖 -->
@@ -247,12 +245,13 @@
         computedHref2(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
           //return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
-          return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.x}`;
+          return `${baseUrl}/index3.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${x}`;
         },
 
         computedHref3(x) {
           const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
           //return `${baseUrl}/index.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${this.sanitizedTypelevel(x)}`;
+          
           return `${baseUrl}/index.html?d=A&date=${Object.keys(this.jsonData[0]).slice(-2)[0].replace("成長率_", '')}&type=${x}`;
         },
 
