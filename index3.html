@@ -121,8 +121,8 @@
                         </template>
                         <template v-slot:item.stock_number="{ item }">
                             <v-btn text @click="openDialog(item)">
-                                 <v-icon v-if=" checklist.filter(x => x == item.stock_number).length > 0  " aria-hidden="false"
-                            color="orange">mdi-star</v-icon>
+                                <v-icon v-if=" checklist.filter(x => x == item.stock_number).length > 0  "
+                                    aria-hidden="false" color="orange">mdi-star</v-icon>
                                 {{ item.stock_number }} {{ item.Type0 }}
                             </v-btn>
                         </template>
@@ -179,7 +179,7 @@
                 <v-dialog v-model="dialog" max-width="90vw">
                     <v-card>
                         <v-card-title class="headline">{{ selectedItem?.stock_number }}
-                               <v-checkbox v-model="checked"
+                            <v-checkbox v-model="checked"
                                 @click="checkboxUpdated(selectedItem?.stock_number)"></v-checkbox>
                         </v-card-title>
                         <v-card-text style="padding: 0; height:90vh;">
@@ -325,7 +325,7 @@
                     this.dialog = true;
                 },
                 checkboxUpdated(newValue) {
-                    this.checklist= JSON.parse(localStorage.getItem('checklist') || '[]')
+                    this.checklist = JSON.parse(localStorage.getItem('checklist') || '[]')
                     if (newValue) {
                         if (this.checked) {
                             this.checklist.push(newValue)
@@ -384,13 +384,13 @@
                     ]
                     //
                     arr = [
-                        '分類標籤', '日期', 'stock_number', '_quote', '成交股數', 'rt_量', '量能', 'now_price', 'rt_price',     'diff_quote',
-                        'MACD_last_cross_date','MACD_hist_diff', 'MACD_%', 'MACD-SL', '%K', '%D','highlight_date',
-                         
-                        'MA_last_cross_date', 'MA_last_cross_%', '量倍率',  'highlight_%', 'highlight_%_1', 'cond_entry', 'LevelArea',
+                        '分類標籤', '日期', 'stock_number', '_quote', '成交股數', 'rt_量', '量能', 'now_price', 'rt_price', 'diff_quote',
+                        'MACD_last_cross_date', 'MACD_hist_diff', 'MACD_%', 'MACD-SL', '%K', '%D', 'highlight_date',
+
+                        'MA_last_cross_date', 'MA_last_cross_%', '量倍率', 'highlight_%', 'highlight_%_1', 'cond_entry', 'LevelArea',
                         '均價long_%', '成交量', '盤後量', 'MA5_%', '均價_%', '均價long_%', 'MA_short', 'MA_long', 'MA_longlong',
-                         //'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 
-                         'VPC_MA_%', 'VPC_break',
+                        //'MACD_%', 'MACD', 'MACD-SL', '%K', '%D', 
+                        'VPC_MA_%', 'VPC_break',
 
                         'highlight_enddate_1', 'highlight_stardate_1', 'highlight_enddate收盤價_1', 'highlight_stardate收盤價_1',
                         'Volume_MA_short', 'Volume_MA_long', 'Volume_Oscillator', 'volume_threshold', 'Volume_Price_Change', 'highlight_enddate', 'Type0', 'Type1', 'Type2', 'Full_Summary',
@@ -465,19 +465,19 @@
                                 });
 
                                 if (this.type) {
-                                          debugger;
-                                      this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type) ||x.desc.includes(this.type)|x.text_desc.includes(this.type)  );
+                                    debugger;
+                                    this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type) || x.desc.includes(this.type) | x.text_desc.includes(this.type));
                                 }
                                 this.jsonData.forEach(x => {
                                     x.Typelevel += x?.分類標籤.split("【")[1]?.split("】")[0]
                                 });
                                 //**//
-/*
-                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
-                                this.jsonData.filter(x => x.highlight_date == '0').map(x => x.MA_last_cross_date = 0)
-                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
-                                this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
-*/
+                                /*
+                                    this.jsonData.filter(x => x.highlight_date == '0').map(x => x['MA_last_cross_%'] = 0)
+                                    this.jsonData.filter(x => x.highlight_date == '0').map(x => x.MA_last_cross_date = 0)
+                                    this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x.MA_last_cross_date = 0)
+                                    this.jsonData.filter(x => x['MA_last_cross_%'] < 0).map(x => x['MA_last_cross_%'] = 0)
+                                */
                                 //**//
 
                                 this.jsonData_ = JSON.parse(JSON.stringify(this.jsonData))
@@ -487,20 +487,7 @@
                                 });
                                 this.set_header()
 
-                                //*
                                 this.oldlabel = JSON.parse(localStorage.getItem('aaalist') || '[]')
-                                /*
-                                app.jsonData=app.jsonData.filter(x => x.分類標籤_)
-                                app.jsonData=app.jsonData.filter(x => x.分類標籤.split("【")[1]?.split("】")[0]!='e')
-
-                                app.sync_realtime()
-                                
-                                app.sync_data()
-                                
-                                //app.jsonData.filter(x=> parseInt(x.rt_price)>3).map(x=>x.Volume_Oscillator).sort(function(a, b) { return - a + b;})
-                                */
-                                // app.jsonData=app.jsonData_.filter(x=> x['highlight_date']!='0'&&x['均價long_%']>0)
-                                //app.jsonData=app.jsonData_.filter(x=> x['highlight_date']!='0'&&x['均價long_%']>0&&x['均價long_%']<1)
                             }
                         })
                         .catch(error => console.error('Error loading Excel file:', error));

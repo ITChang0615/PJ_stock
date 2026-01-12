@@ -747,37 +747,11 @@
                     app.jsonData.map(y => y.分類標籤 = (+cachenew.find(x => x.value == y.stock_number)?.key + cache.find(x => x.value == y.stock_number)?.key))
                     //----------------------------------------------------------------------------
                     //-----
-                    app.jsonData = app.jsonData_.filter(x => x.MA_last_cross_date >= '2025/12/01')
-                    app.sortBy = ['LevelArea', 'txt', 'MA_last_cross_date', 'rt_量',];
-                    app.sortBy = ['分類標籤', 'txt', 'MA_last_cross_date', 'rt_量',];
-                    app.sortDesc = [true, true, true, true]
-
-
-                    //  排序 MACD_last_cross_date 搭大量 ==> 走短線(txt>2)
-                    //  排序 MA_last_cross_date  幾天後出量 ==> 看長線(txt 約 0.5) ， MA 5/10 /20/50  翻多 80不一定
-
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && x.LevelArea > -50 && x.LevelArea < 90
-                        && x.now_price > x.MACD_death_cross_d收盤價
-                        && x['MACD_last_cross_date'] != ''
-                        //&& x['MA_last_cross_date'] != ''
-                    )
-
-                    app.jsonData = app.jsonData.filter(x => true
-                        //&&  x.diff_quote>8 &&  x.diff_quote<16
-                        && x.LevelArea > -80
-                        && parseFloat(x['MA_last_cross_%']) < 10
-                        && parseFloat(x['MA_last_cross_%']) > 0
-                    )
-
-
                     /* !!!!!!!!!!!!!!!!!!!!!!!!!
                     '均價long_%', '均價longlong_%',
                     'diff_quote', '量能',
                     'now_price','MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
                     */
-
-
                     app.jsonData = app.jsonData_.filter(x => true
                         //&& parseFloat(x['均價long_%']) <0 && parseFloat(x['均價longlong_%']) >0
                         // && parseFloat(x['MA_longlong']) > parseFloat(x['MA_short']) // 拉回長線
@@ -807,13 +781,6 @@
                         && parseFloat(x['均價long_%']) > 0
                         && parseFloat(x['均價longlong_%']) > 0
                     )
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && x.LevelArea >= -50
-                        && x.LevelArea < 99
-                        && parseFloat(x['txt']) < 0.4
-                    )
-                    app.sortBy = ['tt', 'txts']
-                    app.sortDesc = [true, true]
 
 
                     app.jsonData = app.jsonData_.filter(x => true
@@ -941,7 +908,7 @@
                     //'now_price','MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
 
                     app.jsonData = app.jsonData_.filter(x => true
-                        && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
+                       // && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
                         && x['MACD_last_cross_date'] != ''
                         && parseFloat(x['%K']) > parseFloat(x['%D'])
                         && parseFloat(x['MA_short']) > parseFloat(x['MA_long'])
@@ -951,11 +918,16 @@
 
                         && parseFloat(x['成交股數']) > 100
                         && parseFloat(x['成交金額']) > parseFloat(x['Volume_MA_long50'])
+                        //&& parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
+                       // && parseFloat(x['Volume_MA_long50']) > parseFloat(x['成交金額平均']) * 0.4
+
+                    )
+  app.jsonData = app.jsonData_.filter(x => true
+                        //&& parseFloat(x['MACD']) >= parseFloat(x['MACD-SL'])
+                        && parseFloat(x['MACD_hist_diff']) > 0
+                        && parseFloat(x['MA_short'])  > parseFloat(x['now_price'])
+                        && parseFloat(x['now_price']) > parseFloat(x['MA_longlonglong'])
                         && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
-                        
-
-                        && parseFloat(x['Volume_MA_long50']) > parseFloat(x['成交金額平均']) * 0.4
-
                     )
 
                 },
