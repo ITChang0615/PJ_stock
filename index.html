@@ -246,6 +246,7 @@
 
                                     營業毛利率 <span style="color: blue;">{{ selectedItem?.營業毛利率 }}</span>
                                     營業利益率 <span style="color: blue;">{{ selectedItem?.營業利益率 }} </span>
+                                    淨值倍率 <span style="color: blue;">{{ selectedItem?.淨值倍率 }} </span>
                                     <br />
                                     <div v-for="x in selectedItem?.text_desc.split('\r\n') ">
                                         <a :href="computedHref(x.split('｜')[2])" target="_blank"> {{x}}
@@ -513,23 +514,28 @@
                                 arr = [
                                     'stock_number',
                                     'tt', 't_t', 'txt', 'txts', 'ttt', '分類標籤',
-                                    '_quote', '成交股數', 'rt_量', 'now_price', 'highlight_stardate收盤價_1',
+                                    '_quote', '成交股數', 'rt_量', 'now_price', 
+                                    //'highlight_stardate收盤價_1',
                                     'rt_price', 'LevelArea', '量能', 'MACD-SL',
 
-                                    '營業毛利率', '營業利益率',
-                                    '%K', '%D', 'MA5_%', '均價long_%', '均價longlong_%',
+                                    
+                                    
                                     'diff_quote',
                                     //'MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
-                                    'MACD_hist_diff', 'MA_last_cross_date', 'MA_last_cross_d2', 'MA_last_cross_%',
-                                    'Type1',
-                                    'MACD_last_cross_date',
-                                    'voc_cross_d',
+                             
+                                  
+                                    'MACD_last_cross_date',  'MACD_hist_diff',
+                                 
                                     'highlight_date',
 
+                                    'voc_cross_d',   'Type1',
+                                    'MA_last_cross_date', 'MA_last_cross_%','MA_last_cross_d2', 
+                                    '營業毛利率', '營業利益率','%K', '%D','MA5_%', '均價long_%', '均價longlong_%',
 
                                     'MA_last_cross_date收盤價',
 
                                     'MACD_death_cross_d收盤價',
+
 
                                     'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1',
                                     'highlight_enddate收盤價_1', 'highlight_收盤價', 'highlight_stardate收盤價_2', 'highlight_enddate收盤價_2', 'highlight_%', 'highlight_%_1', 'highlight_%_2',
@@ -931,14 +937,13 @@
                         && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
                     )
 
-
                     app.jsonData = app.jsonData_.filter(x => true
                         && x['highlight_enddate_1'] == "2026-01-13 00:00:00"
-                        && x['highlight_date'] != "2026-01-09"
+                        && x['highlight_date'] != "0"
                         && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
+                        && parseFloat(x['營業利益率']) > 0
                     )
                     app.jsonData.map(x => x['ttt'] = ((parseFloat(x['now_price']) - parseFloat(x['highlight_stardate收盤價_1'])) / parseFloat(x['highlight_stardate收盤價_1'])).toFixed(2))
-
 
                 },
             }
