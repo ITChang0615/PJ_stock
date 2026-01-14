@@ -944,6 +944,16 @@
                         && parseFloat(x['營業利益率']) > 0
                     )
                     app.jsonData.map(x => x['ttt'] = ((parseFloat(x['now_price']) - parseFloat(x['highlight_stardate收盤價_1'])) / parseFloat(x['highlight_stardate收盤價_1'])).toFixed(2))
+                    
+                    
+                    //
+                    app.jsonData = app.jsonData_.filter(x => true
+                        && (x['分類標籤'].includes('價_量;【b1】') )
+                    )
+
+                    app.jsonData = app.jsonData_.filter(x => true
+                        && parseFloat(x['diff_quote']) > 4
+                    )
 
                 },
             }
