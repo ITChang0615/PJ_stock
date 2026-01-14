@@ -110,6 +110,7 @@
                                         //&&  item.stock_number=='8039'
                                     )
                                     app.sortBy = ['LevelArea', 'txt', 'rt_量',];
+                                    app.sortBy = ['MACD_last_cross_date', 'MA_last_cross_date', 'MA_last_cross_%'];
                                     app.sortDesc = [true, true, true]
 
                                     app.jsonData = app.jsonData.filter(item => (parseFloat(item['txt']) > 0.7))                
