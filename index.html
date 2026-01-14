@@ -516,7 +516,7 @@
                                     'tt', 't_t', 'txt', 'txts', 'ttt', '分類標籤',
                                     '_quote', '成交股數', 'rt_量', 'now_price', 
                                     //'highlight_stardate收盤價_1',
-                                    'rt_price', 'LevelArea', '量能', 'MACD-SL',
+                                    'rt_price', 'LevelArea', '量能', 'MACD-SL','均價longlong_%',
 
                                     
                                     
@@ -529,7 +529,7 @@
                                     'highlight_date',
 
                                     'voc_cross_d',   'Type1',
-                                    'MA_last_cross_date', 'MA_last_cross_%','MA_last_cross_d2', 
+                                    'MA_last_cross_date', 'MA_last_cross_d2', 'MA_last_cross_%',
                                     '營業毛利率', '營業利益率','%K', '%D','MA5_%', '均價long_%', '均價longlong_%',
 
                                     'MA_last_cross_date收盤價',
@@ -953,6 +953,14 @@
 
                     app.jsonData = app.jsonData_.filter(x => true
                         && parseFloat(x['diff_quote']) > 4
+                    )
+
+                    app.jsonData = app.jsonData_.filter(x => true
+
+                        && parseFloat(x['txt']) > 0.4
+                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
+                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
+
                     )
 
                 },
