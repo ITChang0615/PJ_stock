@@ -248,6 +248,7 @@
                                     營業毛利率 <span style="color: blue;">{{ selectedItem?.營業毛利率 }}</span>
                                     營業利益率 <span style="color: blue;">{{ selectedItem?.營業利益率 }} </span>
                                     淨值倍率 <span style="color: blue;">{{ selectedItem?.淨值倍率 }} </span>
+                                    殖利率 <span style="color: blue;">{{ selectedItem?.殖利率 }} </span>
                                     <br />
                                     <div v-for="x in selectedItem?.text_desc.split('\r\n') ">
                                         <a :href="computedHref(x.split('｜')[2])" target="_blank"> {{x}}
@@ -951,10 +952,13 @@
                     app.jsonData = app.jsonData_.filter(x => true
                         && (x['分類標籤'].includes('價_量;【b1】') )
                     )
+                    app.sortBy = ['MACD_last_cross_date', 'LevelArea']
+                    app.sortDesc = [true, true]
 
                     app.jsonData = app.jsonData_.filter(x => true
                         && parseFloat(x['diff_quote']) > 4
                     )
+
 
                     app.jsonData = app.jsonData_.filter(x => true
 
