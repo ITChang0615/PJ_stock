@@ -49,8 +49,6 @@
                     </v-col>
                 </v-row>
 
-
-
                 <div v-for="(type, index) in distinct_type" v-show="appmode">
                     {{type.Typelevel }} {{parseFloat(type.Volume_Price_Change).toFixed(0)}}
 
@@ -63,10 +61,6 @@
                                 {{ item.stock_number }} {{ item.Type0 }}
                             </v-btn>
                         </template>
-                        <!--
-                               {{(((realtimedata.filter(x=>x.c==item.stock_number)[0]?.a / item.now_price)-1
-                                )*100).toFixed(1)}}
-                        -->
                         <template v-slot:item.rt_price="{ item }">
                             <span style="color: rgb(124, 169, 173);"
                                 v-show="realtimedata.filter(x=>x.c==item.stock_number)[0]?.a">
@@ -98,7 +92,6 @@
                     <a :href="computedHref(type)" target="_blank" rel="noopener">
                         {{ sanitizedTypelevel(type) }}
                     </a>
-
 
                     <br>
                     <v-data-table disable-pagination fixed-header hide-default-footer :headers="headers"
@@ -142,10 +135,6 @@
                                 </span>
                             </v-btn>
                         </template>
-                        <!--
-                               {{(((realtimedata.filter(x=>x.c==item.stock_number)[0]?.a / item.now_price)-1
-                                )*100).toFixed(1)}}
-                        -->
                         <template v-slot:item.rt_price="{ item }">
                             <span style="color: rgb(124, 169, 173);"
                                 v-show="realtimedata.filter(x=>x.c==item.stock_number)[0]?.a">
@@ -158,7 +147,6 @@
                                 {{(realtimedata.filter(x=>x.c==item.stock_number)[0]?.v/parseFloat(item.成交股數)).toFixed(1)}}
                             </span>
                         </template>
-
                         <template v-slot:item.成交股數="{ item }">
                             <v-btn text @click="openDialog(item)">
                                 {{ item.成交股數 }} <span style="color: rgb(124, 169, 173);"
@@ -166,8 +154,6 @@
                                     ({{realtimedata.filter(x=>x.c==item.stock_number)[0]?.v}})</span>
                             </v-btn>
                         </template>
-
-
                         <template v-slot:column.data="{ item, column }">
                             {{ item[column.value] }}
                         </template>
@@ -176,18 +162,67 @@
 
 
                 <!-- 弹出窗口 -->
-                <v-dialog v-model="dialog" max-width="90vw">
+     <v-dialog v-model="dialog" max-width="90vw">
                     <v-card>
-                        <v-card-title class="headline">{{ selectedItem?.stock_number }}
+                        <v-card-title class="headline">
                             <v-checkbox v-model="checked"
                                 @click="checkboxUpdated(selectedItem?.stock_number)"></v-checkbox>
+                            {{ selectedItem?.stock_number }}
                         </v-card-title>
-                        <v-card-text style="padding: 0; height:90vh;">
-                            <!-- 在這裡添加iframe -->
+                        <v-card-text style="padding: 0; height:100vh;">
                             <iframe v-if="selectedItem"
                                 :src="`${url}[${selectedItem.stock_number}]${selectedItem.Type.replace('*', '')}.html`"
-                                width="80%" frameborder="0" style="padding: 0; height:80vh;">
+                                width="80%" frameborder="0" style="padding: 0; height:70vh; width:140vh;">
                             </iframe>
+                            <br />
+
+                            <a v-if="selectedItem?.Type2=='上市'"
+                                :href="`https://tw.tradingview.com/chart/?symbol=TWSE%3A${selectedItem?.stock_number}`"
+                                target="_blank"> TradingView </a>
+                            <a v-if="selectedItem?.Type2!='上市'"
+                                :href="`https://tw.tradingview.com/chart/?symbol=TPEX%3A${selectedItem?.stock_number}`"
+                                target="_blank"> TradingView </a> &nap;
+                            <!--
+                            <a :href="`https://statementdog.com/analysis/${selectedItem?.stock_number}`"
+                                target="_blank"> 本益比河流 </a>
+                            -->
+                            <!--
+                            ////'Full_Summary', 'textdesc',  '營收比重',  'desc',
+                                -->
+
+                            <v-row no-gutters>
+                                <v-col col="4">
+                                    【{{ selectedItem?.Type1 }}】 {{ selectedItem?.textdesc }}
+                                    <br />
+
+                                    營業毛利率 <span style="color: blue;">{{ selectedItem?.營業毛利率 }}</span>
+                                    營業利益率 <span style="color: blue;">{{ selectedItem?.營業利益率 }} </span>
+                                    淨值倍率 <span style="color: blue;">{{ selectedItem?.淨值倍率 }} </span>
+                                    殖利率 <span style="color: blue;">{{ selectedItem?.殖利率 }} </span>
+                                    <br />
+                                    營業收入-上月比較增減(%)<span style="color: blue;">{{ parseFloat(
+                                        selectedItem?.['營業收入-上月比較增減(%)'] ).toFixed(1)}} </span>
+                                    營業收入-去年同月增減(%)<span style="color: blue;">{{ parseFloat(
+                                        selectedItem?.['營業收入-去年同月增減(%)'] ).toFixed(1)}} </span>
+                                    累計營業收入-前期比較增減(%)<span style="color: blue;">{{ parseFloat(
+                                        selectedItem?.['累計營業收入-前期比較增減(%)'] ).toFixed(1)}} </span>
+                                    <br />
+                                    <div v-for="x in selectedItem?.text_desc.split('\r\n') ">
+                                        <a :href="computedHref(x.split('｜')[2])" target="_blank"> {{x}}
+                                        </a>
+                                    </div>
+                                </v-col>
+                                <v-col col="4">
+                                    <span v-html="formatDesc(selectedItem?.Full_Summary)"
+                                        style="color: #285376b8;"></span>
+                                </v-col>
+                                <v-col col="4">
+                                    {{ selectedItem?.desc }}
+                                    <br />
+                                    {{ selectedItem?.營收比重 }}
+                                    <br />
+                                </v-col>
+                            </v-row>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -270,19 +305,37 @@
                 },
             },
             methods: {
-                computedHref(x) {
+                 paraDate_str() {
+                    const d = new Date(this.paraDate);
+                    return `${d.getFullYear()}/` +
+                        `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+                        `${String(d.getDate()).padStart(2, '0')}`;
+                },
+                computedHref33(x) {
                     const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
+                    debugger;
                     return `${baseUrl}/index2.html?d=type&type=${this.sanitizedTypelevel(x)}`;
+                },
+                computedHref(x) {
+                    const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
+                    var para_data = app.paraDate_str().replaceAll('/', '-');
+                    if(!!x.Typelevel)
+                        return `${baseUrl}/index.html?d=A&date=${para_data}&type=${this.sanitizedTypelevel(x)}`;
+                    return ''
                 },
                 computedHref2(x) {
                     const baseUrl = window.location.href.split('/').slice(0, 4).join('/'); // 取得當前網站的根網址
                     let urlParams = new URLSearchParams(window.location.search);
                     return `${baseUrl}/index3.html?d=${urlParams.get('d')}&date=${urlParams.get('date')}&type=${this.sanitizedTypelevel(x)}`;
                 },
+                formatDesc(desc) {
+                    return String(desc).replace(/\*\*/g, '<br/>'); // 把 `**` 轉換成 `<br/>`
+                },
                 sanitizedTypelevel(x) {
-
                     //return x.Type1
-                    return x.Typelevel.replace('右上', '').replace('平', '').replace('右下', '').replace('b', '').replace('c', '').replace('d', '').replace('e', '');
+                     //return (x || '').replace(/[\\/:*?"<>|]/g, "_");
+                    return x.Typelevel.replace('右上', '').replace('平', '')
+                    .replace('右下', '').replace('b', '').replace('c', '').replace('d', '').replace('e', '');
                 },
 
                 async init() {
@@ -465,7 +518,6 @@
                                 });
 
                                 if (this.type) {
-                                    debugger;
                                     this.jsonData = this.jsonData.filter(x => x.Typelevel.includes(this.type) || x.desc.includes(this.type) | x.text_desc.includes(this.type));
                                 }
                                 this.jsonData.forEach(x => {
