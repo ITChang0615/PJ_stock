@@ -904,6 +904,10 @@
                         && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
                     && parseFloat(x['MA_last_cross_%']) > 3 )
 
+
+                    localStorage.setItem('checklist', JSON.stringify([]));
+                    app.checklist=[]
+
                 }
             },
         });

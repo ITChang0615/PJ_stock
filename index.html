@@ -304,7 +304,8 @@
                     filters: {},
                     uniqueValues: {},
                     //sortBy: 'highlight_date',
-                    sortBy: 'MA_last_cross_date',
+                    // sortBy: 'MA_last_cross_date',
+                    sortBy: 'txts',
                     sortDesc: true,
                     dialog: false,
                     selectedItem: null,
@@ -521,11 +522,11 @@
                                 }
 
                                 arr = [
-                                    'stock_number',
+                                 
                                     'tt', 't_t', 'txt', 'txts', 'ttt', '分類標籤',
                                     '_quote', '成交股數', 'rt_量', 'now_price',
                                     //'highlight_stardate收盤價_1',
-                                    'rt_price', 'LevelArea', '量能', 'MACD-SL', '均價longlong_%',
+                                    'rt_price',    'stock_number','LevelArea', '量能', 'MACD-SL', '均價longlong_%',
 
 
 
@@ -643,7 +644,8 @@
                             app.sortBy = ['MACD_last_cross_date', 'MA_last_cross_date', 'txt']
                             app.sortDesc = [true, true, true]
 
-                            app.sortBy = ['MA_last_cross_date', 'txt']
+                            //app.sortBy = ['MA_last_cross_date', 'txt']
+                            app.sortBy = ['txts']
                             app.sortDesc = [true, true]
                         })
                         .catch(error => console.error('Error loading Excel file:', error));
@@ -993,6 +995,9 @@
                              && parseFloat(x['營業利益率']) > 0
                              && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
 
+                                && parseFloat(x['LevelArea']) > -70
+                                && parseFloat(x['LevelArea']) < 90
+                                  && parseFloat(x['成交股數']) > 100
 
                         )
 
