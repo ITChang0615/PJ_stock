@@ -1000,14 +1000,16 @@
                         && parseFloat(x['成交股數']) > 100
 
                     )
-
                     app.jsonData = app.jsonData_.filter(x => true
                     && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
-                    && x['highlight_date'] != "0"
+                    && x['highlight_date'] >= "2026-01-20"
                     && parseFloat(x['LevelArea']) > 0
+                    && parseFloat(x['LevelArea']) < 90
+
                     )
-                    app.sortBy = ['highlight_date', 'diff_quote']
-                    app.sortDesc = [true, false]
+
+                    app.sortBy = ['MA5_%','highlight_date', 'diff_quote']
+                    app.sortDesc = [true,true, false]
 
                 },
             }
