@@ -908,18 +908,21 @@
                         && parseFloat(x['MA_last_cross_%']) > 3
                     )
 
-					//JSON.parse(localStorage.getItem('checklist') || '[]')
-                    localStorage.setItem('checklist', JSON.stringify([]));
-                    app.checklist = []
 
-                    
-                    app.jsonData = app.jsonData_.filter(item => true
 
-                    && parseFloat(item['Volume_MA_short']) > parseFloat(item['Volume_MA_long']) * 0.9
-                    && parseFloat(item['成交金額']) > parseFloat(item['Volume_MA_short']) * 1.1
+                      app.jsonData = app.jsonData_.filter(item => true
+                        && parseFloat(item['成交金額']) > parseFloat(item['Volume_MA_short']) * 1.1
+                        && parseFloat(item['Volume_MA_short']) > parseFloat(item['Volume_MA_long']) * 1
+                        //&& parseFloat(item['Volume_MA_long']) > parseFloat(item['Volume_MA_long50']) *.8
+                        
+                         && parseFloat(item['Volume_MA_long50']) <  parseFloat(item['成交金額平均']) *0.5
+                        
+                        
 
-                    && parseFloat(item['diff_quote']) >0 && parseFloat(item['diff_quote']) < 10
-                    &&  parseFloat( item['LevelArea']) > 0    && parseFloat(item['MACD_hist_diff']) > 0
+                        //&& parseFloat(item['diff_quote']) >0 
+                        //&& parseFloat(item['diff_quote']) < 10
+                        &&  parseFloat( item['LevelArea']) > 0    
+                        && parseFloat(item['MACD_hist_diff']) > 0
                     )
 
 
