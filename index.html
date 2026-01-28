@@ -135,6 +135,30 @@
                                 
                         ">預測(趨勢)</v-btn>
                              
+                        
+                        <v-btn color="primary" @click="     
+                                 app.jsonData = app.jsonData.filter(item => true
+                                        //&& (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業', '光電業'].includes(x.Type1))
+                                        && parseFloat(item['營業利益率']) > 0
+                                        && parseFloat(item['累計營業收入-前期比較增減(%)']) > 0
+
+                                        && parseFloat(item['成交金額']) > parseFloat(item['Volume_MA_short']) * 1.1
+                                        && parseFloat(item['Volume_MA_short']) > parseFloat(item['Volume_MA_long']) * 1
+                                        //&& parseFloat(item['Volume_MA_long']) > parseFloat(item['Volume_MA_long50']) *.5
+                                        && parseFloat(item['Volume_MA_long50']) < parseFloat(item['成交金額平均']) * 0.85
+                                        && parseFloat(item['Volume_MA_long50']) >= parseFloat(item['成交金額平均']) * 0.5
+
+                                        //&& parseFloat(item['量能']) > 10
+                                        //&& parseFloat(item['diff_quote']) >0 
+                                        //&& parseFloat(item['diff_quote']) < 10
+                                        && parseFloat(item['LevelArea']) > 0
+                                        && parseFloat(item['MACD_hist_diff']) > 0
+                                        
+                                        // && parseFloat(item['MACD-SL']) <  parseFloat(item['MACD-SL_max']) *0.6
+                                    )
+                                                
+                        ">帶適當量</v-btn>
+                             
                     </v-col>
                 </v-row>
                 <!-- Vuetify DataTable  -->
