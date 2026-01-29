@@ -44,13 +44,12 @@
                         //  JSON.parse(localStorage.getItem('checklist') || '[]')
                             localStorage.setItem('checklist', JSON.stringify([]));
                             app.checklist = []
-                        "
-                        >clear</v-btn>
-                      
+                        ">clear</v-btn>
+
                     </v-col>
-                    
+
                     <v-col col="4">
-                    
+
                         <v-btn color="primary" @click="
                             const output = app.checklist
                             localStorage.setItem('checklist', JSON.stringify(output));
@@ -64,6 +63,11 @@
                             link.download = `export_${Date.now()}.txt`
                             link.click()
                             ">下 載</v-btn>
+
+                        <v-btn color="primary" @click="
+                            app.jsonData = app.jsonData_.filter(x => JSON.parse(localStorage.getItem('checklist') || '[]').includes(x.stock_number))
+                            ">選中的
+                        </v-btn>
                         <v-btn color="primary" @click=" 
                            app.jsonData = app.jsonData_.filter( x =>true
                             && !(['化學工業','航運業','生技醫療業','塑膠工業','金融保險', '鋼鐵工業','居家生活'].includes(x.Type1))
@@ -122,7 +126,7 @@
 
                                     app.jsonData = app.jsonData.filter(item => (parseFloat(item['txt']) > 0.7))                
                         ">預測(當沖)</v-btn>
-                 
+
                         <v-btn color="primary" @click="     
                                     app.jsonData = app.jsonData_.filter(item => true
                                         && item['分類標籤'].includes('d1')
@@ -134,9 +138,10 @@
                                     )
                                 
                         ">預測(趨勢)</v-btn>
-                             
-                        
+
+
                         <v-btn color="primary" @click="     
+
                                  app.jsonData = app.jsonData.filter(item => true
                                         //&& (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業', '光電業'].includes(x.Type1))
                                         && parseFloat(item['營業利益率']) > 0
@@ -158,7 +163,7 @@
                                     )
                                                 
                         ">帶適當量</v-btn>
-                             
+
                     </v-col>
                 </v-row>
                 <!-- Vuetify DataTable  -->
@@ -1031,16 +1036,16 @@
                     )
 
                     app.jsonData = app.jsonData_.filter(x => true
-                    && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
-                    && x['highlight_date'] >= "2026-01-20"
-                    && parseFloat(x['LevelArea']) > 0
-                    && parseFloat(x['LevelArea']) < 90
+                        && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
+                        && x['highlight_date'] >= "2026-01-20"
+                        && parseFloat(x['LevelArea']) > 0
+                        && parseFloat(x['LevelArea']) < 90
 
                     )
 
-                    app.sortBy = ['MA5_%','highlight_date', 'diff_quote']
-                    app.sortDesc = [true,true, false]
-                    
+                    app.sortBy = ['MA5_%', 'highlight_date', 'diff_quote']
+                    app.sortDesc = [true, true, false]
+
                     app.sortBy = ['MA_last_cross_date', '_quote']
                     app.sortDesc = [true, true]
 
