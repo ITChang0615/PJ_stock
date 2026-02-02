@@ -989,8 +989,7 @@
                         && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
                         && parseFloat(x['營業利益率']) > 0
                     )
-                    app.jsonData.map(x => x['ttt'] = ((parseFloat(x['now_price']) - parseFloat(x['highlight_stardate收盤價_1'])) / parseFloat(x['highlight_stardate收盤價_1'])).toFixed(2))
-                    app.jsonData_.map(x => x['ttt'] = ((parseFloat(x['now_price']) - parseFloat(x['MA_longlonglong'])) / parseFloat(x['MA_longlonglong'])).toFixed(2))
+
 
                     app.jsonData = app.jsonData_.filter(x => true
                         && parseFloat(x['ttt']) > 0
@@ -1009,19 +1008,15 @@
                     app.sortDesc = [true, true]
 
                     app.jsonData = app.jsonData_.filter(x => true
+                     && parseFloat(x['營業利益率']) > 0
+                        && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
                         && parseFloat(x['diff_quote']) > 4
                     )
 
 
-                    app.jsonData = app.jsonData_.filter(x => true
 
-                        && parseFloat(x['txt']) > 0.4
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
 
-                    )
-
-                    app.jsonData = app.jsonData_.filter(x => true
+      app.jsonData = app.jsonData_.filter(x => true
                         && parseFloat(x['MA_short']) > parseFloat(x['MA_long'])
                         && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
                         && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
@@ -1029,11 +1024,18 @@
                         && parseFloat(x['營業利益率']) > 0
                         && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
 
-                        && parseFloat(x['LevelArea']) > -70
-                        && parseFloat(x['LevelArea']) < 90
-                        && parseFloat(x['成交股數']) > 100
+                        //&& parseFloat(x['LevelArea']) > -70
+                        //&& parseFloat(x['LevelArea']) < 90
+                        //&& parseFloat(x['成交股數']) > 100
+
+                        && parseFloat(x['MA_short'])  < parseFloat(x['MA_longlong'])*1.15
+                        && parseFloat(x['MA_short'])  > parseFloat(x['MA_longlong'])*1.05
+
+                        && parseFloat(x['MACD_hist_diff']) > 0
+                       
 
                     )
+
 
                     app.jsonData = app.jsonData_.filter(x => true
                         && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業'].includes(x.Type1))
