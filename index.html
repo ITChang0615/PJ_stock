@@ -847,10 +847,30 @@
                     
                         // && parseFloat(x['MACD-SL_max']) *0.85 < parseFloat(x['MACD-SL'])
                         // && parseFloat(x['%D']) < parseFloat(x['%K'])
-                        && parseFloat(x['MACD_hist_diff']) > 0
                         //&& parseFloat(x['diff_quote']) > 0
+                        && parseFloat(x['MACD_hist_diff']) > 0
                         && parseFloat(x['MA5_%']) > 0
+                        && parseFloat(x['MACD_%']) > 0
+                       
+
+                    )
+
+                    app.jsonData = app.jsonData_.filter(x => true
+                       
+            && parseFloat(x['營業利益率']) > 0
+                        && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
                         
+                        && parseFloat(x['MA_short']) > parseFloat(x['MA_long'])
+                        && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
+
+                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
+                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
+                    
+                  
+                        && parseFloat(x['MACD_hist_diff']) > 0
+                        && parseFloat(x['MA5_%']) > 0
+                        && parseFloat(x['MACD_%']) > 0
+                        && parseFloat(x['_quote']) > 3
 
                     )
 
