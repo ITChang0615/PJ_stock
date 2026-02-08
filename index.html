@@ -158,21 +158,22 @@
                         ">多頭排列</v-btn>
 
                         <!--
-                        
-                       
-                      app.jsonData = app.jsonData_.filter(x => true
-                        && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業', '光電業'].includes(x.Type1))
-                        && parseFloat(x['營業利益率']) > 0
-                        && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
 
-                        && parseFloat(x['txts']) > 1.2
-                     
-                        && parseFloat(x['now_price']) > parseFloat(x['MA_longlonglong'])
-                        && parseFloat(x['MA_long']) > parseFloat(x['MA_longlong']) 
+                            app.jsonData = app.jsonData_.filter(x => true
+                                && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業', '光電業'].includes(x.Type1))
+                                && parseFloat(x['營業利益率']) > 0
+                                && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
 
-                        && parseFloat(x['MACD_hist_diff']) > 0
-                    )
-
+                                //&& parseFloat(x['txts']) > 1.2
+                                && parseFloat(x['txt']) > 0.75
+                                && parseFloat(x['%K']) >parseFloat(x['%D'])
+                                
+                                && parseFloat(x['now_price']) > parseFloat(x['MA_longlonglong'])
+                                && parseFloat(x['MA_long']) > parseFloat(x['MA_longlong']) 
+                                
+                                
+                                && parseFloat(x['MACD_hist_diff']) > 0
+                            )
                         -->
                     </v-col>
                 </v-row>
