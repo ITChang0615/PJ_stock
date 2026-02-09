@@ -776,8 +776,11 @@
                        // && parseFloat(x['%D']) >parseFloat(x['%K'])
                     )
                     app.jsonData = app.jsonData_.filter(x => true
+                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) 
+                        && parseFloat(x['MA_short']) > parseFloat(x['MA_long'])
+                        && parseFloat(x['MA_long']) < parseFloat(x['MA_longlong'])
+                       
 
-                    
                     )
           
                                        
