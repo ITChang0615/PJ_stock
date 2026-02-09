@@ -775,11 +775,12 @@
                         //&& parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) 
                        // && parseFloat(x['%D']) >parseFloat(x['%K'])
                     )
-                      app.jsonData = app.jsonData_.filter(x => true
+   app.jsonData = app.jsonData_.filter(x => true
                         && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) 
+                       // && parseFloat(x['Volume_MA_short']) < parseFloat(x['Volume_MA_long']) 
                         && parseFloat(x['MA_10']) > parseFloat(x['MA_long'])
                         && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
-                       
+                        && parseFloat(x['成交股數']) >100
 
                     )
                                        
