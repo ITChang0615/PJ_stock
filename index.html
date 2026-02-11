@@ -31,7 +31,7 @@
                         <span>data count {{filteredData.map(x=>x.stock_number).length}}</span>
                         <v-btn color="primary" @click="openNextPage(1)" v-show="paraDate">Next</v-btn>
                     </v-col>
-                    <v-col col="4">
+                    <v-col col="3">
                         <v-btn color="primary" @click="reset">reset</v-btn>
                         <v-btn color="primary" @click="reverse">reverse</v-btn>
                         <!--
@@ -48,7 +48,7 @@
 
                     </v-col>
 
-                    <v-col col="4">
+                    <v-col col="5">
 
                         <v-btn color="primary" @click="
                             const output = app.checklist
@@ -147,7 +147,7 @@
                                                 
                         ">帶適當量</v-btn>
                         <v-btn color="primary" @click="     
-                                app.jsonData = app.jsonData.filter(item => true
+                                app.jsonData = app.jsonData_.filter(item => true
                                     && parseFloat(item['營業利益率']) > 0
                                     && parseFloat(item['累計營業收入-前期比較增減(%)']) > 0
                                     && parseFloat(item['多頭排列_前5日次數']) > 0
@@ -155,7 +155,17 @@
                                     && parseFloat(item['LevelArea']) > 0
                                     && parseFloat(item['diff_quote']) >-2
                                 )
-                        ">多頭排列</v-btn>
+                        ">多頭+收益</v-btn>
+                        <v-btn color="primary" @click=" 
+                            app.jsonData = app.jsonData_.filter(x => true
+                                    && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) 
+                                // && parseFloat(x['Volume_MA_short']) < parseFloat(x['Volume_MA_long']) 
+                                    && parseFloat(x['MA_10']) > parseFloat(x['MA_long'])
+                                    && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
+                                    && parseFloat(x['成交股數']) >100
+
+                                )
+                        ">多頭+量</v-btn>
 
                         <!--
 
