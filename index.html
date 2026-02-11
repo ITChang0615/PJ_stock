@@ -147,7 +147,7 @@
                                                 
                         ">帶適當量</v-btn>
                         <v-btn color="primary" @click="     
-                                app.jsonData = app.jsonData_.filter(item => true
+                                app.jsonData = app.jsonData.filter(item => true
                                     && parseFloat(item['營業利益率']) > 0
                                     && parseFloat(item['累計營業收入-前期比較增減(%)']) > 0
                                     && parseFloat(item['多頭排列_前5日次數']) > 0
@@ -157,7 +157,7 @@
                                 )
                         ">多頭+收益</v-btn>
                         <v-btn color="primary" @click=" 
-                            app.jsonData = app.jsonData_.filter(x => true
+                            app.jsonData = app.jsonData.filter(x => true
                                     && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) 
                                 // && parseFloat(x['Volume_MA_short']) < parseFloat(x['Volume_MA_long']) 
                                     && parseFloat(x['MA_10']) > parseFloat(x['MA_long'])
@@ -304,6 +304,9 @@
                                     營業利益率 <span style="color: blue;">{{ selectedItem?.營業利益率 }} </span>
                                     淨值倍率 <span style="color: blue;">{{ selectedItem?.淨值倍率 }} </span>
                                     殖利率 <span style="color: blue;">{{ selectedItem?.殖利率 }} </span>
+                                    <br />
+                                    本益比 <span style="color: blue;">{{ selectedItem?.本益比 }}</span>
+                                    同業平均本益比 <span style="color: blue;">{{ selectedItem?.同業平均本益比 }}</span>
                                     <br />
                                     營業收入-上月比較增減(%)<span style="color: blue;">{{ parseFloat(
                                         selectedItem?.['營業收入-上月比較增減(%)'] ).toFixed(1)}} </span>
