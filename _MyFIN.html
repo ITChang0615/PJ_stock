@@ -593,7 +593,7 @@
                     // 【INPUT】
                     this.maindata_input = [
                         //{ "Desc": "預設", "202601": "0", "202602": null, "202603": null, "202604": null, "202605": null, "202606": null, "202607": null, "202608": null, "202609": null, "202610": null, "202611": null, "202612": null },
-                        { "Desc": "薪", "202601": "69679", "202602": "69679", "202603": "68474", "202604": "60000", "202605": "0", "202606": "0", "202607": "0", "202608": "0", "202609": "0", "202610": "0", "202611": "0", "202612": "0" },
+                        { "Desc": "薪", "202601": "69679", "202602": "69679", "202603": "68474", "202604": "69679", "202605": "0", "202606": "0", "202607": "0", "202608": "0", "202609": "0", "202610": "0", "202611": "0", "202612": "0" },
                         { "Desc": "獎金", "202601": "0", "202602": 72300, "202603": null, "202604": null, "202605": "0", "202606": null, "202607": null, "202608": null, "202609": null, "202610": "0", "202611": null, "202612": "" },
                         { "Desc": "獎金2", "202601": "0", "202602": 50000, "202603": null, "202604": null, "202605": null, "202606": null, "202607": null, "202608": null, "202609": null, "202610": null, "202611": null, "202612": "" },
                         { "Desc": "Other", "202601": 0, "202602": null, "202603": null, "202604": 400000, "202605": null, "202606": null, "202607": null, "202608": null, "202609": null, "202610": null, "202611": null, "202612": "" },
@@ -617,20 +617,21 @@
                     ]
                     //Now
                     var current = [
-                        { Desc: '生活', value: 8552 },
+                        { Desc: '固-阿罵', value: 66880 },
+                        { Desc: '購物/娛樂', value: 12000 },
+                        { Desc: '生活', value: 8863 },
                         { Desc: '運動', value: 8400 },
-                        { Desc: '固-阿罵', value: 6080 },
-                
                         { Desc: '生活-LPP', value: 5000 },
+                        { Desc: '固-車', value: 1345 },
                         { Desc: '固-3C影音', value: 1188 },
-                        { Desc: '固-車', value: 667 },
+
                         { Desc: '3C產品', value: null },
-                        { Desc: '購物/娛樂', value: null },
+
                         { Desc: '固-車稅/保養', value: null },
                         { Desc: '固-稅', value: null },
                         { Desc: '旅', value: null },
                     ]
-                    this.currentym = '202600'
+                    this.currentym = '202602'
 
                     current.forEach(current => {
                         this.maindata_output.find(x => x.Desc == current.Desc)[this.currentym] = current.value
@@ -658,10 +659,10 @@
                         { "Desc": "invest_output", "N_1": null, "N_2": null },//賣出 
                         { "Desc": "income_loss", "N_1": null, "N_2": null },//損益   
                         { "Desc": "股息", "N_1": null, "N_2": null },//股息
-                        { "Desc": "現金", "today": 9000 },
-                        { "Desc": "信用卡", "today": -13591 },
-                        { "Desc": "銀行", "today": 171653 },
-                        { "Desc": "預備金", "today": 330000 },
+                        { "Desc": "現金", "today": 2000 },
+                        { "Desc": "信用卡", "today": -15311 },
+                        { "Desc": "銀行", "today": 105853 },
+                        { "Desc": "預備金", "today": 330309 },
                         { "Desc": "日幣", "today": 0 },
                         { "Desc": "投入", "today": 3740148 },
                         { "Desc": "可下單現金", "today": 595805 },
@@ -700,110 +701,33 @@
                     this.stockdata = this.sumdata("total", this.stockdata);
                     this.stockdata.map(x => x.stock_number = x.number)
                 },
-                memo_txt() {
-                    //----------------------------------------------
-                    // 福岡 Yonex
-                    //
-                    // 		 Alpen FUKUOKA  (博多運河城)
-
-                    // 熊本
-                    //         Hayakawa Sports Kamitori Honten
-                    //         Taiikudo Badomintonsenka WaiWai
-                    //---------------------------------------------
-
-                    /*
-
-                    【交通】
-                    •   3/6： 台南機場 15:55 ->  熊本機場19:00 
-                            利木津巴士直達熊本市區 (熊本機場-> JR熊本站)
-                                乘車點：機場1樓出口4號站牌
-                                乘車方向：開往西部車庫或熊本站方向
-                                乘車時間：約1小時即可到直達熊本站
-                                班距：每10至20分鐘1班
-                                票價：1,000日圓（起點:機場－終點:熊本站）
-                                付費方式：先買票或下車投錢
-                                下車點：多個下車站，建議可在「通筋町」下車直接到「日航飯店」等飯店、在「桜町バスターミナル」下車，步行到商店街一帶飯店
-
-                                -https://carolblog.tw/kumamoto-airport-transport/
-
-                    
-
-                    小提醒（行程銜接）
-                    •	3/9：熊本 → 糸島，當天需留意交通轉乘時間
-                    •	3/10：糸島 → 福岡市中心（天神），距離不遠，時間相對彈性
-                    •	福岡最後一間 10:00 前退房，若搭較晚班機可先寄放行李
-
-                    
-                    CANDEO HOTELS Kumamoto Shinshigai	    日本・熊本市（中央區 新市街）   	2026/03/06（五）	15:00 後	2026/03/09（一）	11:00 前
-                    seven x seven Itoshima              	日本・福岡（西區 糸島）         	2026/03/09（一）	15:00 後	2026/03/10（二）	11:00 前
-                    GRAND BASE Fukuoka Tenjin	            日本・福岡市（中央區 天神／渡邊通）  2026/03/10（二）	 15:00 後  	 2026/03/16（一）	 10:00 前
-
-                    */
-
-                    //****************************************************************
-                    //[ Google IDE 工具] 藉由 Google Antigravity IDE 工具，來體驗 AI 直接實作個人網站
-                    // gemini 3
-                    //---------------------------------------------
-
-
-                    //https://sol.auo.com/PLMORM/COTDMZ/COT/DataList
-                    //https://tw.tradingview.com/chart/flWtRF5S/?symbol=2441 
-
-                    // Bose QC Ultra 
-
-
-                    // 交易筆記
-                    // 英文
-                    // 日本行程
-                    // 羽球剪片
-
-
-                    /*
-                       機-
-                            去: TWD 12078    -> 6039/人
-                            回: JPY 142765 (TWD 28965)   -> 5793 /人
-                       住-
-                            熊本(3): TWD 15045           5000/人
-                            系島(1): TWD 8000            2000/人
-                            福岡(6): TWD 67957?        估15000/人
-
-
-                    */
-                },
                 aa() {
 
-
-                    /*
-                    Focus    ABF CPO ASIC 華通 2330  京元電子 高階封測 
-                    壓到MA20 以上  MA20 加10000 
-                    */
 
                     app.jsonData = app.jsonData_.filter(x => true
                         && (x['text_desc'].includes('光通訊設備'))
                     )
                     app.jsonData = app.jsonData_.filter(x => true
-                        &&  (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業', '光電業'].includes(x.Type1))
+                        && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業', '光電業'].includes(x.Type1))
                         //&& parseFloat(x['txt']) > 0.2
                         //&& parseFloat(x['txt']) < 0.3
-                        
+
                         && parseFloat(x['MACD_%']) > 0
-                        && (parseFloat(x['多頭排列_前5日次數']) >0 )
-                        && parseFloat(x['MA5_%']) >0
-                        && parseFloat(x['LevelArea'])>0
-                        
-                        && parseFloat(x['_quote'])>-5
+                        && (parseFloat(x['多頭排列_前5日次數']) > 0)
+                        && parseFloat(x['MA5_%']) > 0
+                        && parseFloat(x['LevelArea']) > 0
+
+                        && parseFloat(x['_quote']) > -5
                         //&& parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) 
-                       // && parseFloat(x['%D']) >parseFloat(x['%K'])
+                        // && parseFloat(x['%D']) >parseFloat(x['%K'])
                     )
-                   app.jsonData = app.jsonData_.filter(x => true
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) 
-                       // && parseFloat(x['Volume_MA_short']) < parseFloat(x['Volume_MA_long']) 
+                    app.jsonData = app.jsonData_.filter(x => true
+                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
+                        // && parseFloat(x['Volume_MA_short']) < parseFloat(x['Volume_MA_long']) 
                         && parseFloat(x['MA_10']) > parseFloat(x['MA_long'])
                         && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
-                        && parseFloat(x['成交股數']) >100
-
+                        && parseFloat(x['成交股數']) > 100
                     )
-                                       
                 }
             },
         });
