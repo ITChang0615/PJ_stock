@@ -624,9 +624,7 @@
                         { Desc: '生活-LPP', value: 5000 },
                         { Desc: '固-車', value: 1445 },
                         { Desc: '固-3C影音', value: 1188 },
-
                         { Desc: '3C產品', value: null },
-
                         { Desc: '固-車稅/保養', value: null },
                         { Desc: '固-稅', value: null },
                         { Desc: '旅', value: null },
@@ -701,34 +699,6 @@
                     this.stockdata = this.sumdata("total", this.stockdata);
                     this.stockdata.map(x => x.stock_number = x.number)
                 },
-                aa() {
-
-
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && (x['text_desc'].includes('光通訊設備'))
-                    )
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', ' 電腦及週邊設備業', '光電業'].includes(x.Type1))
-                        //&& parseFloat(x['txt']) > 0.2
-                        //&& parseFloat(x['txt']) < 0.3
-
-                        && parseFloat(x['MACD_%']) > 0
-                        && (parseFloat(x['多頭排列_前5日次數']) > 0)
-                        && parseFloat(x['MA5_%']) > 0
-                        && parseFloat(x['LevelArea']) > 0
-
-                        && parseFloat(x['_quote']) > -5
-                        //&& parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) 
-                        // && parseFloat(x['%D']) >parseFloat(x['%K'])
-                    )
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
-                        // && parseFloat(x['Volume_MA_short']) < parseFloat(x['Volume_MA_long']) 
-                        && parseFloat(x['MA_10']) > parseFloat(x['MA_long'])
-                        && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
-                        && parseFloat(x['成交股數']) > 100
-                    )
-                }
             },
         });
     </script>

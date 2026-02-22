@@ -45,11 +45,11 @@
                             app.checklist = []
                         ">clear</v-btn>
 
-                    <v-btn color="primary" @click="
+                        <v-btn color="primary" @click="
                         alist = ['2330', '3037', '8046', '3189', '4958', '3661', '3443', '3035', '3363', '3081', '2313', '6442', '2449', '6515', '6223', '3711', '3131', '6187', '2467']
                         app.jsonData = app.jsonData.filter(x => alist.includes(x.stock_number))
                     ">前景公司</v-btn>
-                    <v-btn color="primary" @click="
+                        <v-btn color="primary" @click="
                         alist =['9925', '9918', '7716', '7556', '6856', '6835', '6805', '6596', '6584', '6530', '6412', '6208', '5871', '5706', '5464', '5234', '4915', '4905', '4439', '4207', '4163', '3596', '3529', '3332', '3324', '3285', '3167', '3147', '2908', '2903', '2801', '1904', '1570', '1341', '1294', '1219']
                         app.jsonData = app.jsonData.filter(x => alist.includes(x.stock_number))
                     ">過0軸</v-btn>
@@ -82,28 +82,37 @@
                         this.jsonData.map(item => item.cal1 = (parseFloat(item['now_price']) / parseFloat(item['MA_long'])).toFixed(2))
                         this.jsonData.map(item => item.cal2 = (parseFloat(item['MA_long']) / parseFloat(item['MA_longlong'])).toFixed(2))
                         this.jsonData.map(item => item.cal3 = (parseFloat(item['MA_longlong']) / parseFloat(item['MA_longlonglong'])).toFixed(2))
-                               
-                            app.jsonData = app.jsonData_.filter( x =>true
-                                && parseFloat(x['cal2']) > 1
-                                && parseFloat(x['cal3']) > 1
-                                && parseFloat(x['txt']) > 0.5
-                                && parseFloat(x['now_price']) >parseFloat(x['MA_longlonglong'])
+                            
+                            //cal1
+                            && parseFloat(item['now_price'])>  parseFloat(item['MA_long'])
+                            //cal2 && parseFloat(x['cal2']) > 1
+                            && parseFloat(item['MA_long'])>  parseFloat(item['MA_longlong'])
+                            //cal3 && parseFloat(x['cal3']) > 1
+                            && parseFloat(item['MA_longlong'])>  parseFloat(item['MA_longlonglong'])
 
+                            app.jsonData = app.jsonData_.filter( x =>true
+                                
+                                && parseFloat(x['MA_long'])>  parseFloat(x['MA_longlong'])
+                                && parseFloat(x['now_price'])>  parseFloat(x['MA_longlonglong'])
+
+                                && parseFloat(x['txt']) > 0.5
+                                
                                 && parseFloat(x['營業利益率']) > 0
                                 && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
                                 && !(['化學工業','航運業','生技醫療業','塑膠工業','金融保險', '鋼鐵工業','居家生活'].includes(x.Type1))
 
-                                && parseFloat(x['cal1']) < 1
+                                && parseFloat(x['cal1']) >= 1.01
+                                && parseFloat(x['cal1']) < 1.8
 
                             )
                             app.sortBy = [ 'tt'] 
                             app.sortDesc = [ false]
                                                     
+
                             app.jsonData = app.jsonData_.filter( x =>true
                                 && (x['Full_Summary'].includes('多頭排列'))
                                 && parseFloat(x['now_price']) > parseFloat(x['highlight_enddate收盤價_1'])
                                 && x['highlight_stardate_1']!='0'
-
                                 && parseFloat(x['成交股數']) > 100
                                 && parseFloat( x['LevelArea']) > 0
                                 && parseFloat(x['MACD_hist_diff']) > 0
@@ -115,7 +124,7 @@
 
                             -----------------------------------------------------------------------
 
-                            app.sortBy = ['highlight_enddate_1','highlight_stardate_1','LevelArea','分類標籤'] 
+                            app.sortBy = ['highlight_enddate_1','highlight_stardate_1','LevelArea','分類標籤']  
                             app.sortDesc = [true,true,true,true]
                                                             
                             app.sortBy = ['LevelArea', 'txt', 'txts'] 
@@ -221,16 +230,23 @@
                                 && parseFloat(x['營業利益率']) > 0
                                 && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
 
-                                //&& parseFloat(x['txts']) > 1.2
-                                && parseFloat(x['txt']) > 0.75
                                 && parseFloat(x['%K']) >parseFloat(x['%D'])
-                                
-                                && parseFloat(x['now_price']) > parseFloat(x['MA_longlonglong'])
-                                && parseFloat(x['MA_long']) > parseFloat(x['MA_longlong']) 
-                                
                                 
                                 && parseFloat(x['MACD_hist_diff']) > 0
                             )
+                            && parseFloat(x['MA_last_cross_%']) > 0
+                            && parseFloat(x['MA5_%']) > 0
+
+                            && x['highlight_date'] >= "2026-01-20"
+                            && parseFloat(x['LevelArea']) > 0
+                            && parseFloat(x['LevelArea']) < 90
+                        
+                            && (x['分類標籤'].includes('價_量;【b1】'))
+                            && (x['Full_Summary'].includes('多頭排列'))
+
+                            &&( x.MACD_last_cross_date>=app.paraDateMinus(15))
+
+                        
                         -->
                     </v-col>
                 </v-row>
@@ -636,7 +652,7 @@
                                     this.sync_data()
                                 }
 
-                                arr = ['tempdesc', 'txt', 'txts','tt',  'cal1', 'cal2', 'cal3',
+                                arr = ['tempdesc', 'txt', 'txts', 'tt', 'cal1', 'cal2', 'cal3',
 
                                     '分類標籤', '_quote', '成交股數', 'rt_量',
 
@@ -652,7 +668,7 @@
 
                                     't_t', 'ttt',
                                     //'Volume_MA_long50','成交金額平均','成交金額','Volume_MA_short',
-                                    'stock_name', 'Type0', 'Type2', '總市值', '營業利益率', '淨值倍率', '殖利率', '貝他值',
+                                    'stock_name', 'Type0', 'Type2', '總市值', '營業利益率', '總市值x營業利益率', '淨值倍率', '殖利率', '貝他值',
                                     '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)',
                                     '營業毛利率', '每股營收(元)', '本益比', '同業平均本益比',
                                     'Type', 'Typelevel',
@@ -723,9 +739,12 @@
                                 this.jsonData.map(x => x.tt = '-')
                                 this.jsonData.map(x => x.t_t = '-')
                                 this.jsonData.map(x => x.tempdesc = '')
+                                this.jsonData.map(x => x.總市值x營業利益率 = '')
                                 this.jsonData.map(x => x.cal1 = '')
                                 this.jsonData.map(x => x.cal2 = '')
                                 this.jsonData.map(x => x.cal3 = '')
+
+                                this.jsonData.map(item => item.總市值x營業利益率 = (parseFloat(item['總市值']) * parseFloat(item['營業利益率']) / 100).toFixed(2))
 
 
                                 this.jsonData.map(item => item.cal1 = (parseFloat(item['now_price']) / parseFloat(item['MA_long'])).toFixed(2))
@@ -900,107 +919,6 @@
 
                     console.table(data)
                 },
-
-                memo() {
-
-
-                    ///-------------------------------
-                    // Volume_MA_short, Volume_MA_long, Volume_MA_long50, 成交金額平均
-                    //'now_price','MA_short', 'MA_long', 'MA_longlong', 'MA_longlonglong',
-
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', '電腦及週邊設備業'].includes(x.Type1))
-
-                        && parseFloat(x['營業利益率']) > 0
-                        && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
-
-                        //now_price
-                        && parseFloat(x['MA_short']) > parseFloat(x['MA_long'])
-                        && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
-
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
-
-                        //&& parseFloat(x['LevelArea']) > -70
-                        //&& parseFloat(x['LevelArea']) < 90
-                        //&& parseFloat(x['成交股數']) > 100
-
-                        && parseFloat(x['MA_short']) < parseFloat(x['MA_longlong']) * 1.15
-                        && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong']) * 1.05
-
-                        && parseFloat(x['MACD_hist_diff']) > 0
-
-                    )
-
-                    app.sortBy = ['LevelArea', 'MA_last_cross_date']
-                    app.sortDesc = [true, true]
-
-                    app.jsonData = app.jsonData_.filter(x => true
-                        && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', '電腦及週邊設備業'].includes(x.Type1))
-
-                        && parseFloat(x['營業利益率']) > 0
-                        && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
-
-                        //now_price
-                        && parseFloat(x['MA_short']) > parseFloat(x['MA_long'])
-                        && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
-
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
-
-                        // && parseFloat(x['MACD-SL_max']) *0.85 < parseFloat(x['MACD-SL'])
-                        // && parseFloat(x['%D']) < parseFloat(x['%K'])
-                        //&& parseFloat(x['diff_quote']) > 0
-                        && parseFloat(x['MACD_hist_diff']) > 0
-                        && parseFloat(x['MA5_%']) > 0
-                        && parseFloat(x['MACD_%']) > 0
-
-
-                    )
-
-                    app.jsonData = app.jsonData_.filter(x => true
-
-                        && parseFloat(x['營業利益率']) > 0
-                        && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
-
-                        && parseFloat(x['MA_short']) > parseFloat(x['MA_long'])
-                        && parseFloat(x['MA_short']) > parseFloat(x['MA_longlong'])
-
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long'])
-                        && parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50'])
-
-
-                        && parseFloat(x['MACD_hist_diff']) > 0
-                        && parseFloat(x['MA5_%']) > 0
-                        && parseFloat(x['MACD_%']) > 0
-                        && parseFloat(x['_quote']) > 3
-
-                    )
-
-                    app.sortBy = ['LevelArea', 'MA5_%']
-                    app.sortDesc = [true, true]
-
-
-
-                    /*
-                        && (['半導體業', '電子零組件業', '其他電子業', '通信網路業', '電子通路業', '電腦及週邊設備業'].includes(x.Type1))
-                        
-                        && parseFloat(x['營業利益率']) > 0
-                        && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
-                        && parseFloat(x['MA_last_cross_%']) > 0
-                        && parseFloat(x['MA5_%']) > 0
-
-                        && x['highlight_date'] >= "2026-01-20"
-                        && parseFloat(x['LevelArea']) > 0
-                        && parseFloat(x['LevelArea']) < 90
-                    
-                        && (x['分類標籤'].includes('價_量;【b1】'))
-                        && (x['Full_Summary'].includes('多頭排列'))
-
-                        &&( x.MACD_last_cross_date>=app.paraDateMinus(15))
-
-                    */
-                },
                 set_tempdesc() {
 
                     const total = app.jsonData.length
@@ -1045,14 +963,8 @@
                         })
 
                     })
-
                     console.table(data)
-
-
-                    //console.table(data)
-
                     //app.jsonData=app.jsonData_.filter(x=>x.tempdesc !='')
-
                 },
             }
         });

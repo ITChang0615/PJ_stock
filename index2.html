@@ -1445,31 +1445,6 @@
 
                     return 'row-down';
                 },
-                memo() {
-
-                    /*
-                    app.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價longlong_%']<0).length)>1 && (x.datalist.filter(y=>y['均價longlong_%']>0).length)>1 && x['均價longlong_%']>0)
-                        .map(x=>(
-                            {stock_number:x.stock_number,
-                            Type:x.Type,
-                            Date:x.datalist.filter(y=>y['均價longlong_%']>0).map(x=>x.日期).slice(-2)[0],
-                            price:x.datalist.find(y=>y.日期== (x.datalist.filter(y=>y['均價longlong_%']>0).map(x=>x.日期).slice(-2)[0])).now_price,
-                            now_price:x.now_price,
-                            
-                            }))
-                        .map(x=>({
-                            stock_number:x.stock_number,
-                            Type:x.Type,
-                            Date:x.Date,
-                            price:x.price,
-                            gain:parseFloat((x.now_price-x.price)/x.price).toFixed(2)
-                            }))
-                         
-                    app.jsonData=app.jsonData_.filter(x=>(x.datalist.filter(y=>y['均價longlong_%']<0).length)>1 && (x.datalist.filter(y=>y['均價longlong_%']>0).length)>1 && x['均價longlong_%']>0)
-                         
-                    */
-
-                }
             }
         });
     </script>
