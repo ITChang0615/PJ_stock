@@ -44,6 +44,16 @@
                             localStorage.setItem('checklist', JSON.stringify([]));
                             app.checklist = []
                         ">clear</v-btn>
+
+                    <v-btn color="primary" @click="
+                        alist = ['2330', '3037', '8046', '3189', '4958', '3661', '3443', '3035', '3363', '3081', '2313', '6442', '2449', '6515', '6223', '3711', '3131', '6187', '2467']
+                        app.jsonData = app.jsonData.filter(x => alist.includes(x.stock_number))
+                    ">前景公司</v-btn>
+                    <v-btn color="primary" @click="
+                        alist =['9925', '9918', '7716', '7556', '6856', '6835', '6805', '6596', '6584', '6530', '6412', '6208', '5871', '5706', '5464', '5234', '4915', '4905', '4439', '4207', '4163', '3596', '3529', '3332', '3324', '3285', '3167', '3147', '2908', '2903', '2801', '1904', '1570', '1341', '1294', '1219']
+                        app.jsonData = app.jsonData.filter(x => alist.includes(x.stock_number))
+                    ">過0軸</v-btn>
+
                     </v-col>
                     <v-col col="8">
 
@@ -69,33 +79,50 @@
                         <!--------------------------------------------------------------------------------------------------------------------->
                         <!--------------------------------------------------------------------------------------------------------------------->
                         <!--
-                        
-app.jsonData = app.jsonData_.filter( x =>true
-    && (x['Full_Summary'].includes('多頭排列'))
-    && parseFloat(x['now_price']) > parseFloat(x['highlight_enddate收盤價_1'])
-    && x['highlight_stardate_1']!='0'
+                        this.jsonData.map(item => item.cal1 = (parseFloat(item['now_price']) / parseFloat(item['MA_long'])).toFixed(2))
+                        this.jsonData.map(item => item.cal2 = (parseFloat(item['MA_long']) / parseFloat(item['MA_longlong'])).toFixed(2))
+                        this.jsonData.map(item => item.cal3 = (parseFloat(item['MA_longlong']) / parseFloat(item['MA_longlonglong'])).toFixed(2))
+                               
+                            app.jsonData = app.jsonData_.filter( x =>true
+                                && parseFloat(x['cal2']) > 1
+                                && parseFloat(x['cal3']) > 1
+                                && parseFloat(x['txt']) > 0.5
+                                && parseFloat(x['now_price']) >parseFloat(x['MA_longlonglong'])
 
-    && parseFloat(x['成交股數']) > 100
-    && parseFloat( x['LevelArea']) > 0
-    && parseFloat(x['MACD_hist_diff']) > 0
-)
+                                && parseFloat(x['營業利益率']) > 0
+                                && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
+                                && !(['化學工業','航運業','生技醫療業','塑膠工業','金融保險', '鋼鐵工業','居家生活'].includes(x.Type1))
+
+                                && parseFloat(x['cal1']) < 1
+
+                            )
+                            app.sortBy = [ 'tt'] 
+                            app.sortDesc = [ false]
+                                                    
+                            app.jsonData = app.jsonData_.filter( x =>true
+                                && (x['Full_Summary'].includes('多頭排列'))
+                                && parseFloat(x['now_price']) > parseFloat(x['highlight_enddate收盤價_1'])
+                                && x['highlight_stardate_1']!='0'
+
+                                && parseFloat(x['成交股數']) > 100
+                                && parseFloat( x['LevelArea']) > 0
+                                && parseFloat(x['MACD_hist_diff']) > 0
+                            )
 
 
-app.sortBy = [ 'highlight_stardate_1', 'txts'] 
-app.sortDesc = [ true, true]
+                            app.sortBy = [ 'highlight_stardate_1', 'txts'] 
+                            app.sortDesc = [ true, true]
 
------------------------------------------------------------------------
+                            -----------------------------------------------------------------------
 
-app.sortBy = ['highlight_enddate_1','highlight_stardate_1','LevelArea','分類標籤'] 
-app.sortDesc = [true,true,true,true]
-                                 
+                            app.sortBy = ['highlight_enddate_1','highlight_stardate_1','LevelArea','分類標籤'] 
+                            app.sortDesc = [true,true,true,true]
+                                                            
+                            app.sortBy = ['LevelArea', 'txt', 'txts'] 
+                            app.sortDesc = [true, true, true]
 
-
-app.sortBy = ['LevelArea', 'txt', 'txts'] 
-app.sortDesc = [true, true, true]
-
-app.sortBy = [ '多頭排列_前5日次數', 'txts'] 
-app.sortDesc = [ false, true]
+                            app.sortBy = [ '多頭排列_前5日次數', 'txts'] 
+                            app.sortDesc = [ false, true]
 
 
                         -->
@@ -104,13 +131,13 @@ app.sortDesc = [ false, true]
                                 && !(['化學工業','航運業','生技醫療業','塑膠工業','金融保險', '鋼鐵工業','居家生活'].includes(x.Type1))
                                 && (x['Full_Summary'].includes('多頭排列'))
                                 && parseFloat(x['成交股數']) > 100
-                                && parseFloat( x['LevelArea']) > 0
+                                && parseFloat( x['LevelArea']) >-40
                                 && parseFloat(x['txt']) > 0.5
 
                                 && parseFloat(x['營業利益率']) > 0
                                 && parseFloat(x['累計營業收入-前期比較增減(%)']) > 0
 
-                                && parseFloat(x['MACD_hist_diff']) > 0
+                               // && parseFloat(x['MACD_hist_diff']) > 0
                                 
                                 && (parseFloat(x['Volume_MA_short']) > parseFloat(x['Volume_MA_long50']) *0.9 && parseFloat(x['Volume_MA_long'])  > parseFloat(x['Volume_MA_long50']) *0.9)
                                 
@@ -124,6 +151,10 @@ app.sortDesc = [ false, true]
 
                               app.sortBy = ['highlight_enddate_1','highlight_stardate_1','LevelArea','分類標籤'] 
                               app.sortDesc = [true,true,true,true]
+                              
+                              app.sortBy = [ 'highlight_stardate_1', 'txts'] 
+                              app.sortDesc = [ true, true]
+
 
                         ">多頭</v-btn>
                         <v-btn color="primary" @click="  
@@ -307,14 +338,11 @@ app.sortDesc = [ false, true]
                             <a :href="`https://statementdog.com/analysis/${selectedItem?.stock_number}`"
                                 target="_blank"> 本益比河流 </a>
                             -->
-                            <!--
-                            ////'Full_Summary', 'textdesc',  '營收比重',  'desc',
-                                -->
-
                             <v-row no-gutters>
                                 <v-col col="4">
                                     【{{ selectedItem?.Type1 }}】 {{ selectedItem?.textdesc }}
                                     <br />
+                                    <!--
                                     Volume_MA_long50 <span style="color: blue;">{{ selectedItem?.Volume_MA_long50 }}</span>
                                     成交金額平均 <span style="color: blue;">{{ selectedItem?.成交金額平均 }}</span>
                                     
@@ -323,9 +351,9 @@ app.sortDesc = [ false, true]
                                     成交金額 <span style="color: blue;">{{ selectedItem?.成交金額 }}</span>
                                     Volume_MA_short <span style="color: blue;">{{ selectedItem?.Volume_MA_short }}</span>
                                     <span style="color: red;">{{ parseFloat(selectedItem?.成交金額/selectedItem?.Volume_MA_short).toFixed(2) }}</span>
+                                    -->
 
 
-                                    
                                     <br />
 
                                     營業毛利率 <span style="color: blue;">{{ selectedItem?.營業毛利率 }}</span>
@@ -451,7 +479,8 @@ app.sortDesc = [ false, true]
                 computedHref(x) {
                     const baseUrl = window.location.href.split('/').slice(0, 4).join('/');
                     var para_data = app.paraDate_str().replaceAll('/', '-');
-                    return `${baseUrl}/index.html?d=A&date=${para_data}&type=${this.sanitizedTypelevel(x)}`;
+                    //return `${baseUrl}/index.html?d=A&date=${para_data}&type=${this.sanitizedTypelevel(x)}`;
+                    return `${baseUrl}/index.html?d=A&date=${para_data}&type=${x}`;
                 },
                 formatDesc(desc) {
                     return String(desc).replace(/\*\*/g, '<br/>'); // 把 `**` 轉換成 `<br/>`
@@ -606,46 +635,48 @@ app.sortDesc = [ false, true]
                                 if (this.realtimedata.length > 0) {
                                     this.sync_data()
                                 }
-  
-                                arr = ['tempdesc','txt', 'txts', 
-                                
-                                    'Volume_MA_long50','成交金額平均','成交金額','Volume_MA_short',
-                                    '分類標籤','_quote', '成交股數', 'rt_量', 'now_price',
-                                    'highlight_stardate_1', 'highlight_enddate_1','highlight_enddate收盤價_1',
+
+                                arr = ['tempdesc', 'txt', 'txts','tt',  'cal1', 'cal2', 'cal3',
+
+                                    '分類標籤', '_quote', '成交股數', 'rt_量',
+
+                                    'now_price', 'MA_long', 'MA_longlong',
+
                                     'rt_price', 'stock_number', 'LevelArea', '量能', 'diff_quote',
-                                    'MACD_last_cross_date', 'highlight_date', 'voc_cross_d','Type1', 
+                                    'MACD_last_cross_date', 'highlight_date', 'voc_cross_d', 'Type1',
                                     '下跌帶量_前15日次數', '盤整震盪_前15日次數', '多頭排列_前5日次數',
 
                                     '均價long_%', 'MA_longlong_15',
                                     'MA_last_cross_date', 'MA_last_cross_d2', 'MA_last_cross_%',
                                     'MACD-SL', 'MACD_hist_diff', '%K', '%D', 'MA5_%', '均價longlong_%',
-                                    
-                                    
-                                    'tt', 't_t', 'ttt',
-                                    'stock_name', 'Type0', 'Type2','總市值', '營業利益率', '淨值倍率', '殖利率', '貝他值',
+
+                                    't_t', 'ttt',
+                                    //'Volume_MA_long50','成交金額平均','成交金額','Volume_MA_short',
+                                    'stock_name', 'Type0', 'Type2', '總市值', '營業利益率', '淨值倍率', '殖利率', '貝他值',
                                     '營業收入-上月比較增減(%)', '營業收入-去年同月增減(%)', '累計營業收入-前期比較增減(%)',
-                                    '營業毛利率', '每股營收(元)', '本益比', '同業平均本益比', 
+                                    '營業毛利率', '每股營收(元)', '本益比', '同業平均本益比',
                                     'Type', 'Typelevel',
 
 
-                                    'MA_last_cross_date收盤價','MACD_death_cross_d收盤價',
+                                    'MA_last_cross_date收盤價', 'MACD_death_cross_d收盤價',
 
 
-                                    'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_1',
-                                    'highlight_enddate收盤價_1', 'highlight_收盤價', 'highlight_stardate收盤價_2', 'highlight_enddate收盤價_2',
-                                     'highlight_%', 'highlight_%_1', 'highlight_%_2',
+                                    'highlight_stardate_1', 'highlight_enddate_1', 'highlight_stardate收盤價_1', 'highlight_enddate收盤價_1',
+                                    'highlight_stardate_2', 'highlight_enddate_2', 'highlight_stardate收盤價_2', 'highlight_enddate收盤價_2',
+                                    'highlight_%_1', 'highlight_%_2',
+                                    'highlight_收盤價', 'highlight_%',
 
 
                                     '日期', '價能', 'cond_entry',
-                                    
+
                                     '%K', '%D', 'MA5_%', '均價_%', '均價long_%', '均價longlong_%',
                                     'MA_short', 'MA_10', 'MA_long', 'MA_longlong', 'MA_longlonglong',
-                                    'MACD_%', 'MACD','MACD-SL_max', 'MACDSL_%',
+                                    'MACD_%', 'MACD', 'MACD-SL_max', 'MACDSL_%',
                                     '成交金額平均', '成交金額', 'Volume_MA_short', 'Volume_MA_long', 'Volume_MA_long50',
                                     //'Volume_Oscillator', 'volume_threshold',
 
                                     'VPC_MACD', 'Volume_Price_Change', 'highlight_enddate',
-                                    
+
 
                                     // '開盤價', '最高價', '最低價', '收盤價', '每股淨值(元)', 
                                     'text_desc', '盤後量', '成交量', '量倍率',
@@ -692,9 +723,16 @@ app.sortDesc = [ false, true]
                                 this.jsonData.map(x => x.tt = '-')
                                 this.jsonData.map(x => x.t_t = '-')
                                 this.jsonData.map(x => x.tempdesc = '')
+                                this.jsonData.map(x => x.cal1 = '')
+                                this.jsonData.map(x => x.cal2 = '')
+                                this.jsonData.map(x => x.cal3 = '')
+
+
+                                this.jsonData.map(item => item.cal1 = (parseFloat(item['now_price']) / parseFloat(item['MA_long'])).toFixed(2))
+                                this.jsonData.map(item => item.cal2 = (parseFloat(item['MA_long']) / parseFloat(item['MA_longlong'])).toFixed(2))
+                                this.jsonData.map(item => item.cal3 = (parseFloat(item['MA_longlong']) / parseFloat(item['MA_longlonglong'])).toFixed(2))
 
                                 //成交金額50日均 vs 總體成交金額平均 比較 (長交易量)
-                             
                                 this.jsonData.map(item => item.txt = (parseFloat(item['Volume_MA_long50']) / parseFloat(item['成交金額平均'])).toFixed(2))
                                 //當日成交金額 vs 5日均 比較 (短交易量)
                                 this.jsonData.map(item => item.txts = (parseFloat(item['成交金額']) / parseFloat(item['Volume_MA_short'])).toFixed(2))
@@ -864,9 +902,7 @@ app.sortDesc = [ false, true]
                 },
 
                 memo() {
-                    
-                    alist = ['2330', '3037', '8046', '3189', '4958', '3661', '3443', '3035', '3363', '3081', '2313', '6442', '2449', '6515', '6223', '3711', '3131', '6187', '2467']
-                    app.jsonData = app.jsonData_.filter(x => alist.includes(x.stock_number))
+
 
                     ///-------------------------------
                     // Volume_MA_short, Volume_MA_long, Volume_MA_long50, 成交金額平均
